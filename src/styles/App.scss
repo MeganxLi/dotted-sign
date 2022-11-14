@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+//base
+@import "./base/reset";
+@import "./base/base";
+
+//pages
+@import "./pages/writingMode";
