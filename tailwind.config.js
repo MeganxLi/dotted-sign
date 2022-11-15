@@ -6,19 +6,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          "royal-blue": "#4F61E8",
-          "dark-blue": "#1E2F61",
-          "depp-blue": "#2E41CE",
-          "green-blue": "#DDF0F4",
-          "pale-blue": "#EEF7F9",
-          "light-blue": "#F2FDFF",
-          "alert-red": "#EF7054",
-          white: "#FFFFFF",
-          black: "#2E2E2E",
-        },
+        "royal-blue": "#4F61E8",
+        "dark-blue": "#1E2F61",
+        "depp-blue": "#2E41CE",
+        "green-blue": "#DDF0F4",
+        "pale-blue": "#EEF7F9",
+        "light-blue": "#F2FDFF",
+        "alert-red": "#EF7054",
+        white: "#FFFFFF",
+        black: "#2E2E2E",
       },
-      dropShadow: {
+      boxShadow: {
         base: "0px 2px 20px -4px #CDDDE1",
         primary: "0px 2px 20px -4px #17237A",
         secodary: "0px 2px 20px -8px #6DA9B7",
