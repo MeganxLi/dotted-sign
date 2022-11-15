@@ -1,4 +1,4 @@
-import WritingMode from "../pages/writing_mode";
+import Sign from "../pages/sign";
 
 //icon svg
 import { ReactComponent as File } from "../assets/svg/file.svg";
@@ -16,7 +16,7 @@ const routes: PageListType[] = [
       </>
     ),
     path: "/",
-    element: <WritingMode />,
+    element: <Sign />,
   },
   {
     name: (
@@ -28,7 +28,7 @@ const routes: PageListType[] = [
       </>
     ),
     path: "/writing",
-    element: <WritingMode />,
+    element: <Sign />,
   },
   {
     name: (
@@ -40,7 +40,7 @@ const routes: PageListType[] = [
       </>
     ),
     path: "/setting",
-    element: <WritingMode />,
+    element: <Sign />,
   },
 ];
 
