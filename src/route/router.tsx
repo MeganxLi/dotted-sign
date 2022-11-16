@@ -17,6 +17,7 @@ const routes: PageListType[] = [
     ),
     path: "/",
     element: <Sign />,
+    classTag: "svg-fill",
   },
   {
     name: (
@@ -29,6 +30,7 @@ const routes: PageListType[] = [
     ),
     path: "/writing",
     element: <Sign />,
+    classTag: "svg-stroke",
   },
   {
     name: (
@@ -41,6 +43,7 @@ const routes: PageListType[] = [
     ),
     path: "/setting",
     element: <Sign />,
+    classTag: "svg-fill",
   },
 ];
 
