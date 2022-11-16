@@ -131,3 +131,8 @@ table {
 a {
   text-decoration: none;
 }
+
+input:focus-visible {
+  border: none;
+  outline: none;
+}

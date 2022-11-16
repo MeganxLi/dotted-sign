@@ -1,0 +1,15 @@
+@layer components {
+  input[type="text"] {
+    @apply bg-transparent;
+  }
+  .text-field {
+    @apply flex items-center rounded-tl-lg rounded-tr-lg border-b border-solid border-b-black/20 px-2 py-3 font-['Roboto_Slab'];
+
+    &:focus-within {
+      @apply border-b-blue bg-blue/10 text-blue;
+      > span > svg {
+        @apply stroke-blue;
+      }
+    }
+  }
+}
