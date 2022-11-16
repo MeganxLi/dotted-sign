@@ -1,0 +1,28 @@
+.scale-up-top-right {
+  animation: scale-up-top-right 0.4s;
+}
+@keyframes scale-up-top-right {
+  0% {
+    transform: scale(0.5);
+    transform-origin: top right;
+  }
+  100% {
+    transform: scale(1);
+    transform-origin: top right;
+  }
+}
+
+.scale-down-top-right {
+  animation: scale-down-top-right 0.4s;
+}
+
+@keyframes scale-down-top-right {
+  0% {
+    transform: scale(1);
+    transform-origin: right top;
+  }
+  100% {
+    transform: scale(0.4);
+    transform-origin: right top;
+  }
+}

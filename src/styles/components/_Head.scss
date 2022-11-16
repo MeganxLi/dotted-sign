@@ -1,0 +1,20 @@
+@layer components {
+  .menu {
+    li.svg-fill {
+      > span > svg {
+        @apply fill-black/50;
+      }
+      &:hover > span > svg {
+        @apply fill-blue;
+      }
+    }
+    li.svg-stroke {
+      > span > svg {
+        @apply stroke-black/50;
+      }
+      &:hover > span > svg {
+        @apply stroke-blue;
+      }
+    }
+  }
+}

@@ -1,26 +1,81 @@
-import React from "react";
+import React, { useState } from "react";
 import routes from "../route/router";
+import { ReactComponent as Menu } from "../assets/svg/menu.svg";
+import { X } from "react-feather";
 
 const Head = () => {
-  return (
-    <header className="
-      absolute w-full px-5 py-4 
-      grid justify-between grid-cols-[max-content_minmax(465px,_max-content)]
-    ">
-      <div className="Logo bg-white shadow-base rounded-large px-8 py-4 ">
-        <img src="/images/Logo.png" alt="Logo" />
-      </div>
-      <nav className="rounded-large bg-white shadow-base flex items-center justify-between pr-2 pl-12">
-        <ul className="grid grid-cols-3 gap-12 ">
-          {routes.map((page, idx) => {
-            return <li key={idx} className="flex gap-2"> {page.name}</li>;
-          })}
-        </ul>
-        <div className="p-1 outline outline-1 outline-black/20 rounded-full
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
 
-"><img src="images/user.png" /></div>
-      </nav>
-    </header>
+  return (
+    <>
+      <header
+        className="absolute z-50 grid w-full grid-cols-[max-content_minmax(465px,_max-content)] 
+        justify-between px-5 py-4 flat:grid-cols-[repeat(2,_max-content)]
+        "
+      >
+        <div
+          className={`rounded-large bg-white px-8 py-4 shadow-base flat:p-[12px_16px] ${
+            openMenu && "shadow-none"
+          }`}
+        >
+          <img className="flat:w-[92px]" src="/images/Logo.png" alt="Logo" />
+        </div>
+        <nav className="flex items-center justify-between rounded-large bg-white pr-2 pl-12 shadow-base flat:hidden">
+          <ul className="menu grid grid-cols-3 gap-12 text-black/50 ">
+            {routes.map((page, idx) => {
+              return (
+                <li
+                  key={idx}
+                  className={`flex gap-2 hover:text-blue ${page.classTag} cursor-pointer p-3`}
+                >
+                  {page.name}
+                </li>
+              );
+            })}
+          </ul>
+          <div className="rounded-full p-1 outline outline-1 outline-black/20">
+            <img src="images/user.png" />
+          </div>
+        </nav>
+        <div className="hidden flat:block ">
+          <button
+            className="h-full rounded-large bg-white px-4 py-3"
+            onClick={() => setOpenMenu(!openMenu)}
+          >
+            {openMenu ? <X stroke-width="1" /> : <Menu />}
+          </button>
+        </div>
+      </header>
+      <ul
+        className={`menu absolute left-0 top-0 z-40 
+        hidden w-full flex-col items-center gap-6 bg-white text-black/50 flat:flex ${
+          openMenu
+            ? "scale-up-top-right pt-24 pb-16"
+            : "scale-down-top-right origin-top-right"
+        } `}
+      >
+        {openMenu && (
+          <>
+            {routes.map((page, idx) => {
+              return (
+                <li
+                  key={idx}
+                  className={`flex gap-2  hover:text-blue ${page.classTag} cursor-pointer p-3`}
+                >
+                  {page.name}
+                </li>
+              );
+            })}
+            <div className="mt-4 flex items-center gap-2">
+              <div className="rounded-full p-1 outline outline-1 outline-black/20">
+                <img src="images/user.png" />
+              </div>
+              我的會員
+            </div>
+          </>
+        )}
+      </ul>
+    </>
   );
 };
 

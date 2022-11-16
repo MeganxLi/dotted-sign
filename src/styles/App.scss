@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+//utils
+@import "./utils/animation";
+
 //base
 @import "./base/reset";
 @import "./base/base";
+
+//components
+@import "./components/head";
