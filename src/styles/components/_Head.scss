@@ -1,5 +1,9 @@
 @layer components {
   .menu {
+    .active {
+      @apply text-blue;
+    }
+
     li.svg-fill {
       > span > svg {
         @apply fill-black/50;
@@ -8,6 +12,10 @@
         @apply fill-blue;
       }
     }
+    .active.svg-fill > span > svg {
+      @apply fill-blue;
+    }
+
     li.svg-stroke {
       > span > svg {
         @apply stroke-black/50;
@@ -15,6 +23,10 @@
       &:hover > span > svg {
         @apply stroke-blue;
       }
+    }
+
+    .active.svg-stroke > span > svg {
+      @apply stroke-blue;
     }
   }
 }
