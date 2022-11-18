@@ -100,7 +100,8 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
           />
           <SignatureCanvas
             canvasProps={{
-              className: "signatureCanvas w-full bg-pale-blue rounded-[32px] ",
+              className:
+                "signatureCanvas w-full bg-pale-blue rounded-[32px] cursor-canvas min-h-[220px]",
             }}
             minWidth={signCanvasProps.width}
             penColor={signCanvasProps.color}
@@ -122,15 +123,15 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
           <InputTextField InputValue={fileName} setInputValue={setFileName} />
         </div>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-4">
+      <div className="mt-4 flex gap-4 flat:flex-col-reverse">
         <button
-          className="btn-secodary"
+          className="btn-secodary flex-auto"
           disabled={!isDrawn}
           onClick={clearCanvas}
         >
           清除畫布
         </button>
-        <button className="btn-primary" onClick={saveCanvas}>
+        <button className="btn-primary flex-auto" onClick={saveCanvas}>
           儲存結果
         </button>
       </div>

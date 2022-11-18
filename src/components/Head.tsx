@@ -34,7 +34,7 @@ const Head = () => {
   return (
     <>
       <header
-        className="absolute z-50 grid w-full grid-cols-[max-content_minmax(465px,_max-content)] 
+        className="sticky top-0 z-50 grid w-full grid-cols-[max-content_minmax(465px,_max-content)] 
         justify-between px-5 py-4 flat:grid-cols-[repeat(2,_max-content)]
         "
       >

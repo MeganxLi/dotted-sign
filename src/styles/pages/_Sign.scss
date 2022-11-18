@@ -1,5 +1,7 @@
 @layer components {
   #WritingMode {
+    @apply flat:w-full;
+
     .sing-canvas-caption {
       @apply after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:text-sm after:text-[#728F9B]  after:content-['在此範圍內進行簽署'];
     }

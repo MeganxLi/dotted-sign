@@ -7,8 +7,8 @@ const Sign = () => {
 
   return (
     <div
-      className="bg-sign-cover flex h-screen items-center justify-center gap-24 bg-light-blue 
-    bg-cover bg-fixed bg-center bg-no-repeat"
+      className="flex h-screen items-center justify-center gap-24  
+     flat:flex-col flat:items-start flat:gap-4 flat:px-6 flat:pt-9"
     >
       <Intro
         LargeStandard={
