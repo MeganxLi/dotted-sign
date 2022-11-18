@@ -6,11 +6,8 @@ import MenuHorizontal from "./MenuHorizontal";
 import InputTextField from "../../components/InputTextField";
 import WritingTools from "./WritingTools";
 import { CanvasToolsName } from "../../constants/EnumType";
-
-const signCanvasPropsDefault: SignCanvasPropsType = {
-  width: 0.5,
-  color: "#404040",
-};
+import { signCanvasPropsDefault } from "../../constants/SignSetting";
+import useClickOutside from "../../utils/useClickOutside";
 
 interface props {
   ActiveMenu: number;
@@ -38,6 +35,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   const selectCanvasTool = (changeTool: string) => {
     setSignCanvasProps((prev) => ({
       ...prev,
+      tool: changeTool,
       width: changeTool === CanvasToolsName.HIGHLIGHTER ? 3 : 0.5,
     }));
     const ctx = sigCanvas.current.getCanvas().getContext("2d");
@@ -46,6 +44,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   const eraseCanvas = () => {
     setSignCanvasProps((prev) => ({
       ...prev,
+      tool: CanvasToolsName.ERASER,
       width: 6,
     }));
     const ctx = sigCanvas.current.getCanvas().getContext("2d");
@@ -82,6 +81,8 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
     setImageURL(sigCanvas.current.getTrimmedCanvas().toDataURL("image/png"));
   };
 
+  useClickOutside(colorRef, () => setIsOpenColor(false));
+
   return (
     <div id="WritingMode">
       <div className="card-box">
@@ -95,6 +96,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
               undoCanvas,
               resetCanvas,
             }}
+            signCanvasProps={signCanvasProps}
           />
           <SignatureCanvas
             canvasProps={{
