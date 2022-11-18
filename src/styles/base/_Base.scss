@@ -21,18 +21,25 @@ body {
 body {
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+div,
+p,
+label,
+span {
   font-family: "Raleway", "Noto Sans TC", sans-serif, "Segoe UI", "Roboto",
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 @layer components {
   body {
     @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat flatMin:bg-sign-cover;
-    @apply before:absolute before:top-0 before:right-0 flat:before:content-[url('/public/images/bg-mobile-2-right.png')];
-    @apply after:absolute after:bottom-0 after:left-0 after:z-[-20] after:h-0 after:w-0 flat:after:content-[url('/public/images/bg-mobile-2-left.png')];
+    // @apply before:absolute before:top-0 before:right-0 flat:before:content-[url('/public/images/bg-mobile-2-right.png')];
+    // @apply after:absolute after:bottom-0 after:left-0 after:z-[-20] after:h-0 after:w-0 flat:after:content-[url('/public/images/bg-mobile-2-left.png')];
   }
   .h1 {
     @apply text-6xl font-medium flat:text-[40px];
