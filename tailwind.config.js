@@ -39,6 +39,9 @@ module.exports = {
       screens: {
         flat: { max: "870px" },
       },
+      cursor: {
+        canvas: "url(/src/assets/svg/canvas_cursor.svg), auto",
+      },
     },
   },
   plugins: [],
