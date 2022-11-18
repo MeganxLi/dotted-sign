@@ -64,6 +64,8 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   const clearCanvas = () => {
     sigCanvas.current.clear();
     setIsDrawn(false);
+    setImageURL(null);
+    sigCanvas.current.on();
   };
 
   const resetCanvas = () => {
@@ -79,6 +81,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
 
   const saveCanvas = () => {
     setImageURL(sigCanvas.current.getTrimmedCanvas().toDataURL("image/png"));
+    sigCanvas.current.off();
   };
 
   useClickOutside(colorRef, () => setIsOpenColor(false));
@@ -88,16 +91,18 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
       <div className="card-box">
         <MenuHorizontal ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
         <div className={`relative px-8 ${isDrawn && ""}`}>
-          <WritingTools
-            handleSignTools={{
-              openColor,
-              selectCanvasTool,
-              eraseCanvas,
-              undoCanvas,
-              resetCanvas,
-            }}
-            signCanvasProps={signCanvasProps}
-          />
+          {!imageURL && (
+            <WritingTools
+              handleSignTools={{
+                openColor,
+                selectCanvasTool,
+                eraseCanvas,
+                undoCanvas,
+                resetCanvas,
+              }}
+              signCanvasProps={signCanvasProps}
+            />
+          )}
           <SignatureCanvas
             canvasProps={{
               className:
