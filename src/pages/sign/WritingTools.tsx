@@ -15,6 +15,7 @@ interface props {
     selectCanvasTool: (changeTool: string) => void;
     eraseCanvas: () => void;
     undoCanvas: () => void;
+    redoCanvas: () => void;
     resetCanvas: () => void;
   };
   signCanvasProps: SignCanvasPropsType;
@@ -62,7 +63,7 @@ const WritingTools = ({ handleSignTools, signCanvasProps }: props) => {
         <li onClick={handleSignTools.undoCanvas}>
           <ArrowUndoIcon className="svg-stroke" />
         </li>
-        <li>
+        <li onClick={handleSignTools.redoCanvas}>
           <ArrowRedoIcon className="svg-stroke" />
         </li>
         <li onClick={handleSignTools.resetCanvas}>

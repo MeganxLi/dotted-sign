@@ -16,6 +16,7 @@ interface props {
 
 const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   const sigCanvas = useRef<any>({});
+  let canvasHistory: string[] = []; // canvas 歷史紀錄，用來復原使用
   const [isDrawn, setIsDrawn] = useState<boolean>(false); //確認是否有繪圖
   const [imageURL, setImageURL] = useState(null);
   const [fileName, setFileName] = useState<string>("signature.png");
@@ -53,13 +54,19 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
 
   const undoCanvas = () => {
     const data = sigCanvas.current.toData();
-
-    if (data) {
-      data.pop(); // remove the last dot or line
+    if (data.length > 0) {
+      data.pop(); // 移除陣列最後一個
       sigCanvas.current.fromData(data);
     }
   };
-  // const redoCanvas = () => {};
+  const redoCanvas = () => {
+    const data = sigCanvas.current.toData();
+
+    if (data.length < canvasHistory.length) {
+      data.push(canvasHistory[data.length]);
+      sigCanvas.current.fromData(data);
+    }
+  };
 
   const clearCanvas = () => {
     sigCanvas.current.clear();
@@ -74,9 +81,9 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
     clearCanvas();
   };
 
-  const fetchCanvas = (e: any) => {
-    const data = sigCanvas.current.toData();
-    setIsDrawn(data.length !== 0);
+  const fetchCanvas = () => {
+    canvasHistory = sigCanvas.current.toData().concat();
+    setIsDrawn(!sigCanvas.current.isEmpty());
   };
 
   const saveCanvas = () => {
@@ -98,6 +105,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
                 selectCanvasTool,
                 eraseCanvas,
                 undoCanvas,
+                redoCanvas,
                 resetCanvas,
               }}
               signCanvasProps={signCanvasProps}
@@ -110,7 +118,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
             }}
             minWidth={signCanvasProps.width}
             penColor={signCanvasProps.color}
-            onBegin={fetchCanvas}
+            onEnd={fetchCanvas}
             ref={sigCanvas}
           />
 
