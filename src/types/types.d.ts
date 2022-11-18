@@ -8,6 +8,7 @@ interface PageListType {
 //Sign page
 
 interface SignCanvasPropsType {
+  tool: string;
   width: number;
   color: string;
 }

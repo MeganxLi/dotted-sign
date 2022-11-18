@@ -21,6 +21,16 @@
             @apply stroke-blue/50;
           }
         }
+        > li.active {
+          @apply bg-blue/10;
+
+          > .svg-fill {
+            @apply fill-blue;
+          }
+          > .svg-stroke {
+            @apply stroke-blue;
+          }
+        }
       }
     }
 

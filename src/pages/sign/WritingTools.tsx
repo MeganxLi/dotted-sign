@@ -17,9 +17,10 @@ interface props {
     undoCanvas: () => void;
     resetCanvas: () => void;
   };
+  signCanvasProps: SignCanvasPropsType;
 }
 
-const WritingTools = ({ handleSignTools }: props) => {
+const WritingTools = ({ handleSignTools, signCanvasProps }: props) => {
   return (
     <div id="WritingTools">
       <ul>
@@ -28,6 +29,9 @@ const WritingTools = ({ handleSignTools }: props) => {
         </li>
         <li
           onClick={() => handleSignTools.selectCanvasTool(CanvasToolsName.PEN)}
+          className={
+            signCanvasProps.tool === CanvasToolsName.PEN ? "active" : undefined
+          }
         >
           <PenIcon className="svg-fill" />
         </li>
@@ -35,10 +39,22 @@ const WritingTools = ({ handleSignTools }: props) => {
           onClick={() =>
             handleSignTools.selectCanvasTool(CanvasToolsName.HIGHLIGHTER)
           }
+          className={
+            signCanvasProps.tool === CanvasToolsName.HIGHLIGHTER
+              ? "active"
+              : undefined
+          }
         >
           <HighlighterIcon className="svg-fill" />
         </li>
-        <li onClick={handleSignTools.eraseCanvas}>
+        <li
+          onClick={handleSignTools.eraseCanvas}
+          className={
+            signCanvasProps.tool === CanvasToolsName.ERASER
+              ? "active"
+              : undefined
+          }
+        >
           <EraserIcon className="svg-fill" />
         </li>
       </ul>
