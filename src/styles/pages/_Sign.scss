@@ -1,7 +1,7 @@
 @layer components {
   #WritingMode,
   #UploadMode {
-    @apply flat:w-full;
+    @apply flex-auto flat:w-full;
   }
   #WritingMode {
     .sing-canvas-caption {

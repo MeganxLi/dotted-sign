@@ -17,9 +17,8 @@ const Head = () => {
       return (
         <li
           key={idx}
-          className={`flex gap-2 hover:text-blue ${
-            page.classTag
-          } cursor-pointer p-3 ${currentPageIdx === idx && "active"}`}
+          className={`flex gap-2 hover:text-blue ${page.classTag
+            } cursor-pointer p-3 ${currentPageIdx === idx && "active"}`}
           onClick={() => {
             navigate(page.path);
             flat && setOpenMenu(false);
@@ -34,14 +33,13 @@ const Head = () => {
   return (
     <>
       <header
-        className="sticky top-0 z-50 grid w-full grid-cols-[max-content_minmax(465px,_max-content)] 
+        className="relative top-0 z-50 grid w-full grid-cols-[max-content_minmax(465px,_max-content)] 
         justify-between px-5 py-4 flat:grid-cols-[repeat(2,_max-content)]
         "
       >
         <div
-          className={`rounded-large bg-white px-8 py-4 shadow-base flat:p-[12px_16px] ${
-            openMenu && "shadow-none"
-          }`}
+          className={`rounded-large bg-white px-8 py-4 shadow-base flat:p-[12px_16px] ${openMenu && "shadow-none"
+            }`}
         >
           <img className="flat:w-[92px]" src="/images/Logo.png" alt="Logo" />
         </div>
@@ -64,11 +62,10 @@ const Head = () => {
       </header>
       <ul
         className={`menu absolute left-0 top-0 z-40 
-        hidden w-full flex-col items-center gap-6 bg-white text-black/50 flat:flex ${
-          openMenu
+        hidden w-full flex-col items-center gap-6 bg-white text-black/50 flat:flex ${openMenu
             ? "scale-up-top-right pt-24 pb-16"
             : "scale-down-top-right origin-top-right"
-        } `}
+          } `}
       >
         {openMenu && (
           <>

@@ -114,7 +114,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
           <SignatureCanvas
             canvasProps={{
               className:
-                "signatureCanvas w-full bg-pale-blue rounded-[32px] cursor-canvas min-h-[220px]",
+                "signatureCanvas w-full bg-pale-blue rounded-[32px] cursor-canvas h-signHight",
             }}
             minWidth={signCanvasProps.width}
             penColor={signCanvasProps.color}

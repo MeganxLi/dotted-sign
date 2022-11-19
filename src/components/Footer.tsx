@@ -1,6 +1,7 @@
 const Footer = () => {
   return (
-    <footer className="px-6 font-['Roboto_Slab'] font-light tracking-widest text-white mix-blend-difference">
+    <footer className="px-6 font-['Roboto_Slab'] font-light tracking-widest text-white 
+    mix-blend-difference flat:text-center flat:mt-16">
       © 2009-2022 Kdan Mobile Software Ltd. All Rights Reserved.
     </footer>
   );
