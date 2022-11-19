@@ -13,16 +13,22 @@ const UploadMode = ({ ActiveMenu, setActiveMenu }: props) => {
   const resetUpload = () => {
     setImageURL(null);
   };
+
   return (
     <div id="UploadMode">
       <div className="card-box">
         <MenuHorizontal ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
         <div className="px-6">
-          <DragUpload
-            fileSetting={{ type: uploadTypeName.IMG, size: 5, divHight: "h-signHight" }}
-            fileURL={imageURL}
-            changeFile={setImageURL}
-          />
+          {imageURL ?
+            <div className="bg-checkerboard h-signHight">
+              <img className="h-full" src={imageURL?.toString()} />
+            </div> :
+            <DragUpload
+              fileSetting={{ type: uploadTypeName.IMG, size: 5, divHight: "h-signHight" }}
+              fileURL={imageURL}
+              changeFile={setImageURL}
+            />
+          }
         </div>
       </div>
       <div className="mt-4 flex gap-4 flat:flex-col-reverse">
