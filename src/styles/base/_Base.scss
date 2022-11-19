@@ -1,7 +1,7 @@
 // 英 Raleway
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;0,700;0,900;1,400&display=swap");
 // 中 Noto Sans TC
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100;300;400;500;700;900&display=swap");
 // Roboto Slab
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;300;400;500;700&display=swap");
 
@@ -37,7 +37,7 @@ span {
 
 @layer components {
   body {
-    @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat flatMin:bg-sign-cover;
+    @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black flatMin:bg-sign-cover;
     @apply before:absolute before:top-0 before:right-0 flat:before:content-[url('/public/images/bg-mobile-2-right.png')];
     @apply after:absolute after:bottom-0 after:left-0 after:z-[-20] after:h-0 after:w-0 flat:after:content-[url('/public/images/bg-mobile-2-left.png')];
   }

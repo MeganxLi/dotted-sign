@@ -28,4 +28,7 @@
       @apply shadow-none;
     }
   }
+  .two-btn {
+    @apply mt-4 flex gap-4 flat:flex-col-reverse;
+  }
 }

@@ -136,7 +136,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
           <InputTextField InputValue={fileName} setInputValue={setFileName} />
         </div>
       </div>
-      <div className="mt-4 flex gap-4 flat:flex-col-reverse">
+      <div className="two-btn ">
         <button
           className="btn-secodary flex-auto"
           disabled={!isDrawn}
