@@ -5,3 +5,8 @@ export enum CanvasToolsName {
   HIGHLIGHTER = "highlighter",
   ERASER = "eraser",
 }
+
+export enum uploadTypeName {
+  PDF = "pdf",
+  IMG = "image"
+}

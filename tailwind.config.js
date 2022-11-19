@@ -43,6 +43,9 @@ module.exports = {
       cursor: {
         canvas: "url(/src/assets/svg/canvas_cursor.svg), auto",
       },
+      height: {
+        signHight: "220px",
+      },
     },
   },
   plugins: [],

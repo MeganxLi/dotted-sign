@@ -5,5 +5,3 @@ export const signCanvasPropsDefault: SignCanvasPropsType = {
   width: 0.5,
   color: "#404040",
 };
-
-export const uploadFileSize = 5;
