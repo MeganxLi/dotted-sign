@@ -7,7 +7,7 @@ import { uploadTypeName } from "../constants/EnumType";
 interface props {
   fileSetting: { type: uploadTypeName.PDF | uploadTypeName.IMG, size: number, divHight: string }
   fileURL: string | ArrayBuffer | null;
-  changeFile: React.Dispatch<React.SetStateAction<string | ArrayBuffer | null>>;
+  changeFile: (file: string | ArrayBuffer | null, name: string) => void;
 }
 const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
   /**  true: PDF; false: img */
@@ -17,7 +17,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
 
   const uploadFile = (file: FileList | null) => {
     if (!file) return;
-    const { size, type } = file[0];
+    const { name, size, type } = file[0];
 
     // 確認檔案類型
     const imgTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -44,7 +44,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
 
     const fileReader = new FileReader(); // FileReader為瀏覽器內建類別，用途為讀取瀏覽器選中的檔案
     fileReader.onload = loadEvt => {
-      changeFile(fileReader.result);
+      changeFile(fileReader.result, name);
       setDragActive(false);
     };
     fileReader.readAsDataURL(file[0]);
