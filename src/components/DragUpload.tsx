@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+import { uploadTypeName } from "../constants/EnumType";
 
 //svg
 import { ReactComponent as UploadIcon } from "../assets/svg/upload.svg";
-import { uploadTypeName } from "../constants/EnumType";
 
 interface props {
   fileSetting: { type: uploadTypeName.PDF | uploadTypeName.IMG, size: number, divHight: string }
@@ -14,6 +17,18 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
   const judgeFileType = fileSetting.type === uploadTypeName.PDF;
   const [dragActive, setDragActive] = React.useState(false); //是否有拖移檔案
   const [uploadError, setUploadError] = useState<"type" | "size" | null>(null); //錯誤提醒，圖片類型和不超過檔案大小
+
+  //pdf canvas
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const c = canvasRef.current;
+    if (c == null) return;
+    setCanvas(c);
+    setCtx(c.getContext("2d"));
+  }, [canvasRef]);
 
   const uploadFile = (file: FileList | null) => {
     if (!file) return;
@@ -43,11 +58,68 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
     setUploadError(null);
 
     const fileReader = new FileReader(); // FileReader為瀏覽器內建類別，用途為讀取瀏覽器選中的檔案
-    fileReader.onload = loadEvt => {
-      changeFile(fileReader.result, name);
-      setDragActive(false);
-    };
-    fileReader.readAsDataURL(file[0]);
+
+    if (judgeFileType) {
+      // 處理 PDF
+      fileReader.onload = function () {
+        if (
+          typeof this.result !== "string" &&
+          this.result !== null &&
+          canvas &&
+          ctx
+        ) {
+          const pdfData = new Uint8Array(this.result);
+          console.log("pdfData", pdfData);
+
+          // Using DocumentInitParameters object to load binary data.
+          const loadingTask = pdfjs.getDocument({ data: pdfData });
+          loadingTask.promise.then(
+            function (pdf) {
+              console.log("PDF loaded");
+              // Fetch the first page
+              const pageNumber = 1;
+              pdf.getPage(pageNumber).then(function (page) {
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale: scale });
+
+                // Prepare canvas using PDF page dimensions
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                // Render PDF page into canvas context
+                const renderContext = {
+                  canvasContext: ctx,
+                  viewport: viewport
+                };
+
+                const renderTask = page.render(renderContext);
+                renderTask.promise.then(function () {
+                  console.log("Page rendered");
+
+                  //輸出圖片
+                  const image = canvas.toDataURL();
+                  console.log("canvas", canvas, "image", image);
+                  changeFile(image, name);
+                });
+              });
+            },
+            function (reason) {
+              // PDF loading error
+              console.error(reason);
+            }
+          );
+        }
+
+      };
+      fileReader.readAsArrayBuffer(file[0]);
+
+    } else {
+      // 處理 Img
+      fileReader.onload = loadEvt => {
+        changeFile(fileReader.result, name);
+        setDragActive(false);
+      };
+      fileReader.readAsDataURL(file[0]);
+    }
 
   };
 
@@ -85,6 +157,8 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
       onDragOver={fileHandleDrag}
       onDrop={fileHandleDrag}
     >
+
+      <canvas className="hidden" ref={canvasRef} width={100} height={100}></canvas>
       <UploadIcon />
       <p className="text-sm tracking-wider">
         <span className=" flat:hidden">拖曳圖片至此，或</span>

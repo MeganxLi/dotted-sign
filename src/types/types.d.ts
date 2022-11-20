@@ -5,8 +5,9 @@ interface PageListType {
   classTag: string;
 }
 
-//Sign page
+type canvasType = string | ArrayBuffer | null;
 
+//Sign page
 interface SignCanvasPropsType {
   tool: string;
   width: number;
