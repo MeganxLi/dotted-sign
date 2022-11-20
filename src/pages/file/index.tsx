@@ -6,11 +6,19 @@ import Intro from "../../components/Intro";
 import { uploadTypeName } from "../../constants/EnumType";
 import EditFile from "./EditFile";
 import FinishUpload from "./FinishUpload";
+import { FileNameDefault } from "../../constants/FileSetting";
 
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
   const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<canvasType>>(fileAtom);
-  const [pdfName, setPdfName] = useState<string>("File");
+  const [pdfName, setPdfName] = useState<string>(FileNameDefault);
+
+  useEffect(() => {
+    return () => {
+      //離開頁面清空
+      setPdfURL(null);
+    };
+  }, []);
 
   useEffect(() => {
     if (pdfURL) return setStepMenu(1);
@@ -30,6 +38,12 @@ const File = () => {
 
   const nextMenu = () => {
     setStepMenu(perv => perv + 1);
+  };
+
+  const cancelFile = () => {
+    setStepMenu(0);
+    setPdfURL(null);
+    setPdfName(FileNameDefault);
   };
 
   return <main
@@ -59,7 +73,7 @@ const File = () => {
     {
       stepMenu === 2 &&
       <EditFile
-        pdfName={pdfName} setPdfName={setPdfName} previousMenu={previousMenu} nextMenu={nextMenu} />
+        pdfName={pdfName} setPdfName={setPdfName} cancelFile={cancelFile} />
     }
   </main>;
 };

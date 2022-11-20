@@ -9,11 +9,10 @@ import TabPanel from "./EditFile/TabPanel";
 interface props {
   pdfName: string;
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
-  previousMenu: () => void;
-  nextMenu: () => void;
+  cancelFile: () => void;
 }
 
-const EditFile = ({ pdfName, setPdfName, previousMenu, nextMenu }: props) => {
+const EditFile = ({ pdfName, setPdfName, cancelFile }: props) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [pdfURL] = useAtom<PrimitiveAtom<canvasType>>(fileAtom);
   const mainRef = useRef<HTMLCanvasElement>(null);
@@ -68,7 +67,7 @@ const EditFile = ({ pdfName, setPdfName, previousMenu, nextMenu }: props) => {
         <FileList />
         <div className="flex flex-col gap-4">
           <button className="btn-primary flex-auto">下一步</button>
-          <button className="btn-secodary flex-auto">取消</button>
+          <button className="btn-secodary flex-auto" onClick={cancelFile}>取消</button>
         </div>
       </div>
     </div>
