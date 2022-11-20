@@ -13,7 +13,7 @@ interface props {
 }
 const FinishUpload = ({ pdfName, setPdfName, previousMenu, nextMenu }: props) => {
   return (
-    <div id="FinishUpload" className="flex-auto flat:w-full">
+    <div id="FinishUpload" >
       <div className="card-box w-full p-6">
         <div className="flex w-full gap-6 bg-pale-blue py-4 px-6 rounded-2xl">
           <span>

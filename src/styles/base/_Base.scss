@@ -46,7 +46,7 @@ span {
     @apply flex h-[calc(100vh-120px)] items-center justify-center gap-24 px-6;
     @apply flat:h-auto flat:flex-col flat:items-start flat:justify-start flat:gap-4 flat:pt-9;
 
-    > div:last-child {
+    > div:last-child:not(.not-w) {
       @apply w-[588px] flat:w-full flat:max-w-full flat:flex-initial;
     }
   }

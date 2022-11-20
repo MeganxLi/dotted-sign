@@ -34,6 +34,7 @@ const File = () => {
 
   return <main
     id="File"
+    className={`${stepMenu === 2 ? "justify-start" : undefined}`}
   >
     {stepMenu !== 2 && <Intro
       LargeStandard={
