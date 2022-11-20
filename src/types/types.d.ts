@@ -13,3 +13,10 @@ interface SignCanvasPropsType {
   width: number;
   color: string;
 }
+
+
+//File page
+interface TagItemType {
+  name: string;
+  icon: JSX.Element;
+}

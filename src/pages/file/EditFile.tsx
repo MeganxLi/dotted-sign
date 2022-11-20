@@ -4,6 +4,7 @@ import { fileAtom } from "../../jotai";
 import { fabric } from "fabric";
 import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
+import TabPanel from "./EditFile/TabPanel";
 
 interface props {
   pdfName: string;
@@ -56,8 +57,9 @@ const EditFile = ({ pdfName, setPdfName, previousMenu, nextMenu }: props) => {
 
   return (
     <div className="grid w-[68%]  gap grid-cols-[220px_100%_220px] not-w">
-      <div className="edit-file-field rounded-l-[32px]">
+      <div className="edit-file-field rounded-l-[32px] grid gap-8">
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
+        <TabPanel />
       </div>
       <div className="flex items-start justify-center bg-green-blue">
         <canvas ref={mainRef} className="canvas-style"></canvas>
