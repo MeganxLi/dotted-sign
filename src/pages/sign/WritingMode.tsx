@@ -79,6 +79,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
     sigCanvas.current.clear();
     setIsDrawn(false);
     setImageURL(null);
+    setSaveButton(false);
     sigCanvas.current.on();
   };
 

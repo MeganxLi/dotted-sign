@@ -19,6 +19,7 @@ const UploadMode = ({ ActiveMenu, setActiveMenu }: props) => {
 
   const resetUpload = () => {
     setImageURL(null);
+    setSaveButton(false);
   };
 
   const saveUpload = () => {
