@@ -1,6 +1,6 @@
 
 import React from "react";
-import { TagItemName } from "../../../../constants/SignSetting";
+import { TagItemName } from "../../../../constants/FileSetting";
 
 const TagField = () => {
   return (
