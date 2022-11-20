@@ -56,7 +56,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile }: props) => {
 
   return (
     <div className="grid w-[68%]  gap grid-cols-[220px_100%_220px] not-w">
-      <div className="edit-file-field rounded-l-[32px] grid gap-8">
+      <div className="edit-file-field rounded-l-[32px] grid gap-8 grid-rows-[repeat(3,_min-content)]">
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
       </div>
