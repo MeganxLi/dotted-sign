@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import { HexColorPicker } from "react-colorful";
 
@@ -8,6 +9,8 @@ import WritingTools from "./WritingTools";
 import { CanvasToolsName } from "../../constants/EnumType";
 import { signCanvasPropsDefault } from "../../constants/SignSetting";
 import useClickOutside from "../../utils/useClickOutside";
+import { useAtom } from "jotai";
+import { signAtom } from "../../jotai";
 
 interface props {
   ActiveMenu: number;
@@ -15,14 +18,18 @@ interface props {
 }
 
 const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
+  // router
+  const navigate = useNavigate();
   const sigCanvas = useRef<any>({});
   let canvasHistory: string[] = []; // canvas 歷史紀錄，用來復原使用
   const [isDrawn, setIsDrawn] = useState<boolean>(false); //確認是否有繪圖
-  const [imageURL, setImageURL] = useState(null);
+  const [imageURL, setImageURL] = useState<HTMLCanvasElement | null>(null);
   const [fileName, setFileName] = useState<string>("signature.png");
   const [signCanvasProps, setSignCanvasProps] = useState<SignCanvasPropsType>(
     signCanvasPropsDefault
   );
+  const [, setSignList] = useAtom(signAtom);
+  const [saveButton, setSaveButton] = useState<boolean>(false);
 
   //color picker
   const colorRef = useRef(null);
@@ -87,8 +94,11 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   };
 
   const saveCanvas = () => {
-    setImageURL(sigCanvas.current.getTrimmedCanvas().toDataURL("image/png"));
+    const DataURL: HTMLCanvasElement = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
+    setImageURL(DataURL);
     sigCanvas.current.off();
+    setSignList(prev => [...prev, DataURL]);
+    setSaveButton(true);
   };
 
   useClickOutside(colorRef, () => setIsOpenColor(false));
@@ -144,9 +154,12 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
         >
           清除畫布
         </button>
-        <button className="btn-primary flex-auto" onClick={saveCanvas}>
-          儲存結果
-        </button>
+        {!saveButton ?
+          <button className="btn-primary flex-auto" onClick={saveCanvas}>
+            儲存結果
+          </button> :
+          <button className="btn-primary flex-auto" onClick={() => navigate("/")}>開始簽署文件</button>
+        }
       </div>
     </div>
   );
