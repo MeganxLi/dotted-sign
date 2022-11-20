@@ -32,10 +32,8 @@ const File = () => {
     setStepMenu(perv => perv + 1);
   };
 
-  return <div
+  return <main
     id="File"
-    className="flexMin:justify-center flex h-screen items-center gap-24  
-    flat:flex-col flat:items-start flat:gap-4 flat:px-6 flat:pt-9"
   >
     {stepMenu !== 2 && <Intro
       LargeStandard={
@@ -62,7 +60,7 @@ const File = () => {
       <EditFile
         pdfName={pdfName} setPdfName={setPdfName} previousMenu={previousMenu} nextMenu={nextMenu} />
     }
-  </div>;
+  </main>;
 };
 
 export default File;

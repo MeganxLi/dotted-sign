@@ -7,10 +7,7 @@ const Sign = () => {
   const [ActiveMenu, setActiveMenu] = useState<number>(0);
 
   return (
-    <div
-      className="flexMin:justify-center flex h-screen items-center gap-24  
-     flat:flex-col flat:items-start flat:gap-4 flat:px-6 flat:pt-9"
-    >
+    <main id="Sign">
       <Intro
         LargeStandard={
           <>
@@ -24,7 +21,7 @@ const Sign = () => {
       ) : (
         <UploadMode ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
       )}
-    </div>
+    </main>
   );
 };
 

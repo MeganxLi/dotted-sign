@@ -25,7 +25,7 @@ const FinishUpload = ({ pdfName, setPdfName, previousMenu, nextMenu }: props) =>
               上傳完成
               <Check className="inline-block ml-2" size="16px" strokeWidth="4" />
             </span>
-            <span className="w-full h-1 bg-blue row-span-2 col-span-2"></span>
+            <span className="w-full h-1 bg-blue row-span-2 col-span-2 mt-2"></span>
           </div>
         </div>
         <div className="mx-6 mt-12 mb-4">

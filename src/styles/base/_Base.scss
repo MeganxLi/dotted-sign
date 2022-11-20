@@ -39,14 +39,25 @@ span {
   body {
     @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black flatMin:bg-sign-cover;
     @apply before:absolute before:top-0 before:right-0 flat:before:content-[url('/public/images/bg-mobile-2-right.png')];
-    @apply after:absolute after:bottom-0 after:left-0 after:z-[-20] after:h-0 after:w-0 flat:after:content-[url('/public/images/bg-mobile-2-left.png')];
+    @apply after:absolute after:left-0 after:z-[-20] after:h-0 after:w-0 flat:after:content-[url('/public/images/bg-mobile-2-left.png')];
   }
+
+  main {
+    @apply flex h-[calc(100vh-120px)] items-center justify-center gap-24 px-6;
+    @apply flat:h-auto flat:flex-col flat:items-start flat:justify-start flat:gap-4 flat:pt-9;
+
+    > div:last-child {
+      @apply w-[588px] flat:w-full flat:max-w-full flat:flex-initial;
+    }
+  }
+
   .h1 {
     @apply text-6xl font-medium flat:text-[40px];
   }
   .h4 {
     @apply text-2xl flat:text-base;
   }
+
   .bg-checkerboard {
     @apply flex items-center justify-center rounded-[32px] bg-[#d9d9d9];
     background-image: linear-gradient(45deg, transparent 75%, #eee 0),
