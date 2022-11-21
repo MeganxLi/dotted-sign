@@ -12,6 +12,7 @@
   .btn-secodary {
     @apply rounded-large bg-white p-3 text-black shadow-secodary;
     @apply active:focus:bg-[#FCFEFF] disabled:cursor-not-allowed disabled:opacity-30;
+    foo: bar;
     &:hover,
     &:focus,
     &:active {
@@ -22,6 +23,7 @@
   .btn-alter {
     @apply rounded-large bg-alert-red p-3 text-white shadow-primary;
     @apply active:focus:bg-[#DD6045] disabled:cursor-not-allowed disabled:opacity-30;
+    foo: bar;
     &:hover,
     &:focus,
     &:active {

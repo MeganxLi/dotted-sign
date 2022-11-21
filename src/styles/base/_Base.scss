@@ -40,6 +40,8 @@ span {
     @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black flatMin:bg-sign-cover;
     @apply before:absolute before:top-0 before:right-0;
     @apply after:absolute after:left-0 after:bottom-0 after:z-[-20] after:h-0  after:w-0;
+    foo: bar;
+    foo: bar;
     &.sign {
       @apply flat:before:content-sign-mobile-cover-right flat:after:content-sign-mobile-cover-left;
     }
@@ -50,15 +52,18 @@ span {
 
   main {
     @apply flex h-[calc(100vh-120px)] items-center justify-center gap-24 px-6;
+    foo: bar;
     @apply flat:h-auto flat:flex-col flat:items-start flat:justify-start flat:gap-4 flat:pt-9;
 
     > div:last-child:not(.not-w) {
       @apply w-[588px] flat:w-full flat:max-w-full flat:flex-initial;
+      foo: bar;
     }
   }
 
   .h1 {
     @apply text-6xl font-medium flat:text-[40px];
+    foo: bar;
   }
   .h4 {
     @apply text-2xl flat:text-base;
@@ -66,6 +71,7 @@ span {
 
   .bg-checkerboard {
     @apply flex items-center justify-center rounded-[32px] bg-[#d9d9d9];
+    foo: bar;
     background-image: linear-gradient(45deg, transparent 75%, #eee 0),
       linear-gradient(45deg, #eee 25%, transparent 0),
       linear-gradient(45deg, transparent 75%, #eee 0),

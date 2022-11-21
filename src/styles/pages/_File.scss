@@ -15,10 +15,12 @@
 
       .sing-tag {
         @apply relative h-[56px] w-[80px] cursor-pointer rounded-lg border-[0.5px];
+        foo: bar;
 
         > img,
         > svg {
           @apply absolute top-[50%] bottom-0 left-[50%] right-0 translate-x-[-50%] translate-y-[-50%];
+          foo: bar;
           @apply block max-h-full max-w-full;
         }
 
@@ -29,6 +31,7 @@
 
       .field-tag {
         @apply h-[80px] w-[80px] cursor-pointer rounded-lg p-4 shadow-tag;
+        foo: bar;
         > span {
           @apply inline-block h-6 w-6;
         }
