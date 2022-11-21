@@ -1,0 +1,5 @@
+@layer components {
+  .card-box {
+    @apply rounded-large bg-white pt-4 pb-6 shadow-base;
+  }
+}

@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+//utils
+@import "./utils/animation";
+
+//base
+@import "./base/reset";
+@import "./base/base";
+@import "./base/button";
+@import "./base/input";
+@import "./base/canvas";
+
+//components
+@import "./components/head";
+@import "./components/cardbox";
+
+//pages
+@import "./pages/sign";
+@import "./pages/file";

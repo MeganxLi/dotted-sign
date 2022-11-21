@@ -1,0 +1,41 @@
+@layer components {
+  #WritingMode {
+    .sing-canvas-caption {
+      @apply after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:text-sm after:text-[#728F9B]  after:content-['在此範圍內進行簽署'];
+    }
+
+    #WritingTools {
+      @apply flex w-[calc(100%-6rem)] items-center justify-between rounded-3xl bg-white px-3 py-1 shadow-base;
+      @apply absolute top-3 left-[50%] translate-x-[-50%];
+
+      > ul {
+        @apply flex items-center gap-2;
+
+        > li {
+          @apply cursor-pointer rounded-[4px] p-[2px] hover:bg-blue/10;
+
+          > .svg-fill {
+            @apply fill-blue/50;
+          }
+          > .svg-stroke {
+            @apply stroke-blue/50;
+          }
+        }
+        > li.active {
+          @apply bg-blue/10;
+
+          > .svg-fill {
+            @apply fill-blue;
+          }
+          > .svg-stroke {
+            @apply stroke-blue;
+          }
+        }
+      }
+    }
+
+    .react-colorful {
+      @apply absolute top-12 left-[4rem] h-28 w-28;
+    }
+  }
+}
