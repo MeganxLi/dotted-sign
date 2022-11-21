@@ -3,6 +3,8 @@ import routes from "../route/router";
 import { ReactComponent as Menu } from "../assets/svg/menu.svg";
 import { X } from "react-feather";
 import { useLocation, useNavigate } from "react-router-dom";
+//img
+import Logo from "../../public/images/Logo.png";
 
 const Head = () => {
   // router
@@ -43,14 +45,18 @@ const Head = () => {
             openMenu && "shadow-none"
           }`}
         >
-          <img className="flat:w-[92px]" src="/images/Logo.png" alt="Logo" />
+          <img
+            className="flat:w-[92px]"
+            src={process.env.PUBLIC_URL + "/images/Logo.png"}
+            alt="Logo"
+          />
         </div>
         <nav className="flex items-center justify-between rounded-large bg-white pr-2 pl-12 shadow-base flat:hidden">
           <ul className="menu grid grid-cols-3 gap-12 text-black/50 ">
             {MenuList(false)}
           </ul>
           <div className="rounded-full p-1 outline outline-1 outline-black/20">
-            <img src="/images/user.png" />
+            <img src={process.env.PUBLIC_URL + "/images/user.png"} />
           </div>
         </nav>
         <div className="hidden flat:block ">
@@ -75,7 +81,7 @@ const Head = () => {
             {MenuList(true)}
             <div className="mt-4 flex items-center gap-2">
               <div className="rounded-full p-1 outline outline-1 outline-black/20">
-                <img src="/images/user.png" />
+                <img src={process.env.PUBLIC_URL + "/images/user.png"} />
               </div>
               我的會員
             </div>
