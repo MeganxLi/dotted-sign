@@ -1,5 +1,3 @@
-
-import React from "react";
 import { TagItemName } from "../../../../constants/FileSetting";
 
 const TagField = () => {
@@ -7,7 +5,7 @@ const TagField = () => {
     <div className="tag-element">
       <p>欄位</p>
       <div className="tag-list">
-        {TagItemName.map((item: TagItemType, idx: number) => {
+        {TagItemName.map((item: TagItemType) => {
           return (
             <div key={item.name} className="field-tag">
               {item.icon}
@@ -16,7 +14,6 @@ const TagField = () => {
           );
         })}
       </div>
-
     </div>
   );
 };

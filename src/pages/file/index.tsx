@@ -33,11 +33,11 @@ const File = () => {
       default:
         break;
     }
-    setStepMenu(perv => perv - 1);
+    setStepMenu((perv) => perv - 1);
   };
 
   const nextMenu = () => {
-    setStepMenu(perv => perv + 1);
+    setStepMenu((perv) => perv + 1);
   };
 
   const cancelFile = () => {
@@ -46,36 +46,56 @@ const File = () => {
     setPdfName(FileNameDefault);
   };
 
-  return <main
-    id="File"
-    className={`${stepMenu === 2 ? "justify-start" : undefined}`}
-  >
-    {stepMenu !== 2 && <Intro
-      LargeStandard={
-        <>
-          Anywhere, <br /> anytime.
-        </>
-      }
-      SubStandard="開始簽署您的文件"
-    />}
-    {stepMenu === 0 && <>
-      <div className="card-box w-full p-5">
-        <DragUpload
-          fileSetting={{ type: uploadTypeName.PDF, size: 20, divHight: "h-[360px]" }}
-          fileURL={pdfURL}
-          changeFile={(file, name) => { setPdfURL(file); setPdfName(name); }}
+  return (
+    <main
+      id="File"
+      className={`${stepMenu === 2 ? "w-screen justify-start" : undefined}`}
+    >
+      {stepMenu !== 2 && (
+        <Intro
+          LargeStandard={
+            <>
+              Anywhere, <br /> anytime.
+            </>
+          }
+          SubStandard="開始簽署您的文件"
         />
-      </div></>
-    }
-    {stepMenu === 1 &&
-      <FinishUpload pdfName={pdfName} setPdfName={setPdfName} previousMenu={previousMenu} nextMenu={nextMenu} />
-    }
-    {
-      stepMenu === 2 &&
-      <EditFile
-        pdfName={pdfName} setPdfName={setPdfName} cancelFile={cancelFile} />
-    }
-  </main>;
+      )}
+      {stepMenu === 0 && (
+        <>
+          <div className="card-box w-full p-5">
+            <DragUpload
+              fileSetting={{
+                type: uploadTypeName.PDF,
+                size: 20,
+                divHight: "h-[360px]",
+              }}
+              fileURL={pdfURL}
+              changeFile={(file, name) => {
+                setPdfURL(file);
+                setPdfName(name);
+              }}
+            />
+          </div>
+        </>
+      )}
+      {stepMenu === 1 && (
+        <FinishUpload
+          pdfName={pdfName}
+          setPdfName={setPdfName}
+          previousMenu={previousMenu}
+          nextMenu={nextMenu}
+        />
+      )}
+      {stepMenu === 2 && (
+        <EditFile
+          pdfName={pdfName}
+          setPdfName={setPdfName}
+          cancelFile={cancelFile}
+        />
+      )}
+    </main>
+  );
 };
 
 export default File;
