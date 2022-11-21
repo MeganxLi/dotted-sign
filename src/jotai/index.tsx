@@ -6,8 +6,13 @@ import { atom } from "jotai";
 const signAtom = atom<(HTMLCanvasElement | string)[]>([]);
 
 /**
+ * 新增 canvas 圖像
+ */
+const addCanvasAtom = atom<HTMLCanvasElement | string>("");
+
+/**
  * 檔案 canvas
  */
 const fileAtom = atom<canvasType>(null);
 
-export { signAtom, fileAtom };
+export { signAtom, addCanvasAtom, fileAtom };
