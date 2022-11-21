@@ -14,6 +14,8 @@ const File = () => {
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
 
   useEffect(() => {
+    document.body.classList.add("file");
+    document.body.classList.remove("sign");
     return () => {
       //離開頁面清空
       setPdfURL(null);

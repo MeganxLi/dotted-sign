@@ -17,8 +17,9 @@ const Head = () => {
       return (
         <li
           key={idx}
-          className={`flex gap-2 hover:text-blue ${page.classTag
-            } cursor-pointer p-3 ${currentPageIdx === idx && "active"}`}
+          className={`flex gap-2 hover:text-blue ${
+            page.classTag
+          } cursor-pointer p-3 ${currentPageIdx === idx && "active"}`}
           onClick={() => {
             navigate(page.path);
             flat && setOpenMenu(false);
@@ -38,8 +39,9 @@ const Head = () => {
         "
       >
         <div
-          className={`rounded-large bg-white px-8 py-4 shadow-base flat:p-[12px_16px] ${openMenu && "shadow-none"
-            }`}
+          className={`rounded-large bg-white px-8 py-4 shadow-base flat:p-[12px_16px] ${
+            openMenu && "shadow-none"
+          }`}
         >
           <img className="flat:w-[92px]" src="/images/Logo.png" alt="Logo" />
         </div>
@@ -48,7 +50,7 @@ const Head = () => {
             {MenuList(false)}
           </ul>
           <div className="rounded-full p-1 outline outline-1 outline-black/20">
-            <img src="images/user.png" />
+            <img src="/images/user.png" />
           </div>
         </nav>
         <div className="hidden flat:block ">
@@ -62,17 +64,18 @@ const Head = () => {
       </header>
       <ul
         className={`menu absolute left-0 top-0 z-40 
-        hidden w-full flex-col items-center gap-6 bg-white text-black/50 flat:flex ${openMenu
+        hidden w-full flex-col items-center gap-6 bg-white text-black/50 flat:flex ${
+          openMenu
             ? "scale-up-top-right pt-24 pb-16"
             : "scale-down-top-right origin-top-right"
-          } `}
+        } `}
       >
         {openMenu && (
           <>
             {MenuList(true)}
             <div className="mt-4 flex items-center gap-2">
               <div className="rounded-full p-1 outline outline-1 outline-black/20">
-                <img src="images/user.png" />
+                <img src="/images/user.png" />
               </div>
               我的會員
             </div>

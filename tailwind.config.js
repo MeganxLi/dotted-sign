@@ -29,10 +29,12 @@ module.exports = {
       },
       backgroundImage: {
         "file-cover": "url('/public/images/bg-desktop-1.png')",
+        "sign-cover": "url('/public/images/bg-desktop-2.png')",
+      },
+      content: {
         "file-mobile-cover-left": "url('/public/images/bg-mobile-1-left.png')",
         "file-mobile-cover-right":
           "url('/public/images/bg-mobile-1-right.png')",
-        "sign-cover": "url('/public/images/bg-desktop-2.png')",
         "sign-mobile-cover-left": "url('/public/images/bg-mobile-2-left.png')",
         "sign-mobile-cover-right":
           "url('/public/images/bg-mobile-2-right.png')",

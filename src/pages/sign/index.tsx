@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Intro from "../../components/Intro";
 import UploadMode from "./UploadMode";
 import WritingMode from "./WritingMode";
 
 const Sign = () => {
   const [ActiveMenu, setActiveMenu] = useState<number>(0);
+
+  useEffect(() => {
+    document.body.classList.add("sign");
+    document.body.classList.remove("file");
+  }, []);
 
   return (
     <main id="Sign">
