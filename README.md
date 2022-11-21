@@ -1,6 +1,6 @@
-# dotted-sign 點點簽
+# Dotted Sign 點點簽
 
-[2022 The F2E](https://2022.thef2e.com/) Week2 - 線上簽名網站
+[2022 The F2E](https://2022.thef2e.com/) Week2 - 簡易線上簽名網站
 
 (尚未完整完成)
 
