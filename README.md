@@ -6,7 +6,7 @@
 
 ## 文件說明
 ### 採用設計
-感謝 [間諜吐司](https://2022.thef2e.com/users/12061579703807156568) Figma
+感謝 [Molly Hung](https://mollyhung.framer.website/) [Figma](https://www.figma.com/file/syDguQlTNgRHsAfhye1hQn/F2E---Week-2?node-id=38%3A123392&t=c3lsYVVt7WPGAncz-3)
 
 ### 技術
  - React
