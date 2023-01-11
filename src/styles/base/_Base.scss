@@ -37,15 +37,17 @@ span {
 
 @layer components {
   body {
-    @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black flatMin:bg-sign-cover;
+    @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black;
     @apply before:absolute before:top-0 before:right-0;
     @apply after:absolute after:left-0 after:bottom-0 after:z-[-20] after:h-0  after:w-0;
     foo: bar;
     foo: bar;
     &.sign {
+      @apply flatMin:bg-sign-cover;
       @apply flat:before:content-sign-mobile-cover-right flat:after:content-sign-mobile-cover-left;
     }
     &.file {
+      @apply flatMin:bg-file-cover;
       @apply flat:before:content-file-mobile-cover-right flat:after:content-file-mobile-cover-left;
     }
   }
