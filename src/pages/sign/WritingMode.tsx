@@ -32,7 +32,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   const [saveButton, setSaveButton] = useState<boolean>(false);
 
   //color picker
-  const colorRef = useRef(null);
+  const colorRef = useRef<HTMLHeadingElement>(null);
   const [isOpenColor, setIsOpenColor] = useState<boolean>(false);
 
   const openColor = () => setIsOpenColor((prev) => !prev);
@@ -95,10 +95,12 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
   };
 
   const saveCanvas = () => {
-    const DataURL: HTMLCanvasElement = sigCanvas.current.getTrimmedCanvas().toDataURL("image/png");
+    const DataURL: HTMLCanvasElement = sigCanvas.current
+      .getTrimmedCanvas()
+      .toDataURL("image/png");
     setImageURL(DataURL);
     sigCanvas.current.off();
-    setSignList(prev => [...prev, DataURL]);
+    setSignList((prev) => [...prev, DataURL]);
     setSaveButton(true);
   };
 
@@ -155,12 +157,18 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
         >
           清除畫布
         </button>
-        {!saveButton ?
+        {!saveButton ? (
           <button className="btn-primary flex-auto" onClick={saveCanvas}>
             儲存結果
-          </button> :
-          <button className="btn-primary flex-auto" onClick={() => navigate("/")}>開始簽署文件</button>
-        }
+          </button>
+        ) : (
+          <button
+            className="btn-primary flex-auto"
+            onClick={() => navigate("/")}
+          >
+            開始簽署文件
+          </button>
+        )}
       </div>
     </div>
   );

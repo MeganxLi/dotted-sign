@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 //utils
-@import "./utils/animation";
+@import "./utils/Animation";
 
 //base
-@import "./base/reset";
-@import "./base/base";
-@import "./base/button";
-@import "./base/input";
-@import "./base/canvas";
+@import "./base/Reset";
+@import "./base/Base";
+@import "./base/Button";
+@import "./base/Input";
+@import "./base/Canvas";
 
 //components
-@import "./components/head";
-@import "./components/cardbox";
+@import "./components/Head";
+@import "./components/CardBox";
 
 //pages
-@import "./pages/sign";
-@import "./pages/file";
+@import "./pages/Sign";
+@import "./pages/File";
