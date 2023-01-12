@@ -1,4 +1,3 @@
-import React from "react";
 import { useAtom } from "jotai";
 import { addCanvasAtom, signAtom } from "../../../../jotai";
 import { Plus } from "react-feather";

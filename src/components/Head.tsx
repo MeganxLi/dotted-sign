@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import routes from "../route/router";
 import { ReactComponent as Menu } from "../assets/svg/menu.svg";
 import { X } from "react-feather";
 import { useLocation, useNavigate } from "react-router-dom";
-//img
-import Logo from "../../public/images/Logo.png";
 
 const Head = () => {
   // router

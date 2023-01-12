@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Intro from "../../components/Intro";
 import UploadMode from "./UploadMode";
 import WritingMode from "./WritingMode";
