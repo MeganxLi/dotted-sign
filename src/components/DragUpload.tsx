@@ -8,7 +8,11 @@ import { uploadTypeName } from "../constants/EnumType";
 import { ReactComponent as UploadIcon } from "../assets/svg/upload.svg";
 
 interface props {
-  fileSetting: { type: uploadTypeName.PDF | uploadTypeName.IMG, size: number, divHight: string }
+  fileSetting: {
+    type: uploadTypeName.PDF | uploadTypeName.IMG;
+    size: number;
+    divHight: string;
+  };
   fileURL: string | ArrayBuffer | null;
   changeFile: (file: string | ArrayBuffer | null, name: string) => void;
 }
@@ -33,6 +37,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
   const uploadFile = (file: FileList | null) => {
     if (!file) return;
     const { name, size, type } = file[0];
+    console.log("upload file", file[0]);
 
     // 確認檔案類型
     const imgTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -75,7 +80,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
           const loadingTask = pdfjs.getDocument({ data: pdfData });
           loadingTask.promise.then(
             function (pdf) {
-              console.log("PDF loaded");
+              console.log("PDF loaded", pdf);
               // Fetch the first page
               const pageNumber = 1;
               pdf.getPage(pageNumber).then(function (page) {
@@ -88,7 +93,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
                 // Render PDF page into canvas context
                 const renderContext = {
                   canvasContext: ctx,
-                  viewport: viewport
+                  viewport: viewport,
                 };
 
                 const renderTask = page.render(renderContext);
@@ -108,19 +113,16 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
             }
           );
         }
-
       };
       fileReader.readAsArrayBuffer(file[0]);
-
     } else {
       // 處理 Img
-      fileReader.onload = loadEvt => {
+      fileReader.onload = (loadEvt) => {
         changeFile(fileReader.result, name);
         setDragActive(false);
       };
       fileReader.readAsDataURL(file[0]);
     }
-
   };
 
   const fileHandleDrag = (e: React.DragEvent<HTMLDivElement>) => {
@@ -135,10 +137,11 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
       setDragActive(false);
     } else if (e.type === "drop") {
       //拖移放開
-      const { dataTransfer: { files } } = e;
+      const {
+        dataTransfer: { files },
+      } = e;
       uploadFile(files);
     }
-
   };
 
   const fileChangedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,17 +151,22 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
 
   return (
     <div
-      className={`relative flex ${fileSetting.divHight} w-full flex-col items-center justify-center gap-4 
+      className={`relative flex ${
+        fileSetting.divHight
+      } w-full flex-col items-center justify-center gap-4 
           rounded-[32px] border-2 border-dashed border-black/20 bg-pale-blue 
-        text-[#728F9B] ${dragActive ? "bg-green-blue" : undefined
-        }`}
+        text-[#728F9B] ${dragActive ? "bg-green-blue" : undefined}`}
       onDragEnter={fileHandleDrag}
       onDragLeave={fileHandleDrag}
       onDragOver={fileHandleDrag}
       onDrop={fileHandleDrag}
     >
-
-      <canvas className="hidden" ref={canvasRef} width={100} height={100}></canvas>
+      <canvas
+        className="hidden"
+        ref={canvasRef}
+        width={100}
+        height={100}
+      ></canvas>
       <UploadIcon />
       <p className="text-sm tracking-wider">
         <span className=" flat:hidden">拖曳圖片至此，或</span>
@@ -177,10 +185,14 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
         </label>
       </p>
       <p className="text-xs tracking-wider">
-        <span className={`${uploadError === "type" ? "text-alert-red" : undefined}`}>
+        <span
+          className={`${uploadError === "type" ? "text-alert-red" : undefined}`}
+        >
           支援檔案類型：{judgeFileType ? "PDF" : "PNG, JPEG"}
         </span>
-        <span className={`${uploadError === "size" ? "text-alert-red" : undefined}`}>
+        <span
+          className={`${uploadError === "size" ? "text-alert-red" : undefined}`}
+        >
           <span className="text-[#B0C3CA]">･</span>≦{fileSetting.size}mb{" "}
         </span>
       </p>
