@@ -13,6 +13,6 @@ const addCanvasAtom = atom<HTMLCanvasElement | string>("");
 /**
  * 檔案 canvas
  */
-const fileAtom = atom<canvasType>(null);
+const fileAtom = atom<string[] | null>(null);
 
 export { signAtom, addCanvasAtom, fileAtom };

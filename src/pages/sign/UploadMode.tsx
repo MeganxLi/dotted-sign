@@ -40,7 +40,10 @@ const UploadMode = ({ ActiveMenu, setActiveMenu }: props) => {
             <DragUpload
               fileSetting={{ type: uploadTypeName.IMG, size: 5, divHight: "h-signHight" }}
               fileURL={imageURL}
-              changeFile={setImageURL}
+              changeFile={(file) => {
+                if (Array.isArray(file)) return;
+                setImageURL(file);
+              }}
             />
           }
         </div>
