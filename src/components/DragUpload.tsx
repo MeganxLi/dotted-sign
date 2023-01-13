@@ -13,8 +13,8 @@ interface props {
     size: number;
     divHight: string;
   };
-  fileURL: string | ArrayBuffer | null;
-  changeFile: (file: string | ArrayBuffer | null, name: string) => void;
+  fileURL: string | string[] | ArrayBuffer | null;
+  changeFile: (file: string | string[] | ArrayBuffer | null, name: string, totalPages?: number) => void;
 }
 const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
   /**  true: PDF; false: img */
@@ -74,38 +74,42 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
           ctx
         ) {
           const pdfData = new Uint8Array(this.result);
-          console.log("pdfData", pdfData);
 
           // Using DocumentInitParameters object to load binary data.
           const loadingTask = pdfjs.getDocument({ data: pdfData });
           loadingTask.promise.then(
             function (pdf) {
-              console.log("PDF loaded", pdf);
               // Fetch the first page
-              const pageNumber = 1;
-              pdf.getPage(pageNumber).then(function (page) {
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale: scale });
+              const imageDate: string[] = [];
 
-                // Prepare canvas using PDF page dimensions
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-                // Render PDF page into canvas context
-                const renderContext = {
-                  canvasContext: ctx,
-                  viewport: viewport,
-                };
+              for (let i = 1; i <= pdf.numPages; i++) {
+                pdf.getPage(i).then(function (page) {
 
-                const renderTask = page.render(renderContext);
-                renderTask.promise.then(function () {
-                  console.log("Page rendered");
+                  const scale = 1.5;
+                  const viewport = page.getViewport({ scale: scale });
+                  const canvasChild = document.createElement("canvas");
+                  canvas.appendChild(canvasChild);
+                  const context = canvasChild.getContext("2d");
+                  // Prepare canvas using PDF page dimensions
+                  canvasChild.height = viewport.height;
+                  canvasChild.width = viewport.width;
+                  // Render PDF page into canvas context
+                  if (!context) return;
+                  const renderContext = {
+                    canvasContext: context,
+                    viewport: viewport,
+                  };
 
-                  //輸出圖片
-                  const image = canvas.toDataURL();
-                  console.log("canvas", canvas, "image", image);
-                  changeFile(image, name);
+                  const renderTask = page.render(renderContext);
+                  renderTask.promise.then(function () {
+                    //輸出圖片
+                    imageDate.push(canvasChild.toDataURL("image/png"));
+                    console.log(imageDate.length + " page(s) loaded in data");
+
+                  });
                 });
-              });
+              }
+              changeFile(imageDate, name, pdf.numPages);
             },
             function (reason) {
               // PDF loading error
@@ -151,9 +155,8 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
 
   return (
     <div
-      className={`relative flex ${
-        fileSetting.divHight
-      } w-full flex-col items-center justify-center gap-4 
+      className={`relative flex ${fileSetting.divHight
+        } w-full flex-col items-center justify-center gap-4 
           rounded-[32px] border-2 border-dashed border-black/20 bg-pale-blue 
         text-[#728F9B] ${dragActive ? "bg-green-blue" : undefined}`}
       onDragEnter={fileHandleDrag}
@@ -166,7 +169,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
         ref={canvasRef}
         width={100}
         height={100}
-      ></canvas>
+      />
       <UploadIcon />
       <p className="text-sm tracking-wider">
         <span className=" flat:hidden">拖曳圖片至此，或</span>
