@@ -10,11 +10,12 @@ interface props {
   pdfName: string;
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
   cancelFile: () => void;
+  totalPages: number;
 }
 
-const EditFile = ({ pdfName, setPdfName, cancelFile }: props) => {
+const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
-  const [pdfURL] = useAtom<PrimitiveAtom<canvasType>>(fileAtom);
+  const [pdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
   const mainRef = useRef<HTMLCanvasElement>(null);
   const [addSignURL] = useAtom(addCanvasAtom);
   const screenHeight = screen.height - 400;
@@ -43,8 +44,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile }: props) => {
       const screenHeight = screen.height - 400;
       const A4Size = 210 / 297;
 
-      fabric.Image.fromURL(pdfURL.toString(), (img) => {
-        canvas.setBackgroundImage(pdfURL as string, () => ({})).renderAll();
+      fabric.Image.fromURL(pdfURL[0].toString(), (img) => {
+        canvas.setBackgroundImage(pdfURL[0] as string, () => ({})).renderAll();
         canvas.setHeight(img.height ?? 0);
         canvas.setWidth(img.width ?? 0);
         canvas
@@ -77,10 +78,10 @@ const EditFile = ({ pdfName, setPdfName, cancelFile }: props) => {
           ref={mainRef}
           className="canvas-style"
           height={screenHeight}
-        ></canvas>
+        />
       </div>
       <div className="edit-file-field flex flex-col justify-between rounded-r-[32px]">
-        <FileList />
+        <FileList totalPages={totalPages} />
         <div className="flex flex-col gap-4">
           <button className="btn-primary flex-auto">下一步</button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
