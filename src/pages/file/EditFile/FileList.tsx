@@ -47,7 +47,9 @@ const FileList = ({ totalPages }: props) => {
     <div id="FileList" className="grid grid-cols-2 gap-4" ref={canvasListRef}>
       {Array.from({ length: totalPages }).map((item, idx: number) => {
         return (
-          <div key={idx}>
+          <div key={idx} data-count={idx + 1}
+            className="flex items-center justify-center bg-green-blue w-[80px] h-[80px] relative rounded-lg 
+            before:content-[attr(data-count)] before:dark-blue  before:absolute before:bottom-0 before:text-sm">
             <canvas ref={(el) => canvasItemRef.current = [...canvasItemRef.current, el]} />
           </div>
         );
