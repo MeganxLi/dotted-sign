@@ -1,31 +1,57 @@
 import { PrimitiveAtom, useAtom } from "jotai";
-import React, { useEffect, useRef, useState } from "react";
-import { pdfjs, Page, Document } from "react-pdf";
+import { useEffect, useRef } from "react";
+import { pdfjs, } from "react-pdf";
+import { A4Size } from "../../../constants/EnumType";
 import { fileAtom } from "../../../jotai";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const FileList = () => {
-  const [pdfURL] =
-    useAtom<PrimitiveAtom<string | ArrayBuffer | null>>(fileAtom);
-  const [numPages, setNumPages] = useState<number>(0);
-  const [pageNumber, setPageNumber] = useState<number>(0);
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
-  const canvasListRef = useRef(null);
+const pdfScale = 0.7;
 
-  function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-    setNumPages(numPages);
-  }
+interface props {
+  totalPages: number
+}
+
+const FileList = ({ totalPages }: props) => {
+  const [pdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
+  const fileUrl: string[] = pdfURL || [];
+  const canvasListRef = useRef<HTMLDivElement>(null);
+  const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
+
+  useEffect(() => {
+    const canvasDiv = canvasListRef.current;
+    if (!canvasDiv) return;
+
+    for (let i = 0; i < totalPages; i++) {
+      const canvasChild = canvasItemRef.current[i];
+      if (!canvasChild) return;
+
+      const context = canvasChild.getContext("2d");
+      // 設定寬度
+      const getDivWidth = canvasDiv.clientWidth / 2;
+      const setWidth = getDivWidth * A4Size * pdfScale;
+      const setHeight = getDivWidth * pdfScale;
+      canvasChild.width = setWidth;
+      canvasChild.height = setHeight;
+
+      if (!context) return;
+      const image = new Image();
+      image.src = fileUrl[i];
+      image.onload = () => {
+        context.drawImage(image, 0, 0, setWidth, setHeight);
+      };
+    }
+
+  }, [canvasListRef]);
 
   return (
-    <div>
-      <Document
-        className="pdf-viewer"
-        file={pdfURL}
-        // onLoadSuccess={onDocumentLoadSuccess}
-        onLoadError={console.error}
-      >
-        <Page className="page" pageNumber={pageNumber} scale={1} />
-      </Document>
+    <div id="FileList" className="grid grid-cols-2 gap-4" ref={canvasListRef}>
+      {Array.from({ length: totalPages }).map((item, idx: number) => {
+        return (
+          <div key={idx}>
+            <canvas ref={(el) => canvasItemRef.current = [...canvasItemRef.current, el]} />
+          </div>
+        );
+      })}
     </div>
   );
 };

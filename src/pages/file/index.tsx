@@ -10,8 +10,9 @@ import { FileNameDefault } from "../../constants/FileSetting";
 
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
-  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<canvasType>>(fileAtom);
+  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   useEffect(() => {
     document.body.classList.add("file");
@@ -73,9 +74,12 @@ const File = () => {
                 divHight: "h-[360px]",
               }}
               fileURL={pdfURL}
-              changeFile={(file, name) => {
-                setPdfURL(file);
-                setPdfName(name);
+              changeFile={(file, name, totalPages) => {
+                if (Array.isArray(file)) {
+                  setPdfURL(file);
+                  setPdfName(name);
+                  setTotalPages(totalPages || 0);
+                }
               }}
             />
           </div>
@@ -94,6 +98,7 @@ const File = () => {
           pdfName={pdfName}
           setPdfName={setPdfName}
           cancelFile={cancelFile}
+          totalPages={totalPages}
         />
       )}
     </main>
