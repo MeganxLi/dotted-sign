@@ -5,6 +5,8 @@ import { fabric } from "fabric";
 import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
 import TabPanel from "./EditFile/TabPanel";
+import Modal from "../../components/Modal";
+import { RWDSize } from "../../constants/EnumType";
 
 interface props {
   pdfName: string;
@@ -14,11 +16,14 @@ interface props {
 }
 
 const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  // useAtom
   const [pdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
-  const mainRef = useRef<HTMLCanvasElement>(null);
   const [addSignURL] = useAtom(addCanvasAtom);
+
+  const mainRef = useRef<HTMLCanvasElement>(null);
+  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const screenHeight = screen.height - 400;
+  const [smallModal, setSmallModal] = useState<boolean>(false);
 
   /** 建立主要的 canvas */
   useEffect(() => {
@@ -67,18 +72,26 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     }
   }, [canvas, pdfURL]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setSmallModal(window.innerWidth >= RWDSize);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <div className="gap not-w  grid w-screen grid-cols-[220px_auto_220px]">
+    <div className="gap not-w  relative grid w-screen grid-cols-[220px_auto_220px]">
       <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-[32px]">
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
       </div>
       <div className="flex items-start justify-center bg-green-blue">
-        <canvas
-          ref={mainRef}
-          className="canvas-style"
-          height={screenHeight}
-        />
+        <canvas ref={mainRef} className="canvas-style" height={screenHeight} />
       </div>
       <div className="edit-file-field flex flex-col justify-between rounded-r-[32px]">
         <FileList totalPages={totalPages} />
@@ -89,6 +102,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           </button>
         </div>
       </div>
+      <Modal small={smallModal}>
+        <span>124</span>
+      </Modal>
     </div>
   );
 };

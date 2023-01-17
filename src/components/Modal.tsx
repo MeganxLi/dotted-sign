@@ -1,22 +1,30 @@
-
 import { createPortal } from "react-dom";
 import { X } from "react-feather";
 interface props {
   children: JSX.Element;
+  small?: boolean;
 }
 
-const Modal = ({ children }: props) => {
+const Modal = ({ children, small }: props) => {
+  const modalEl = small ? null : document.getElementById("Modal");
 
-  const modalEl = document.getElementById("Modal");
   const modalContent: JSX.Element = (
-    <div className="absolute w-full h-full top-0">
-      <div className="bg-[#151515]/[.5] w-full h-full" />
-      <span className="text-white absolute top-6 right-6 cursor-pointer"><X size={20} /></span>
-      {children}
+    <div className="absolute top-0 z-[100] h-full w-full">
+      <div
+        className={`h-full w-full backdrop-blur-md ${
+          small ? "rounded-[32px]" : ""
+        } bg-[#151515]/[.5]`}
+      />
+      <span className="absolute top-6 right-6 cursor-pointer text-white">
+        <X size={20} />
+      </span>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[300px] bg-white">{children}</div>
+      </div>
     </div>
   );
 
-  return modalEl ? createPortal(modalContent, modalEl) : null;
+  return modalEl ? createPortal(modalContent, modalEl) : modalContent;
 };
 
 export default Modal;
