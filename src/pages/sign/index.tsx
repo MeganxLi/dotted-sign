@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Intro from "../../components/Intro";
-import UploadMode from "./UploadMode";
-import WritingMode from "./WritingMode";
+import UploadMode from "../../components/SignMode/UploadMode";
+import WritingMode from "../../components/SignMode/WritingMode";
 
 const Sign = () => {
   const [ActiveMenu, setActiveMenu] = useState<number>(0);
