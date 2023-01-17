@@ -15,9 +15,11 @@ import { signAtom } from "../../jotai";
 interface props {
   ActiveMenu: number;
   setActiveMenu: React.Dispatch<React.SetStateAction<number>>;
+  onlySendBtn?: boolean;
+  clickStartSignBtn?: (event: React.MouseEvent<HTMLElement>) => void
 }
 
-const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
+const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStartSignBtn }: props) => {
   // router
   const navigate = useNavigate();
   const sigCanvas = useRef<any>({});
@@ -150,13 +152,17 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
         </div>
       </div>
       <div className="two-btn ">
-        <button
+        {!saveButton ? <button
           className="btn-secodary flex-auto"
           disabled={!isDrawn}
           onClick={clearCanvas}
         >
           清除畫布
-        </button>
+        </button> : !onlySendBtn && <button
+          className="btn-secodary flex-auto"
+        >
+          管理簽名
+        </button>}
         {!saveButton ? (
           <button className="btn-primary flex-auto" onClick={saveCanvas}>
             儲存結果
@@ -164,7 +170,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu }: props) => {
         ) : (
           <button
             className="btn-primary flex-auto"
-            onClick={() => navigate("/")}
+            onClick={(e) => clickStartSignBtn ? clickStartSignBtn(e) : navigate("/")}
           >
             開始簽署文件
           </button>
