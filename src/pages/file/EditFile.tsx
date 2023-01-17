@@ -7,6 +7,8 @@ import FileList from "./EditFile/FileList";
 import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
 import { RWDSize } from "../../constants/EnumType";
+import UploadMode from "../../components/SignMode/UploadMode";
+import WritingMode from "../../components/SignMode/WritingMode";
 
 interface props {
   pdfName: string;
@@ -24,6 +26,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const screenHeight = screen.height - 400;
   const [smallModal, setSmallModal] = useState<boolean>(false);
+  const [ActiveMenu, setActiveMenu] = useState<number>(0);
 
   /** 建立主要的 canvas */
   useEffect(() => {
@@ -102,8 +105,19 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           </button>
         </div>
       </div>
-      <Modal small={smallModal}>
-        <span>124</span>
+      <Modal childrenClassName="w-[580px]" small={smallModal}>
+        <React.Fragment>
+          {ActiveMenu === 0 ? (
+            <WritingMode
+              ActiveMenu={ActiveMenu}
+              setActiveMenu={setActiveMenu}
+              onlySendBtn={true}
+              clickStartSignBtn={() => console.log("yes---")} />
+          ) : (
+            <UploadMode ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
+          )}
+          <p className="mt-8 text-white text-center text-xs">點擊畫面任一處離開</p>
+        </React.Fragment>
       </Modal>
     </div>
   );
