@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MenuHorizontal from "../../pages/sign/MenuHorizontal";
+import MenuHorizontal from "./Writing/MenuHorizontal";
 import DragUpload from "../DragUpload";
 import { uploadTypeName } from "../../constants/EnumType";
 import { useAtom } from "jotai";

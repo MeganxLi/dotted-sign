@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import { HexColorPicker } from "react-colorful";
 
-import MenuHorizontal from "./MenuHorizontal";
+import MenuHorizontal from "./Writing/MenuHorizontal";
 import InputTextField from "../../components/InputTextField";
-import WritingTools from "./WritingTools";
+import WritingTools from "./Writing/WritingTools";
 import { CanvasToolsName } from "../../constants/EnumType";
 import { signCanvasPropsDefault } from "../../constants/SignSetting";
 import useClickOutside from "../../utils/useClickOutside";

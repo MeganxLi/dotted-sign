@@ -1,5 +1,5 @@
 import React from "react";
-import { SignMenuName } from "../../constants/EnumType";
+import { SignMenuName } from "../../../constants/EnumType";
 
 interface props {
   ActiveMenu: number;
@@ -13,10 +13,9 @@ const MenuHorizontal = ({ ActiveMenu, setActiveMenu }: props) => {
         return (
           <li
             key={item}
-            className={`cursor-pointer p-2 text-black/50 hover:text-blue ${
-              ActiveMenu === idx &&
+            className={`cursor-pointer p-2 text-black/50 hover:text-blue ${ActiveMenu === idx &&
               "border-b border-solid border-b-blue text-blue "
-            }`}
+              }`}
             onClick={() => setActiveMenu(idx)}
           >
             {item}
