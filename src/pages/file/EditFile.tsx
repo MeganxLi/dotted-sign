@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PrimitiveAtom, useAtom } from "jotai";
-import { addCanvasAtom, fileAtom } from "../../jotai";
+import { addCanvasAtom, fileAtom, openModalAtom } from "../../jotai";
 import { fabric } from "fabric";
 import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
 import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
 import { RWDSize } from "../../constants/EnumType";
-import UploadMode from "../../components/SignMode/UploadMode";
-import WritingMode from "../../components/SignMode/WritingMode";
+import SignMode from "../../components/SignMode";
 
 interface props {
   pdfName: string;
@@ -21,12 +20,16 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   // useAtom
   const [pdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
   const [addSignURL] = useAtom(addCanvasAtom);
+  const [, setOpenModal] = useAtom(openModalAtom);
 
   const mainRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const screenHeight = screen.height - 400;
   const [smallModal, setSmallModal] = useState<boolean>(false);
-  const [ActiveMenu, setActiveMenu] = useState<number>(0);
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   /** 建立主要的 canvas */
   useEffect(() => {
@@ -88,7 +91,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   }, []);
 
   return (
-    <div className="gap not-w  relative grid w-screen grid-cols-[220px_auto_220px]">
+    <div className="gap not-w h-[70vh] relative grid w-screen grid-cols-[220px_auto_220px]">
       <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-[32px]">
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
@@ -107,16 +110,11 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       </div>
       <Modal childrenClassName="w-[580px]" small={smallModal}>
         <React.Fragment>
-          {ActiveMenu === 0 ? (
-            <WritingMode
-              ActiveMenu={ActiveMenu}
-              setActiveMenu={setActiveMenu}
-              onlySendBtn={true}
-              clickStartSignBtn={() => console.log("yes---")} />
-          ) : (
-            <UploadMode ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
-          )}
-          <p className="mt-8 text-white text-center text-xs">點擊畫面任一處離開</p>
+          <SignMode
+            onlySendBtn={true}
+            clickStartSignBtn={closeModal}
+          />
+          <p className="pt-8 text-white text-center text-xs" onClick={closeModal}>點擊畫面任一處離開</p>
         </React.Fragment>
       </Modal>
     </div>

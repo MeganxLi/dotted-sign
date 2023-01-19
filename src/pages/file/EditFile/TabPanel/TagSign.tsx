@@ -1,13 +1,11 @@
 import { useAtom } from "jotai";
-import { addCanvasAtom, signAtom } from "../../../../jotai";
+import { addCanvasAtom, openModalAtom, signAtom } from "../../../../jotai";
 import { Plus } from "react-feather";
-import { useNavigate } from "react-router-dom";
 
 const TagSign = () => {
-  // router
-  const navigate = useNavigate();
   const [signList] = useAtom(signAtom);
   const [, setAddCanvas] = useAtom(addCanvasAtom);
+  const [, setOpenModal] = useAtom(openModalAtom);
 
   const createSignURL = (item: string | HTMLCanvasElement) => {
     setAddCanvas(item);
@@ -30,7 +28,7 @@ const TagSign = () => {
         })}
         <div
           className="sing-tag border-dashed border-black/20 text-blue"
-          onClick={() => navigate("/writing")}
+          onClick={() => setOpenModal(true)}
         >
           <Plus size={14} />
         </div>
