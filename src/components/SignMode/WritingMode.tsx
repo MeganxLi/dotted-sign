@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import SignatureCanvas from "react-signature-canvas";
 import { HexColorPicker } from "react-colorful";
+import { useAtom } from "jotai";
+import { signAtom } from "../../jotai";
 
 import MenuHorizontal from "./Writing/MenuHorizontal";
 import InputTextField from "../../components/InputTextField";
@@ -9,8 +10,6 @@ import WritingTools from "./Writing/WritingTools";
 import { CanvasToolsName } from "../../constants/EnumType";
 import { signCanvasPropsDefault } from "../../constants/SignSetting";
 import useClickOutside from "../../utils/useClickOutside";
-import { useAtom } from "jotai";
-import { signAtom } from "../../jotai";
 
 interface props {
   ActiveMenu: number;
@@ -20,8 +19,6 @@ interface props {
 }
 
 const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStartSignBtn }: props) => {
-  // router
-  const navigate = useNavigate();
   const sigCanvas = useRef<any>({});
   let canvasHistory: string[] = []; // canvas 歷史紀錄，用來復原使用
   const [isDrawn, setIsDrawn] = useState<boolean>(false); //確認是否有繪圖
@@ -152,17 +149,16 @@ const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStar
         </div>
       </div>
       <div className="two-btn ">
-        {!saveButton ? <button
-          className="btn-secodary flex-auto"
-          disabled={!isDrawn}
-          onClick={clearCanvas}
-        >
-          清除畫布
-        </button> : !onlySendBtn && <button
-          className="btn-secodary flex-auto"
-        >
-          管理簽名
-        </button>}
+        {!saveButton ?
+          <button
+            className="btn-secodary flex-auto"
+            disabled={!isDrawn}
+            onClick={clearCanvas}
+          >
+            清除畫布
+          </button> :
+          (!onlySendBtn && <button className="btn-secodary flex-auto">管理簽名</button>)
+        }
         {!saveButton ? (
           <button className="btn-primary flex-auto" onClick={saveCanvas}>
             儲存結果
@@ -170,7 +166,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStar
         ) : (
           <button
             className="btn-primary flex-auto"
-            onClick={(e) => clickStartSignBtn ? clickStartSignBtn(e) : navigate("/")}
+            onClick={clickStartSignBtn}
           >
             開始簽署文件
           </button>

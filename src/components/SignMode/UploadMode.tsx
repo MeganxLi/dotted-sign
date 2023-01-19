@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAtom } from "jotai";
+import { signAtom } from "../../jotai";
+
 import MenuHorizontal from "./Writing/MenuHorizontal";
 import DragUpload from "../DragUpload";
 import { uploadTypeName } from "../../constants/EnumType";
-import { useAtom } from "jotai";
-import { signAtom } from "../../jotai";
 
 interface props {
   ActiveMenu: number;
   setActiveMenu: React.Dispatch<React.SetStateAction<number>>;
+  onlySendBtn?: boolean;
+  clickStartSignBtn?: (event: React.MouseEvent<HTMLElement>) => void
 }
-const UploadMode = ({ ActiveMenu, setActiveMenu }: props) => {
-  // router
-  const navigate = useNavigate();
+const UploadMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStartSignBtn }: props) => {
   const [imageURL, setImageURL] = useState<string | ArrayBuffer | null>(null);
   const [, setSignList] = useAtom(signAtom);
   const [saveButton, setSaveButton] = useState<boolean>(false);
@@ -49,10 +49,18 @@ const UploadMode = ({ ActiveMenu, setActiveMenu }: props) => {
         </div>
       </div>
       <div className="mt-4 flex gap-4 flat:flex-col-reverse">
-        <button className="btn-secodary flex-auto" disabled={imageURL === null} onClick={resetUpload}>重新上傳</button>
+        {!saveButton ?
+          <button className="btn-secodary flex-auto" disabled={imageURL === null} onClick={resetUpload}>重新上傳</button> :
+          (!onlySendBtn && <button className="btn-secodary flex-auto">管理簽名</button>)
+        }
         {!saveButton ?
           <button className="btn-primary flex-auto" onClick={saveUpload}>儲存結果</button> :
-          <button className="btn-primary flex-auto" onClick={() => navigate("/")}>開始簽署文件</button>
+          <button
+            className="btn-primary flex-auto"
+            onClick={clickStartSignBtn}
+          >
+            開始簽署文件
+          </button>
         }
       </div>
     </div>
