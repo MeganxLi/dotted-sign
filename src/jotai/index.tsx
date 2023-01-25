@@ -6,6 +6,11 @@ import { atom } from "jotai";
 const openModalAtom = atom<boolean>(false);
 
 /**
+ * 通知 Message 開關、icon和訊息內容
+ */
+const messageAtom = atom<MessageType | null>(null);
+
+/**
  * 簽名 Sign
  */
 const signAtom = atom<(HTMLCanvasElement | string)[]>([]);
@@ -20,4 +25,5 @@ const addCanvasAtom = atom<HTMLCanvasElement | string>("");
  */
 const fileAtom = atom<string[] | null>(null);
 
-export { openModalAtom, signAtom, addCanvasAtom, fileAtom };
+export { openModalAtom, messageAtom, signAtom, addCanvasAtom, fileAtom };
+

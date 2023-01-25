@@ -20,3 +20,18 @@ interface TagItemType {
   name: string;
   icon: JSX.Element;
 }
+
+// Message
+type MessageIconString = "check" | "warn";
+
+interface MessageType {
+  open: boolean;
+  icon: MessageIconString;
+  content: string;
+}
+
+interface MessageIconType {
+  [key: string]: {
+    icon: Icon
+  }
+}
