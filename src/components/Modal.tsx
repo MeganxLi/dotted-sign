@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useAtom } from "jotai";
 import { openModalAtom } from "../jotai";
@@ -12,12 +11,6 @@ interface props {
 const Modal = ({ children, childrenClassName = "", small }: props) => {
   const [openModal, setOpenModal] = useAtom(openModalAtom);
   const modalEl = small ? null : document.getElementById("Modal");
-
-  useEffect(() => {
-
-    console.log(openModal);
-
-  }, [openModal]);
 
   const modalContent: JSX.Element = (
     <div className={"absolute top-0 z-[100] h-full w-full"}>
