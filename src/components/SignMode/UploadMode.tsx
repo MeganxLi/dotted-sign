@@ -1,21 +1,30 @@
 import React, { useState } from "react";
 import { useAtom } from "jotai";
-import { signAtom } from "../../jotai";
+import { messageAtom, signAtom } from "../../jotai";
 
 import MenuHorizontal from "./Writing/MenuHorizontal";
 import DragUpload from "../DragUpload";
 import { uploadTypeName } from "../../constants/EnumType";
+import { MessageTexts } from "../../constants/MessageSetting";
 
 interface props {
   ActiveMenu: number;
   setActiveMenu: React.Dispatch<React.SetStateAction<number>>;
-  onlySendBtn?: boolean;
-  clickStartSignBtn?: (event: React.MouseEvent<HTMLElement>) => void
+  clickStartSignBtn?: (event: React.MouseEvent<HTMLElement>) => void;
+  handleOnlyBtnElement: JSX.Element;
+  handleSaveBtnMessage: () => void
 }
-const UploadMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStartSignBtn }: props) => {
+const UploadMode = ({
+  ActiveMenu,
+  setActiveMenu,
+  clickStartSignBtn,
+  handleOnlyBtnElement,
+  handleSaveBtnMessage
+}: props) => {
   const [imageURL, setImageURL] = useState<string | ArrayBuffer | null>(null);
   const [, setSignList] = useAtom(signAtom);
   const [saveButton, setSaveButton] = useState<boolean>(false);
+  const [, setMessage] = useAtom(messageAtom);
 
   const resetUpload = () => {
     setImageURL(null);
@@ -26,6 +35,8 @@ const UploadMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStart
     if (!imageURL) return;
     setSignList(prev => [...prev, imageURL.toString()]);
     setSaveButton(true);
+
+    handleSaveBtnMessage();
   };
 
   return (
@@ -51,7 +62,7 @@ const UploadMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStart
       <div className="mt-4 flex gap-4 flat:flex-col-reverse">
         {!saveButton ?
           <button className="btn-secodary flex-auto" disabled={imageURL === null} onClick={resetUpload}>重新上傳</button> :
-          (!onlySendBtn && <button className="btn-secodary flex-auto">管理簽名</button>)
+          handleOnlyBtnElement
         }
         {!saveButton ?
           <button className="btn-primary flex-auto" onClick={saveUpload}>儲存結果</button> :

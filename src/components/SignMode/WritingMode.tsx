@@ -14,11 +14,18 @@ import useClickOutside from "../../utils/useClickOutside";
 interface props {
   ActiveMenu: number;
   setActiveMenu: React.Dispatch<React.SetStateAction<number>>;
-  onlySendBtn?: boolean;
-  clickStartSignBtn?: (event: React.MouseEvent<HTMLElement>) => void
+  clickStartSignBtn?: (event: React.MouseEvent<HTMLElement>) => void;
+  handleOnlyBtnElement: JSX.Element;
+  handleSaveBtnMessage: () => void;
 }
 
-const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStartSignBtn }: props) => {
+const WritingMode = ({
+  ActiveMenu,
+  setActiveMenu,
+  clickStartSignBtn,
+  handleOnlyBtnElement,
+  handleSaveBtnMessage
+}: props) => {
   const sigCanvas = useRef<any>({});
   let canvasHistory: string[] = []; // canvas 歷史紀錄，用來復原使用
   const [isDrawn, setIsDrawn] = useState<boolean>(false); //確認是否有繪圖
@@ -101,6 +108,8 @@ const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStar
     sigCanvas.current.off();
     setSignList((prev) => [...prev, DataURL]);
     setSaveButton(true);
+
+    handleSaveBtnMessage();
   };
 
   useClickOutside(colorRef, () => setIsOpenColor(false));
@@ -157,7 +166,7 @@ const WritingMode = ({ ActiveMenu, setActiveMenu, onlySendBtn = false, clickStar
           >
             清除畫布
           </button> :
-          (!onlySendBtn && <button className="btn-secodary flex-auto">管理簽名</button>)
+          handleOnlyBtnElement
         }
         {!saveButton ? (
           <button className="btn-primary flex-auto" onClick={saveCanvas}>
