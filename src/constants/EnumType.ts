@@ -11,6 +11,12 @@ export enum uploadTypeName {
   IMG = "image",
 }
 
+/** portrait:直, landscape:橫 */
+export enum orientationType {
+  portrait,
+  landscape
+}
+
 /**  w: 210, h: 297 */
 export const A4Size = 210 / 297;
 

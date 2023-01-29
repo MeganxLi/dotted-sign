@@ -7,6 +7,11 @@ interface PageListType {
 
 type canvasType = string | ArrayBuffer | null;
 
+interface pdfFileType {
+  orientation: number;
+  dataURL: string;
+}
+
 //Sign page
 interface SignCanvasPropsType {
   tool: string;

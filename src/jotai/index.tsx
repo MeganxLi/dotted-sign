@@ -23,7 +23,7 @@ const addCanvasAtom = atom<HTMLCanvasElement | string>("");
 /**
  * 檔案 canvas
  */
-const fileAtom = atom<string[] | null>(null);
+const fileAtom = atom<pdfFileType[] | null>(null);
 
 export { openModalAtom, messageAtom, signAtom, addCanvasAtom, fileAtom };
 

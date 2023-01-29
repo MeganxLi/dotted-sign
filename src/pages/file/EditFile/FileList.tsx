@@ -12,8 +12,8 @@ interface props {
 }
 
 const FileList = ({ totalPages }: props) => {
-  const [pdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
-  const fileUrl: string[] = pdfURL || [];
+  const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
+  const fileUrl: pdfFileType[] = pdfURL || [];
   const canvasListRef = useRef<HTMLDivElement>(null);
   const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
 
@@ -35,7 +35,7 @@ const FileList = ({ totalPages }: props) => {
 
       if (!context) return;
       const image = new Image();
-      image.src = fileUrl[i];
+      image.src = fileUrl[i].dataURL;
       image.onload = () => {
         context.drawImage(image, 0, 0, setWidth, setHeight);
       };

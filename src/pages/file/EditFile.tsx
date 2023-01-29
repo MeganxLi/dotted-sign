@@ -18,7 +18,7 @@ interface props {
 
 const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   // useAtom
-  const [pdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
+  const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [addSignURL] = useAtom(addCanvasAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
 
@@ -50,13 +50,15 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   /** 填上背景檔案 */
   useEffect(() => {
+    console.log("pdfURL", pdfURL);
+
     if (canvas && pdfURL) {
       //計算 className canvas-container 長寬度
       const screenHeight = screen.height - 400;
       const A4Size = 210 / 297;
 
       fabric.Image.fromURL(pdfURL[0].toString(), (img) => {
-        canvas.setBackgroundImage(pdfURL[0] as string, () => ({})).renderAll();
+        canvas.setBackgroundImage(pdfURL[0].dataURL as string, () => ({})).renderAll();
         canvas.setHeight(img.height ?? 0);
         canvas.setWidth(img.width ?? 0);
         canvas
@@ -99,7 +101,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       <div className="flex items-start justify-center bg-green-blue">
         <canvas ref={mainRef} className="canvas-style" height={screenHeight} />
       </div>
-      <div className="edit-file-field flex flex-col justify-between rounded-r-[32px]">
+      <div className="edit-file-field flex flex-col justify-between rounded-r-[32px] gap-8">
         <FileList totalPages={totalPages} />
         <div className="flex flex-col gap-4">
           <button className="btn-primary flex-auto">下一步</button>

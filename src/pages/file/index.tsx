@@ -10,7 +10,7 @@ import { FileNameDefault } from "../../constants/FileSetting";
 
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
-  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<string[] | null>>(fileAtom);
+  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
   const [totalPages, setTotalPages] = useState<number>(0);
 

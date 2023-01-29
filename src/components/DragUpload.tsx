@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-import { uploadTypeName } from "../constants/EnumType";
+import { orientationType, uploadTypeName } from "../constants/EnumType";
 
 //svg
 import { ReactComponent as UploadIcon } from "../assets/svg/upload.svg";
@@ -13,8 +13,8 @@ interface props {
     size: number;
     divHight: string;
   };
-  fileURL: string | string[] | ArrayBuffer | null;
-  changeFile: (file: string | string[] | ArrayBuffer | null, name: string, totalPages?: number) => void;
+  fileURL: string | pdfFileType[] | ArrayBuffer | null;
+  changeFile: (file: string | pdfFileType[] | ArrayBuffer | null, name: string, totalPages?: number) => void;
 }
 const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
   /**  true: PDF; false: img */
@@ -80,7 +80,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
           loadingTask.promise.then(
             function (pdf) {
               // Fetch the first page
-              const imageDate: string[] = [];
+              const imageDate: pdfFileType[] = [];
 
               for (let i = 1; i <= pdf.numPages; i++) {
                 pdf.getPage(i).then(function (page) {
@@ -103,7 +103,12 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
                   const renderTask = page.render(renderContext);
                   renderTask.promise.then(function () {
                     //輸出圖片
-                    imageDate.push(canvasChild.toDataURL("image/png"));
+                    imageDate.push({
+                      orientation: canvasChild.height > canvasChild.width ?
+                        orientationType.landscape :
+                        orientationType.portrait,
+                      dataURL: canvasChild.toDataURL("image/png")
+                    });
                     console.log(imageDate.length + " page(s) loaded in data");
 
                   });
