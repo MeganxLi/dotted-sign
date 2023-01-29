@@ -27,9 +27,9 @@ const FileList = ({ totalPages }: props) => {
 
       const context = canvasChild.getContext("2d");
       // 設定寬度
-      const getDivWidth = canvasDiv.clientWidth / 2;
-      const setWidth = getDivWidth * A4Size * pdfScale;
-      const setHeight = getDivWidth * pdfScale;
+      const getDivWidth = canvasDiv.clientWidth / 2 * pdfScale;
+      const setWidth = fileUrl[i].orientation === 1 ? getDivWidth * A4Size : getDivWidth;
+      const setHeight = fileUrl[i].orientation === 0 ? getDivWidth * A4Size : getDivWidth;
       canvasChild.width = setWidth;
       canvasChild.height = setHeight;
 
