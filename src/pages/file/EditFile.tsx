@@ -6,7 +6,7 @@ import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
 import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
-import { RWDSize } from "../../constants/EnumType";
+import { A4Size, RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
 
 interface props {
@@ -22,9 +22,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [addSignURL] = useAtom(addCanvasAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
 
+  const bgRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
-  const screenHeight = screen.height - 400;
   const [smallModal, setSmallModal] = useState<boolean>(false);
 
   const closeModal = () => {
@@ -50,15 +50,16 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   /** 填上背景檔案 */
   useEffect(() => {
-    console.log("pdfURL", pdfURL);
-
-    if (canvas && pdfURL) {
+    if (canvas && pdfURL && bgRef.current) {
       //計算 className canvas-container 長寬度
-      const screenHeight = screen.height - 400;
-      const A4Size = 210 / 297;
 
-      fabric.Image.fromURL(pdfURL[0].toString(), (img) => {
-        canvas.setBackgroundImage(pdfURL[0].dataURL as string, () => ({})).renderAll();
+      const screenHeight = bgRef.current.clientHeight;
+      const screenWidth = bgRef.current.clientWidth;
+
+      const bgImage = pdfURL[0].dataURL;
+      fabric.Image.fromURL(bgImage, (img) => {
+        canvas.setBackgroundImage(bgImage, () => canvas.renderAll());
+        console.log("img---", img, "screenHeight", screenHeight);
         canvas.setHeight(img.height ?? 0);
         canvas.setWidth(img.width ?? 0);
         canvas
@@ -68,8 +69,11 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
               // height: cssWidth / (fabricWidth / fabricHeight) + "px"
               // width: "424px",
               // height: "600px",
-              width: screenHeight * A4Size + "px",
-              height: screenHeight + "px",
+              // width: screenHeight * A4Size + "px",
+              // height: screenHeight + "px",
+
+              width: (pdfURL[0].orientation === 1 ? screenHeight * A4Size : screenWidth) + "px",
+              height: (pdfURL[0].orientation === 1 ? screenHeight : screenWidth * A4Size) + "px",
             },
             { cssOnly: true }
           )
@@ -98,8 +102,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
       </div>
-      <div className="flex items-start justify-center bg-green-blue">
-        <canvas ref={mainRef} className="canvas-style" height={screenHeight} />
+      <div className="flex items-start justify-center bg-green-blue" ref={bgRef}>
+        <canvas ref={mainRef} className="canvas-style" height={bgRef.current?.clientHeight} />
       </div>
       <div className="edit-file-field flex flex-col justify-between rounded-r-[32px] gap-8">
         <FileList totalPages={totalPages} />
