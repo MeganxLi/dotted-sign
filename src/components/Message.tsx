@@ -2,17 +2,23 @@ import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "react-feather";
+import { useLocation } from "react-router-dom";
 import { MessageDefault, MessageIcon } from "../constants/MessageSetting";
 import { messageAtom } from "../jotai";
 
 const Message = () => {
+  // route
+  const location = useLocation();
+  const pathname = location.pathname;
+
   const [messageObj, setMessageObj] = useAtom(messageAtom);
 
   const [messages, setMessages] = useState<MessageType>(MessageDefault);
   const messageEl = document.getElementById("Message");
 
+  const messagesOff = () => setMessages((prev) => ({ ...prev, ... { open: false } }));
+
   useEffect(() => {
-    const messagesOff = () => setMessages((prev) => ({ ...prev, ... { open: false } }));
     const handleTimer = setTimeout(() => {
       messagesOff();
     }, 5000);
@@ -26,8 +32,12 @@ const Message = () => {
     } else {
       messagesOff();
     }
-
   }, [messageObj]);
+
+  useEffect(() => {
+    //變化 page 關閉 message
+    messagesOff();
+  }, [pathname]);
 
   const messageContent: JSX.Element = (
     <div className={`min-w-[380px] py-4 px-6 bg-depp-blue text-white flex rounded items-center gap-2 ${messages.open ?
