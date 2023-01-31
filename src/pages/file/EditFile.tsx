@@ -8,6 +8,7 @@ import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
 import { A4Size, RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
+import { ChevronDown, Minus, Plus } from "react-feather";
 
 interface props {
   pdfName: string;
@@ -65,13 +66,6 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         canvas
           .setDimensions(
             {
-              // width: (cssWidth) + "px",
-              // height: cssWidth / (fabricWidth / fabricHeight) + "px"
-              // width: "424px",
-              // height: "600px",
-              // width: screenHeight * A4Size + "px",
-              // height: screenHeight + "px",
-
               width: (pdfURL[0].orientation === 1 ? screenHeight * A4Size : screenWidth) + "px",
               height: (pdfURL[0].orientation === 1 ? screenHeight : screenWidth * A4Size) + "px",
             },
@@ -102,8 +96,14 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
       </div>
-      <div className="flex items-start justify-center bg-green-blue" ref={bgRef}>
+      <div className="flex items-start justify-center bg-green-blue relative" ref={bgRef}>
         <canvas ref={mainRef} className="canvas-style" height={bgRef.current?.clientHeight} />
+        <div className="absolute flex items-center gap-2 bg-white rounded-[8px] right-3 bottom-2 shadow-base px-2 py-3">
+          <span><Plus size={16} /></span>
+          <span><Minus size={16} /></span>
+          <span className="Roboto-Slab w-[40px] text-right font-medium">10%</span>
+          <span><ChevronDown size={16} /></span>
+        </div>
       </div>
       <div className="edit-file-field flex flex-col justify-between rounded-r-[32px] gap-8">
         <FileList totalPages={totalPages} />
