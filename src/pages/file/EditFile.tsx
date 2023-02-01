@@ -66,8 +66,14 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         canvas
           .setDimensions(
             {
-              width: (pdfURL[0].orientation === 1 ? screenHeight * A4Size : screenWidth) + "px",
-              height: (pdfURL[0].orientation === 1 ? screenHeight : screenWidth * A4Size) + "px",
+              width:
+                (pdfURL[0].orientation === 1
+                  ? screenHeight * A4Size
+                  : screenWidth) + "px",
+              height:
+                (pdfURL[0].orientation === 1
+                  ? screenHeight
+                  : screenWidth * A4Size) + "px",
             },
             { cssOnly: true }
           )
@@ -91,21 +97,36 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   }, []);
 
   return (
-    <div className="gap not-w h-[70vh] relative grid w-screen grid-cols-[220px_auto_220px]">
+    <div className="gap not-w relative grid h-[70vh] w-screen grid-cols-[220px_auto_220px]">
       <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-[32px]">
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
       </div>
-      <div className="flex items-start justify-center bg-green-blue relative" ref={bgRef}>
-        <canvas ref={mainRef} className="canvas-style" height={bgRef.current?.clientHeight} />
-        <div className="absolute flex items-center gap-2 bg-white rounded-[8px] right-3 bottom-2 shadow-base px-2 py-3">
-          <span><Plus size={16} /></span>
-          <span><Minus size={16} /></span>
-          <span className="Roboto-Slab w-[40px] text-right font-medium">10%</span>
-          <span><ChevronDown size={16} /></span>
+      <div
+        className="relative flex items-start justify-center bg-green-blue"
+        ref={bgRef}
+      >
+        <canvas
+          ref={mainRef}
+          className="canvas-style"
+          height={bgRef.current?.clientHeight}
+        />
+        <div className="absolute right-3 bottom-2 flex items-center gap-2 rounded-[8px] bg-white px-2 py-3 shadow-base">
+          <span>
+            <Plus size={16} />
+          </span>
+          <span>
+            <Minus size={16} />
+          </span>
+          <span className="Roboto-Slab w-[40px] text-right font-medium">
+            10%
+          </span>
+          <span>
+            <ChevronDown size={16} />
+          </span>
         </div>
       </div>
-      <div className="edit-file-field flex flex-col justify-between rounded-r-[32px] gap-8">
+      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-[32px]">
         <FileList totalPages={totalPages} />
         <div className="flex flex-col gap-4">
           <button className="btn-primary flex-auto">下一步</button>
@@ -116,11 +137,13 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       </div>
       <Modal childrenClassName="w-[580px]" small={smallModal}>
         <React.Fragment>
-          <SignMode
-            onlySendBtn={true}
-            clickStartSignBtn={closeModal}
-          />
-          <p className="pt-8 text-white text-center text-xs" onClick={closeModal}>點擊畫面任一處離開</p>
+          <SignMode onlySendBtn={true} clickStartSignBtn={closeModal} />
+          <p
+            className="pt-8 text-center text-xs text-white"
+            onClick={closeModal}
+          >
+            點擊畫面任一處離開
+          </p>
         </React.Fragment>
       </Modal>
     </div>

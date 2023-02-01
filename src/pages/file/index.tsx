@@ -10,7 +10,8 @@ import { FileNameDefault } from "../../constants/FileSetting";
 
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
-  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
+  const [pdfURL, setPdfURL] =
+    useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [progressBar, setProgressBar] = useState<number>(0);
@@ -100,7 +101,6 @@ const File = () => {
           cancelUpload={cancelUpload}
           nextMenu={nextMenu}
           progressBar={progressBar}
-
         />
       )}
       {stepMenu === 2 && (
