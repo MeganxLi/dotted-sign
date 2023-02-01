@@ -15,8 +15,9 @@ interface props {
   };
   fileURL: string | pdfFileType[] | ArrayBuffer | null;
   changeFile: (file: string | pdfFileType[] | ArrayBuffer | null, name: string, totalPages?: number) => void;
+  setProgressBar?: React.Dispatch<React.SetStateAction<number>>;
 }
-const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
+const DragUpload = ({ fileSetting, fileURL, changeFile, setProgressBar }: props) => {
   /**  true: PDF; false: img */
   const judgeFileType = fileSetting.type === uploadTypeName.PDF;
   const [dragActive, setDragActive] = React.useState(false); //是否有拖移檔案
@@ -32,6 +33,7 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
     if (c == null) return;
     setCanvas(c);
     setCtx(c.getContext("2d"));
+    setProgressBar?.(0);
   }, [canvasRef]);
 
   const uploadFile = (file: FileList | null) => {
@@ -109,8 +111,9 @@ const DragUpload = ({ fileSetting, fileURL, changeFile }: props) => {
                         orientationType.portrait,
                       dataURL: canvasChild.toDataURL("image/png")
                     });
-                    console.log(imageDate.length + " page(s) loaded in data");
+                    console.log(imageDate.length + " page(s) loaded in data, total page", pdf.numPages);
 
+                    setProgressBar?.(imageDate.length / pdf.numPages * 100);
                   });
                 });
               }
