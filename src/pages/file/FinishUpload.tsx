@@ -9,11 +9,12 @@ interface props {
   pdfName: string;
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
   previousMenu: () => void;
+  cancelUpload: () => void;
   nextMenu: () => void;
   progressBar: number;
 }
 
-const FinishUpload = ({ pdfName, setPdfName, previousMenu, nextMenu, progressBar }: props) => {
+const FinishUpload = ({ pdfName, setPdfName, previousMenu, cancelUpload, nextMenu, progressBar }: props) => {
   return (
     <div id="FinishUpload" >
       <div className="card-box w-full p-6">
@@ -39,18 +40,19 @@ const FinishUpload = ({ pdfName, setPdfName, previousMenu, nextMenu, progressBar
         </div>
       </div>
       <div className="two-btn">
-        <button
-          className="btn-secodary flex-auto"
-          onClick={previousMenu}
-        >
+        <button className="btn-secodary flex-auto" onClick={previousMenu}>
           重新上傳
         </button>
-        <button
-          className="btn-primary flex-auto"
-          onClick={nextMenu}
-        >
-          下一步
-        </button>
+        {
+          progressBar !== 100 ?
+            <button className="btn-alter flex-auto" onClick={cancelUpload}>
+              取消上傳
+            </button> :
+            <button className="btn-primary flex-auto" onClick={nextMenu}>
+              下一步
+            </button>
+        }
+
       </div>
     </div>
   );

@@ -40,6 +40,11 @@ const File = () => {
     setStepMenu((perv) => perv - 1);
   };
 
+  const cancelUpload = () => {
+    previousMenu();
+    setProgressBar(0);
+  };
+
   const nextMenu = () => {
     setStepMenu((perv) => perv + 1);
   };
@@ -92,8 +97,10 @@ const File = () => {
           pdfName={pdfName}
           setPdfName={setPdfName}
           previousMenu={previousMenu}
+          cancelUpload={cancelUpload}
           nextMenu={nextMenu}
           progressBar={progressBar}
+
         />
       )}
       {stepMenu === 2 && (
