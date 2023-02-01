@@ -13,6 +13,7 @@ const File = () => {
   const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [progressBar, setProgressBar] = useState<number>(0);
 
   useEffect(() => {
     document.body.classList.add("file");
@@ -81,6 +82,7 @@ const File = () => {
                   setTotalPages(totalPages || 0);
                 }
               }}
+              setProgressBar={setProgressBar}
             />
           </div>
         </>
@@ -91,6 +93,7 @@ const File = () => {
           setPdfName={setPdfName}
           previousMenu={previousMenu}
           nextMenu={nextMenu}
+          progressBar={progressBar}
         />
       )}
       {stepMenu === 2 && (
