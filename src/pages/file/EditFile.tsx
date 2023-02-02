@@ -8,7 +8,7 @@ import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
 import { A4Size, RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
-import { ChevronDown, Minus, Plus } from "react-feather";
+import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 
 interface props {
   pdfName: string;
@@ -111,20 +111,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           className="canvas-style"
           height={bgRef.current?.clientHeight}
         />
-        <div className="absolute right-3 bottom-2 flex items-center gap-2 rounded-[8px] bg-white px-2 py-3 shadow-base">
-          <span>
-            <Plus size={16} />
-          </span>
-          <span>
-            <Minus size={16} />
-          </span>
-          <span className="Roboto-Slab w-[40px] text-right font-medium">
-            10%
-          </span>
-          <span>
-            <ChevronDown size={16} />
-          </span>
-        </div>
+        <ControlSizeCanvas />
       </div>
       <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-[32px]">
         <FileList totalPages={totalPages} />
