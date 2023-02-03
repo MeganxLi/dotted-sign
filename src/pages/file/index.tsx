@@ -56,6 +56,49 @@ const File = () => {
     setPdfName(FileNameDefault);
   };
 
+  const fileElement: { [index: number]: JSX.Element } = {
+    0: (
+      <>
+        <div className="card-box w-full p-5">
+          <DragUpload
+            fileSetting={{
+              type: uploadTypeName.PDF,
+              size: 20,
+              divHight: "h-[360px]",
+            }}
+            fileURL={pdfURL}
+            changeFile={(file, name, totalPages) => {
+              if (Array.isArray(file)) {
+                setPdfURL(file);
+                setPdfName(name);
+                setTotalPages(totalPages || 0);
+              }
+            }}
+            setProgressBar={setProgressBar}
+          />
+        </div>
+      </>
+    ),
+    1: (
+      <FinishUpload
+        pdfName={pdfName}
+        setPdfName={setPdfName}
+        previousMenu={previousMenu}
+        cancelUpload={cancelUpload}
+        nextMenu={nextMenu}
+        progressBar={progressBar}
+      />
+    ),
+    2: (
+      <EditFile
+        pdfName={pdfName}
+        setPdfName={setPdfName}
+        cancelFile={cancelFile}
+        totalPages={totalPages}
+      />
+    ),
+  };
+
   return (
     <main
       id="File"
@@ -71,46 +114,7 @@ const File = () => {
           SubStandard="開始簽署您的文件"
         />
       )}
-      {stepMenu === 0 && (
-        <>
-          <div className="card-box w-full p-5">
-            <DragUpload
-              fileSetting={{
-                type: uploadTypeName.PDF,
-                size: 20,
-                divHight: "h-[360px]",
-              }}
-              fileURL={pdfURL}
-              changeFile={(file, name, totalPages) => {
-                if (Array.isArray(file)) {
-                  setPdfURL(file);
-                  setPdfName(name);
-                  setTotalPages(totalPages || 0);
-                }
-              }}
-              setProgressBar={setProgressBar}
-            />
-          </div>
-        </>
-      )}
-      {stepMenu === 1 && (
-        <FinishUpload
-          pdfName={pdfName}
-          setPdfName={setPdfName}
-          previousMenu={previousMenu}
-          cancelUpload={cancelUpload}
-          nextMenu={nextMenu}
-          progressBar={progressBar}
-        />
-      )}
-      {stepMenu === 2 && (
-        <EditFile
-          pdfName={pdfName}
-          setPdfName={setPdfName}
-          cancelFile={cancelFile}
-          totalPages={totalPages}
-        />
-      )}
+      {fileElement[stepMenu]}
     </main>
   );
 };
