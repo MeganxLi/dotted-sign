@@ -3,9 +3,19 @@ import { ChevronDown, Minus, Plus } from "react-feather";
 
 const sizeOption: number[] = [25, 50, 75, 100];
 
-const ControlSizeCanvas = () => {
+interface props {
+  onSelectSize: number;
+  setOnSelectSize: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
   const dropdownRef = useRef<HTMLElement>(null);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
+
+  const clickSelectSize = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    setOnSelectSize(Number(e.currentTarget.dataset.order));
+    setOpenMenu(!openMenu);
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -13,7 +23,7 @@ const ControlSizeCanvas = () => {
         dropdownRef.current !== null &&
         !dropdownRef.current.contains(e.target as HTMLElement)
       ) {
-        setOpenMenu(!openMenu);
+        setOpenMenu(false);
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -45,7 +55,7 @@ const ControlSizeCanvas = () => {
           onClick={() => setOpenMenu(!openMenu)}
           className="flex cursor-pointer hover:text-blue"
         >
-          <span className="Roboto-Slab w-[40px]">10%</span>
+          <span className="Roboto-Slab w-[40px]">{onSelectSize}%</span>
           <ChevronDown size={16} />
         </div>
 
@@ -58,6 +68,8 @@ const ControlSizeCanvas = () => {
             <li
               className="hover:text-blue [&:not(:last-child)]:mb-2"
               key={size}
+              data-order={size}
+              onClick={clickSelectSize}
             >
               {size}%
             </li>

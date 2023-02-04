@@ -27,6 +27,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const mainRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [smallModal, setSmallModal] = useState<boolean>(false);
+  const [onSelectSize, setOnSelectSize] = useState<number>(100); // size 為百分比
 
   const closeModal = () => {
     setOpenModal(false);
@@ -111,7 +112,10 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           className="canvas-style"
           height={bgRef.current?.clientHeight}
         />
-        <ControlSizeCanvas />
+        <ControlSizeCanvas
+          onSelectSize={onSelectSize}
+          setOnSelectSize={setOnSelectSize}
+        />
       </div>
       <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-[32px]">
         <FileList totalPages={totalPages} />
