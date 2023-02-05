@@ -24,7 +24,7 @@ const WritingMode = ({
   setActiveMenu,
   clickStartSignBtn,
   handleOnlyBtnElement,
-  handleSaveBtnMessage
+  handleSaveBtnMessage,
 }: props) => {
   const sigCanvas = useRef<any>({});
   let canvasHistory: string[] = []; // canvas 歷史紀錄，用來復原使用
@@ -135,7 +135,7 @@ const WritingMode = ({
           <SignatureCanvas
             canvasProps={{
               className:
-                "signatureCanvas w-full bg-pale-blue rounded-[32px] cursor-canvas h-signHight",
+                "signatureCanvas w-full bg-pale-blue rounded-md cursor-canvas h-signHight",
             }}
             minWidth={signCanvasProps.width}
             penColor={signCanvasProps.color}
@@ -158,25 +158,23 @@ const WritingMode = ({
         </div>
       </div>
       <div className="two-btn ">
-        {!saveButton ?
+        {!saveButton ? (
           <button
             className="btn-secodary flex-auto"
             disabled={!isDrawn}
             onClick={clearCanvas}
           >
             清除畫布
-          </button> :
+          </button>
+        ) : (
           handleOnlyBtnElement
-        }
+        )}
         {!saveButton ? (
           <button className="btn-primary flex-auto" onClick={saveCanvas}>
             儲存結果
           </button>
         ) : (
-          <button
-            className="btn-primary flex-auto"
-            onClick={clickStartSignBtn}
-          >
+          <button className="btn-primary flex-auto" onClick={clickStartSignBtn}>
             開始簽署文件
           </button>
         )}

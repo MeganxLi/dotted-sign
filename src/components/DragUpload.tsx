@@ -14,10 +14,19 @@ interface props {
     divHight: string;
   };
   fileURL: string | pdfFileType[] | ArrayBuffer | null;
-  changeFile: (file: string | pdfFileType[] | ArrayBuffer | null, name: string, totalPages?: number) => void;
+  changeFile: (
+    file: string | pdfFileType[] | ArrayBuffer | null,
+    name: string,
+    totalPages?: number
+  ) => void;
   setProgressBar?: React.Dispatch<React.SetStateAction<number>>;
 }
-const DragUpload = ({ fileSetting, fileURL, changeFile, setProgressBar }: props) => {
+const DragUpload = ({
+  fileSetting,
+  fileURL,
+  changeFile,
+  setProgressBar,
+}: props) => {
   /**  true: PDF; false: img */
   const judgeFileType = fileSetting.type === uploadTypeName.PDF;
   const [dragActive, setDragActive] = React.useState(false); //是否有拖移檔案
@@ -86,7 +95,6 @@ const DragUpload = ({ fileSetting, fileURL, changeFile, setProgressBar }: props)
 
               for (let i = 1; i <= pdf.numPages; i++) {
                 pdf.getPage(i).then(function (page) {
-
                   const scale = 1.5;
                   const viewport = page.getViewport({ scale: scale });
                   const canvasChild = document.createElement("canvas");
@@ -106,14 +114,18 @@ const DragUpload = ({ fileSetting, fileURL, changeFile, setProgressBar }: props)
                   renderTask.promise.then(function () {
                     //輸出圖片
                     imageDate.push({
-                      orientation: canvasChild.height > canvasChild.width ?
-                        orientationType.landscape :
-                        orientationType.portrait,
-                      dataURL: canvasChild.toDataURL("image/png")
+                      orientation:
+                        canvasChild.height > canvasChild.width
+                          ? orientationType.landscape
+                          : orientationType.portrait,
+                      dataURL: canvasChild.toDataURL("image/png"),
                     });
-                    console.log(imageDate.length + " page(s) loaded in data, total page", pdf.numPages);
+                    console.log(
+                      imageDate.length + " page(s) loaded in data, total page",
+                      pdf.numPages
+                    );
 
-                    setProgressBar?.(imageDate.length / pdf.numPages * 100);
+                    setProgressBar?.((imageDate.length / pdf.numPages) * 100);
                   });
                 });
               }
@@ -163,21 +175,17 @@ const DragUpload = ({ fileSetting, fileURL, changeFile, setProgressBar }: props)
 
   return (
     <div
-      className={`relative flex ${fileSetting.divHight
-        } w-full flex-col items-center justify-center gap-4 
-          rounded-[32px] border-2 border-dashed border-black/20 bg-pale-blue 
+      className={`relative flex ${
+        fileSetting.divHight
+      } w-full flex-col items-center justify-center gap-4 
+          rounded-md border-2 border-dashed border-black/20 bg-pale-blue 
         text-[#728F9B] ${dragActive ? "bg-green-blue" : undefined}`}
       onDragEnter={fileHandleDrag}
       onDragLeave={fileHandleDrag}
       onDragOver={fileHandleDrag}
       onDrop={fileHandleDrag}
     >
-      <canvas
-        className="hidden"
-        ref={canvasRef}
-        width={100}
-        height={100}
-      />
+      <canvas className="hidden" ref={canvasRef} width={100} height={100} />
       <UploadIcon />
       <p className="text-sm tracking-wider">
         <span className=" flat:hidden">拖曳圖片至此，或</span>
