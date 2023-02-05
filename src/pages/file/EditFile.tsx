@@ -27,7 +27,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const mainRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [smallModal, setSmallModal] = useState<boolean>(false);
-  const [onSelectSize, setOnSelectSize] = useState<number>(100); // size 為百分比
+  const [onSelectSize, setOnSelectSize] = useState<number>(1);
 
   const closeModal = () => {
     setOpenModal(false);
@@ -54,9 +54,14 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   useEffect(() => {
     if (canvas && pdfURL && bgRef.current) {
       //計算 className canvas-container 長寬度
+      console.log(
+        "scrollHeight",
+        bgRef.current.scrollHeight * onSelectSize,
+        bgRef.current.scrollHeight * A4Size * onSelectSize
+      );
 
-      const screenHeight = bgRef.current.clientHeight;
-      const screenWidth = bgRef.current.clientWidth;
+      const screenHeight = bgRef.current.scrollHeight * onSelectSize;
+      const screenWidth = bgRef.current.scrollWidth * onSelectSize;
 
       const bgImage = pdfURL[0].dataURL;
       fabric.Image.fromURL(bgImage, (img) => {
@@ -83,7 +88,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         // scaleAndPositionImage(img);
       });
     }
-  }, [canvas, pdfURL]);
+  }, [canvas, pdfURL, onSelectSize]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -104,7 +109,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         <TabPanel />
       </div>
       <div
-        className="relative flex items-start justify-center bg-green-blue"
+        className="relative flex items-start overflow-auto bg-green-blue"
         ref={bgRef}
       >
         <canvas

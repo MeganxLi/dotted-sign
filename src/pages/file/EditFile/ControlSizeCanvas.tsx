@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Minus, Plus } from "react-feather";
 
-const sizeOption: number[] = [25, 50, 75, 100];
+const sizeOption: number[] = [50, 75, 100, 125, 150];
 
 interface props {
   onSelectSize: number;
@@ -13,7 +13,7 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
   const clickSelectSize = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    setOnSelectSize(Number(e.currentTarget.dataset.order));
+    setOnSelectSize(Number(e.currentTarget.dataset.order) / 100);
     setOpenMenu(!openMenu);
   };
 
@@ -55,7 +55,7 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
           onClick={() => setOpenMenu(!openMenu)}
           className="flex cursor-pointer hover:text-blue"
         >
-          <span className="Roboto-Slab w-[40px]">{onSelectSize}%</span>
+          <span className="Roboto-Slab w-[40px]">{onSelectSize * 100}%</span>
           <ChevronDown size={16} />
         </div>
 
