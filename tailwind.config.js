@@ -26,6 +26,7 @@ module.exports = {
       },
       borderRadius: {
         large: "40px",
+        md: "32px",
       },
       backgroundImage: {
         "file-cover": "url('/public/images/bg-desktop-1.png')",
@@ -48,6 +49,7 @@ module.exports = {
       },
       height: {
         signHight: "220px",
+        inherit: "inherit",
       },
     },
   },
