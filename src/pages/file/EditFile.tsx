@@ -24,8 +24,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [, setOpenModal] = useAtom(openModalAtom);
 
   const bgRef = useRef<HTMLDivElement>(null);
-  const mainRef = useRef<HTMLCanvasElement>(null);
-  const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
+  const mainRef = useRef<(HTMLCanvasElement | null)[]>([]);
+  const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
   const [smallModal, setSmallModal] = useState<boolean>(false);
   const [onSelectSize, setOnSelectSize] = useState<number>(1);
 
@@ -35,58 +35,61 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   /** 建立主要的 canvas */
   useEffect(() => {
-    const c = new fabric.Canvas(mainRef.current);
-    setCanvas(c);
+    for (let i = 0; i < totalPages; i++) {
+      console.log("mainRef", mainRef.current[i]);
+
+      const c: fabric.Canvas = new fabric.Canvas(mainRef.current[i]);
+      setCanvas((prev) => [...prev, c]);
+    }
   }, [mainRef]);
 
   /** 填上簽名 */
   useEffect(() => {
-    if (canvas && addSignURL) {
-      fabric.Image.fromURL(addSignURL.toString(), (img) => {
-        img.scaleToWidth(100);
-        img.scaleToHeight(100);
-        canvas.add(img).renderAll();
-      });
-    }
+    fabric.Image.fromURL(addSignURL.toString(), (img) => {
+      img.scaleToWidth(100);
+      img.scaleToHeight(100);
+      // canvas[0].add(img).renderAll();
+    });
   }, [canvas, addSignURL]);
 
   /** 填上背景檔案 */
   useEffect(() => {
-    if (canvas && pdfURL && bgRef.current) {
-      //計算 className canvas-container 長寬度
-      console.log(
-        "scrollHeight",
-        bgRef.current.scrollHeight * onSelectSize,
-        bgRef.current.scrollHeight * A4Size * onSelectSize
-      );
+    if (pdfURL && bgRef.current) {
+      for (let i = 0; i < totalPages; i++) {
+        {
+          //計算 className canvas-container 長寬度
+          const screenHeight = bgRef.current.scrollHeight * onSelectSize;
+          const screenWidth = bgRef.current.scrollWidth * onSelectSize;
 
-      const screenHeight = bgRef.current.scrollHeight * onSelectSize;
-      const screenWidth = bgRef.current.scrollWidth * onSelectSize;
+          const bgImage = pdfURL[i].dataURL;
+          // console.log("canvas[i]", canvas[i]);
+          if (!canvas[i]) return;
 
-      const bgImage = pdfURL[0].dataURL;
-      fabric.Image.fromURL(bgImage, (img) => {
-        canvas.setBackgroundImage(bgImage, () => canvas.renderAll());
-        console.log("img---", img, "screenHeight", screenHeight);
-        canvas.setHeight(img.height ?? 0);
-        canvas.setWidth(img.width ?? 0);
-        canvas
-          .setDimensions(
-            {
-              width:
-                (pdfURL[0].orientation === 1
-                  ? screenHeight * A4Size
-                  : screenWidth) + "px",
-              height:
-                (pdfURL[0].orientation === 1
-                  ? screenHeight
-                  : screenWidth * A4Size) + "px",
-            },
-            { cssOnly: true }
-          )
-          .requestRenderAll();
+          fabric.Image.fromURL(bgImage, (img) => {
+            canvas[i].setBackgroundImage(bgImage, () => canvas[i].renderAll());
+            // console.log("img---", img, "screenHeight", screenHeight);
+            canvas[i].setHeight(img.height ?? 0);
+            canvas[i].setWidth(img.width ?? 0);
+            canvas[i]
+              .setDimensions(
+                {
+                  width:
+                    (pdfURL[0].orientation === 1
+                      ? screenHeight * A4Size
+                      : screenWidth) + "px",
+                  height:
+                    (pdfURL[0].orientation === 1
+                      ? screenHeight
+                      : screenWidth * A4Size) + "px",
+                },
+                { cssOnly: true }
+              )
+              .requestRenderAll();
 
-        // scaleAndPositionImage(img);
-      });
+            // scaleAndPositionImage(img);
+          });
+        }
+      }
     }
   }, [canvas, pdfURL, onSelectSize]);
 
@@ -112,11 +115,18 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         className="relative flex items-start overflow-auto bg-green-blue"
         ref={bgRef}
       >
-        <canvas
-          ref={mainRef}
-          className="canvas-style"
-          height={bgRef.current?.clientHeight}
-        />
+        <div>
+          {canvas.map((_, idx: number) => {
+            return (
+              <canvas
+                ref={(el) => (mainRef.current = [...mainRef.current, el])}
+                className="canvas-style"
+                height={bgRef.current?.clientHeight}
+                key={idx}
+              />
+            );
+          })}
+        </div>
         <ControlSizeCanvas
           onSelectSize={onSelectSize}
           setOnSelectSize={setOnSelectSize}
