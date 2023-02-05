@@ -1,7 +1,7 @@
 @layer components {
   #File {
     .edit-file-field {
-      @apply overflow-y-auto overflow-x-hidden bg-white py-12 px-6;
+      @apply h-inherit bg-white py-12;
     }
 
     .tag-element {
@@ -39,6 +39,10 @@
           @apply mt-1 text-xs;
         }
       }
+    }
+
+    .canvas-container {
+      @apply m-auto;
     }
   }
 }

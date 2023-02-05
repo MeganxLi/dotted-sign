@@ -107,7 +107,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   return (
     <div className="gap not-w relative grid h-[70vh] w-screen grid-cols-[220px_auto_220px]">
-      <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-[32px]">
+      <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-md  px-6">
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
         <TabPanel />
       </div>
@@ -132,9 +132,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           setOnSelectSize={setOnSelectSize}
         />
       </div>
-      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-[32px]">
+      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-md">
         <FileList totalPages={totalPages} />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 px-6">
           <button className="btn-primary flex-auto">下一步</button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
             取消
