@@ -115,8 +115,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         className="relative flex h-inherit w-full items-start bg-green-blue"
         ref={bgRef}
       >
-        <div className="h-inherit w-full overflow-auto">
-          {canvas.map((_, idx: number) => {
+        <div className="grid h-inherit w-full gap-4 overflow-auto p-4">
+          {Array.from({ length: totalPages }).map((_, idx: number) => {
             return (
               <canvas
                 ref={(el) => (mainRef.current = [...mainRef.current, el])}
