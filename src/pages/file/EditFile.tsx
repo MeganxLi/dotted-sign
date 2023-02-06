@@ -112,10 +112,10 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         <TabPanel />
       </div>
       <div
-        className="relative flex items-start overflow-auto bg-green-blue"
+        className="relative flex h-inherit w-full items-start bg-green-blue"
         ref={bgRef}
       >
-        <div>
+        <div className="h-inherit w-full overflow-auto">
           {canvas.map((_, idx: number) => {
             return (
               <canvas

@@ -35,7 +35,7 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
 
   return (
     <div
-      className="absolute right-3 bottom-2 flex 
+      className="absolute right-6 bottom-4 flex 
     items-center gap-4 rounded-[8px] bg-white px-2 py-3 shadow-base"
     >
       <span
