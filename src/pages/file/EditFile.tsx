@@ -24,7 +24,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [, setOpenModal] = useAtom(openModalAtom);
 
   const bgRef = useRef<HTMLDivElement>(null);
-  const mainRef = useRef<(HTMLCanvasElement | null)[]>([]);
+  const canvasListRef = useRef<HTMLDivElement | null>(null);
+  const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
   const [smallModal, setSmallModal] = useState<boolean>(false);
   const [onSelectSize, setOnSelectSize] = useState<number>(1);
@@ -36,12 +37,12 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   /** 建立主要的 canvas */
   useEffect(() => {
     for (let i = 0; i < totalPages; i++) {
-      console.log("mainRef", mainRef.current[i]);
+      console.log("canvasItemRef", canvasItemRef.current[i]);
 
-      const c: fabric.Canvas = new fabric.Canvas(mainRef.current[i]);
+      const c: fabric.Canvas = new fabric.Canvas(canvasItemRef.current[i]);
       setCanvas((prev) => [...prev, c]);
     }
-  }, [mainRef]);
+  }, [canvasItemRef]);
 
   /** 填上簽名 */
   useEffect(() => {
@@ -115,11 +116,16 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         className="relative flex h-inherit w-full items-start bg-green-blue"
         ref={bgRef}
       >
-        <div className="grid h-inherit w-full gap-4 overflow-auto p-4">
+        <div
+          className="grid h-inherit w-full gap-4 overflow-auto p-4"
+          ref={canvasListRef}
+        >
           {Array.from({ length: totalPages }).map((_, idx: number) => {
             return (
               <canvas
-                ref={(el) => (mainRef.current = [...mainRef.current, el])}
+                ref={(el) =>
+                  (canvasItemRef.current = [...canvasItemRef.current, el])
+                }
                 className="canvas-style"
                 height={bgRef.current?.clientHeight}
                 key={idx}
@@ -133,7 +139,11 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         />
       </div>
       <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-md">
-        <FileList totalPages={totalPages} />
+        <FileList
+          totalPages={totalPages}
+          canvasListRef={canvasListRef}
+          canvasItemRef={canvasItemRef}
+        />
         <div className="flex flex-col gap-4 px-6">
           <button className="btn-primary flex-auto">下一步</button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
