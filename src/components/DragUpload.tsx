@@ -112,6 +112,7 @@ const DragUpload = ({
 
                   const renderTask = page.render(renderContext);
                   renderTask.promise.then(function () {
+                    // console.log(canvasChild, page.getViewport, viewport);
                     //輸出圖片
                     imageDate.push({
                       orientation:
@@ -119,6 +120,8 @@ const DragUpload = ({
                           ? orientationType.landscape
                           : orientationType.portrait,
                       dataURL: canvasChild.toDataURL("image/png"),
+                      width: viewport.width,
+                      height: viewport.height,
                     });
                     console.log(
                       imageDate.length + " page(s) loaded in data, total page",

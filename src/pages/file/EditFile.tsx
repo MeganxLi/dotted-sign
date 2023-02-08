@@ -68,7 +68,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
           fabric.Image.fromURL(bgImage, (img) => {
             canvas[i].setBackgroundImage(bgImage, () => canvas[i].renderAll());
-            // console.log("img---", img, "screenHeight", screenHeight);
+            console.log("img---", img);
             canvas[i].setHeight(img.height ?? 0);
             canvas[i].setWidth(img.width ?? 0);
             canvas[i]
@@ -117,7 +117,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         ref={bgRef}
       >
         <div
-          className="grid h-inherit w-full gap-4 overflow-auto p-4"
+          className="grid h-inherit w-full gap-4 overflow-auto py-4"
           ref={canvasListRef}
         >
           {Array.from({ length: totalPages }).map((_, idx: number) => {

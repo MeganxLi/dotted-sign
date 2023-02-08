@@ -6,7 +6,7 @@ import { A4Size } from "../../../constants/EnumType";
 import { fileAtom } from "../../../jotai";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const pdfScale = 0.7;
+const pageScale = 80;
 
 interface props {
   totalPages: number;
@@ -37,11 +37,15 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
 
       const context = canvasChild.getContext("2d");
       // 設定寬度
-      const getDivWidth = (canvasDiv.clientWidth / 2) * pdfScale;
-      const setWidth =
-        fileUrl[i].orientation === 1 ? getDivWidth * A4Size : getDivWidth;
-      const setHeight =
-        fileUrl[i].orientation === 0 ? getDivWidth * A4Size : getDivWidth;
+      console.log(
+        fileUrl[i].width,
+        fileUrl[i].height,
+        fileUrl[i].width / fileUrl[i].height
+      );
+      const imgSize = fileUrl[i].width / fileUrl[i].height;
+      const getDivWidth = pageScale * 0.8;
+      const setWidth = imgSize >= 1 ? getDivWidth * imgSize : getDivWidth;
+      const setHeight = imgSize >= 1 ? getDivWidth * imgSize : getDivWidth;
       canvasChild.width = setWidth;
       canvasChild.height = setHeight;
 
@@ -65,8 +69,9 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
           <div
             key={idx}
             data-count={idx + 1}
-            className="before:dark-blue relative flex h-[80px] w-[80px] cursor-pointer items-center justify-center 
-            rounded-lg bg-green-blue  before:absolute before:bottom-0 before:text-sm before:content-[attr(data-count)]"
+            className={`before:dark-blue relative flex h-[${pageScale}px] w-[${pageScale}px] 
+            cursor-pointer items-center justify-center 
+            rounded-lg bg-green-blue  before:absolute before:bottom-0 before:text-sm before:content-[attr(data-count)]`}
             onClick={moveCanvasScroll}
           >
             <canvas

@@ -10,6 +10,8 @@ type canvasType = string | ArrayBuffer | null;
 interface pdfFileType {
   orientation: number;
   dataURL: string;
+  width: number;
+  height: number;
 }
 
 //Sign page
@@ -18,7 +20,6 @@ interface SignCanvasPropsType {
   width: number;
   color: string;
 }
-
 
 //File page
 interface TagItemType {
@@ -37,6 +38,6 @@ interface MessageType {
 
 interface MessageIconType {
   [key: string]: {
-    icon: Icon
-  }
+    icon: Icon;
+  };
 }
