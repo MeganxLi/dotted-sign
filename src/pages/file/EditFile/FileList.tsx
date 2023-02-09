@@ -1,8 +1,6 @@
-import { log } from "console";
 import { PrimitiveAtom, useAtom } from "jotai";
 import { useEffect, useRef } from "react";
 import { pdfjs } from "react-pdf";
-import { A4Size } from "../../../constants/EnumType";
 import { fileAtom } from "../../../jotai";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -39,7 +37,7 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
       // 設定寬度
       const imgSize = fileUrl[i].width / fileUrl[i].height;
       const getDivSize = pageScale * 0.8;
-      // 如果頁面是直的使用乘法，如果是橫的使用除法
+      // 如果頁面是直(>=1)的使用乘法，如果是橫(<1)的使用除法
       const setWidth = imgSize >= 1 ? getDivSize : getDivSize * imgSize;
       const setHeight = imgSize >= 1 ? getDivSize / imgSize : getDivSize;
       canvasChild.width = setWidth;
