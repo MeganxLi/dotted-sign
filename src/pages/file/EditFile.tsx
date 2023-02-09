@@ -6,7 +6,7 @@ import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
 import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
-import { A4Size, RWDSize } from "../../constants/EnumType";
+import { RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 
@@ -37,8 +37,6 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   /** 建立主要的 canvas */
   useEffect(() => {
     for (let i = 0; i < totalPages; i++) {
-      console.log("canvasItemRef", canvasItemRef.current[i]);
-
       const c: fabric.Canvas = new fabric.Canvas(canvasItemRef.current[i]);
       setCanvas((prev) => [...prev, c]);
     }
@@ -63,25 +61,26 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           const screenWidth = bgRef.current.scrollWidth * onSelectSize;
 
           const bgImage = pdfURL[i].dataURL;
-          // console.log("canvas[i]", canvas[i]);
           if (!canvas[i]) return;
 
           fabric.Image.fromURL(bgImage, (img) => {
             canvas[i].setBackgroundImage(bgImage, () => canvas[i].renderAll());
-            console.log("img---", img);
+
+            // 計算頁面尺寸
+            const imgSize = pdfURL[i].width / pdfURL[i].height;
             canvas[i].setHeight(img.height ?? 0);
             canvas[i].setWidth(img.width ?? 0);
+            // 如果頁面是直(>=1)的使用乘法，如果是橫(<1)的使用除法
+            const getSmallSize = Math.min(screenHeight, screenWidth);
             canvas[i]
               .setDimensions(
                 {
                   width:
-                    (pdfURL[0].orientation === 1
-                      ? screenHeight * A4Size
-                      : screenWidth) + "px",
+                    (imgSize >= 1 ? getSmallSize : getSmallSize * imgSize) +
+                    "px",
                   height:
-                    (pdfURL[0].orientation === 1
-                      ? screenHeight
-                      : screenWidth * A4Size) + "px",
+                    (imgSize >= 1 ? getSmallSize / imgSize : getSmallSize) +
+                    "px",
                 },
                 { cssOnly: true }
               )
