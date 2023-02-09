@@ -34,18 +34,14 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
     for (let i = 0; i < totalPages; i++) {
       const canvasChild = pageItemRef.current[i];
       if (!canvasChild) return;
-
       const context = canvasChild.getContext("2d");
+
       // 設定寬度
-      console.log(
-        fileUrl[i].width,
-        fileUrl[i].height,
-        fileUrl[i].width / fileUrl[i].height
-      );
       const imgSize = fileUrl[i].width / fileUrl[i].height;
-      const getDivWidth = pageScale * 0.8;
-      const setWidth = imgSize >= 1 ? getDivWidth * imgSize : getDivWidth;
-      const setHeight = imgSize >= 1 ? getDivWidth * imgSize : getDivWidth;
+      const getDivSize = pageScale * 0.8;
+      // 如果頁面是直的使用乘法，如果是橫的使用除法
+      const setWidth = imgSize >= 1 ? getDivSize : getDivSize * imgSize;
+      const setHeight = imgSize >= 1 ? getDivSize / imgSize : getDivSize;
       canvasChild.width = setWidth;
       canvasChild.height = setHeight;
 
