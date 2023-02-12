@@ -2,6 +2,7 @@
   #File {
     .edit-file-field {
       @apply h-inherit bg-white py-12;
+      @apply flat:h-min flat:py-4 first:flat:pt-5 last:flat:bg-transparent last:flat:py-0;
     }
 
     .tag-element {
@@ -19,7 +20,7 @@
 
         > img,
         > svg {
-          @apply absolute top-[50%] bottom-0 left-[50%] right-0 translate-x-[-50%] translate-y-[-50%];
+          @apply absolute top-1/2 bottom-0 left-1/2 right-0 -translate-x-1/2 -translate-y-1/2;
           foo: bar;
           @apply block max-h-full max-w-full;
         }

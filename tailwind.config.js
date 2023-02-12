@@ -50,6 +50,7 @@ module.exports = {
       height: {
         signHight: "220px",
         inherit: "inherit",
+        initial: "initial",
       },
     },
   },

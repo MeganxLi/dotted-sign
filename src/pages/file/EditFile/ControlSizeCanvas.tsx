@@ -35,16 +35,16 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
 
   return (
     <div
-      className="absolute right-6 bottom-4 flex 
-    items-center gap-4 rounded-[8px] bg-white px-2 py-3 shadow-base"
+      className="absolute bottom-4 flex select-none items-center gap-4 rounded-[8px] bg-white 
+      px-2 py-3 shadow-base flat:left-1/2 flat:-translate-x-1/2 flatMin:right-6"
     >
       <span
-        className="relative cursor-pointer after:absolute
-        after:top-0 after:right-[-8px] after:block after:h-4 after:w-[1px] after:bg-black/20 hover:text-blue"
+        className="relative cursor-pointer after:absolute after:top-0
+        after:right-[-8px] after:block after:h-4 after:w-[1px] after:bg-black/20 hover:text-blue flat:hidden"
       >
         <Plus size={16} />
       </span>
-      <span className="cursor-pointer hover:text-blue">
+      <span className="cursor-pointer hover:text-blue flat:hidden">
         <Minus size={16} />
       </span>
       <span

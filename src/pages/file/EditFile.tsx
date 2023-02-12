@@ -27,8 +27,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const canvasListRef = useRef<HTMLDivElement | null>(null);
   const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
-  const [smallModal, setSmallModal] = useState<boolean>(false);
-  const [onSelectSize, setOnSelectSize] = useState<number>(1);
+  const [phoneSize, setPhoneSize] = useState<boolean>(false); // RWD phone size
+  const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
 
   const closeModal = () => {
     setOpenModal(false);
@@ -95,7 +95,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setSmallModal(window.innerWidth >= RWDSize);
+      setPhoneSize(window.innerWidth >= RWDSize);
     };
 
     window.addEventListener("resize", handleResize);
@@ -106,17 +106,23 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   }, []);
 
   return (
-    <div className="gap not-w relative grid h-[70vh] w-screen grid-cols-[220px_auto_220px]">
-      <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-md  px-6">
+    <div
+      className="gap not-w relative grid h-[70vh] w-full grid-cols-[220px_auto_220px] 
+    flat:grid-cols-1 flat:grid-rows-[auto_400px_auto]"
+    >
+      <div
+        className="edit-file-field grid grid-rows-[repeat(3,_min-content)] 
+      gap-8 rounded-l-md px-6 flat:grid-rows-1 flat:rounded-t-md flat:rounded-b-none"
+      >
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
-        <TabPanel />
+        {phoneSize && <TabPanel />}
       </div>
       <div
-        className="relative flex h-inherit w-full items-start bg-green-blue"
+        className="relative flex h-inherit w-full items-start bg-green-blue flat:h-initial"
         ref={bgRef}
       >
         <div
-          className="grid h-inherit w-full gap-4 overflow-auto py-4"
+          className="grid h-inherit w-full gap-4 overflow-auto py-4 flat:h-full"
           ref={canvasListRef}
         >
           {Array.from({ length: totalPages }).map((_, idx: number) => {
@@ -137,7 +143,10 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           setOnSelectSize={setOnSelectSize}
         />
       </div>
-      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-md">
+      <div
+        className="edit-file-field flex flex-col justify-between gap-8 
+      rounded-r-md "
+      >
         <FileList
           totalPages={totalPages}
           canvasListRef={canvasListRef}
@@ -150,7 +159,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           </button>
         </div>
       </div>
-      <Modal childrenClassName="w-[580px]" small={smallModal}>
+      <Modal childrenClassName="w-[580px]" small={phoneSize}>
         <React.Fragment>
           <SignMode onlySendBtn={true} clickStartSignBtn={closeModal} />
           <p
