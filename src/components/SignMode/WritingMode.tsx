@@ -97,7 +97,6 @@ const WritingMode = ({
 
   const fetchCanvas = () => {
     canvasHistory = sigCanvas.current.toData().concat();
-    setIsDrawn(!sigCanvas.current.isEmpty());
   };
 
   const saveCanvas = () => {
@@ -118,7 +117,7 @@ const WritingMode = ({
     <div id="WritingMode">
       <div className="card-box">
         <MenuHorizontal ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
-        <div className={`relative px-8 ${isDrawn && ""}`}>
+        <div className={`relative px-8 ${!isDrawn && "sing-canvas-caption"}`}>
           {!imageURL && (
             <WritingTools
               handleSignTools={{
@@ -140,6 +139,10 @@ const WritingMode = ({
             minWidth={signCanvasProps.width}
             penColor={signCanvasProps.color}
             onEnd={fetchCanvas}
+            onBegin={() => {
+              // 判斷是否已有點擊繪圖
+              setIsDrawn(true);
+            }}
             ref={sigCanvas}
           />
 

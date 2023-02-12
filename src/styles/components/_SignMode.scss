@@ -1,0 +1,4 @@
+.sing-canvas-caption {
+  @apply after:absolute after:bottom-1/3 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:text-sm after:text-[#728F9B] after:content-['在此範圍內進行簽署'];
+  foo: bar;
+}
