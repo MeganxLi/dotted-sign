@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Minus, Plus } from "react-feather";
 
-const sizeOption: number[] = [50, 75, 100, 125, 150];
+const sizeOption: number[] = [0.5, 0.75, 1, 1.25, 1.5];
 
 interface props {
   onSelectSize: number;
@@ -13,8 +13,28 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
   const clickSelectSize = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    setOnSelectSize(Number(e.currentTarget.dataset.order) / 100);
+    setOnSelectSize(Number(e.currentTarget.dataset.order));
     setOpenMenu(!openMenu);
+  };
+
+  const findSize = (size: number): number =>
+    sizeOption.findIndex((item: number) => size === item);
+
+  const nextSize = () => {
+    setOnSelectSize((prev) => {
+      const getFindSize: number = findSize(prev);
+      const maxLength = sizeOption.length - 1;
+      const calcSize = getFindSize < maxLength ? getFindSize + 1 : maxLength;
+      return sizeOption[calcSize];
+    });
+  };
+
+  const prevSize = () => {
+    setOnSelectSize((prev) => {
+      const getFindSize: number = findSize(prev);
+      const calcSize = getFindSize > 0 ? getFindSize - 1 : 0;
+      return sizeOption[calcSize];
+    });
   };
 
   useEffect(() => {
@@ -41,10 +61,14 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
       <span
         className="relative cursor-pointer after:absolute after:top-0
         after:right-[-8px] after:block after:h-4 after:w-[1px] after:bg-black/20 hover:text-blue flat:hidden"
+        onClick={nextSize}
       >
         <Plus size={16} />
       </span>
-      <span className="cursor-pointer hover:text-blue flat:hidden">
+      <span
+        className="cursor-pointer hover:text-blue flat:hidden"
+        onClick={prevSize}
+      >
         <Minus size={16} />
       </span>
       <span
@@ -71,7 +95,7 @@ const ControlSizeCanvas = ({ onSelectSize, setOnSelectSize }: props) => {
               data-order={size}
               onClick={clickSelectSize}
             >
-              {size}%
+              {size * 100}%
             </li>
           ))}
         </ul>
