@@ -1,6 +1,7 @@
 import { PrimitiveAtom, useAtom } from "jotai";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { pdfjs } from "react-pdf";
+import { RWDSize } from "../../../constants/EnumType";
 import { fileAtom } from "../../../jotai";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -16,7 +17,9 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const fileUrl: pdfFileType[] = pdfURL || [];
   const pageListRef = useRef<HTMLDivElement>(null);
+  const pageItemBlackRef = useRef<HTMLDivElement>(null);
   const pageItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
+  const [resizeSize, setResizeSize] = useState<boolean>(false);
 
   const moveCanvasScroll = (e: React.MouseEvent<HTMLDivElement>) => {
     const clickIndex = Number(e.currentTarget.dataset.count) - 1;
@@ -25,7 +28,7 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
         (canvasItemRef.current[clickIndex]?.parentElement?.offsetTop || 0) - 4;
   };
 
-  useEffect(() => {
+  const handlePageItem = () => {
     const canvasDiv = pageListRef.current;
     if (!canvasDiv) return;
 
@@ -36,7 +39,7 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
 
       // 設定寬度
       const imgSize = fileUrl[i].width / fileUrl[i].height;
-      const getDivSize = pageScale * 0.8;
+      const getDivSize = (pageItemBlackRef.current?.clientWidth || 0) * 0.8;
       // 如果頁面是直(>=1)的使用乘法，如果是橫(<1)的使用除法
       const setWidth = imgSize >= 1 ? getDivSize : getDivSize * imgSize;
       const setHeight = imgSize >= 1 ? getDivSize / imgSize : getDivSize;
@@ -50,13 +53,29 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
         context.drawImage(image, 0, 0, setWidth, setHeight);
       };
     }
-  }, [pageListRef]);
+  };
+
+  useEffect(() => {
+    handlePageItem();
+  }, [pageListRef, resizeSize]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setResizeSize(window.innerWidth >= RWDSize);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
       id="FileList"
       className={`flat-list grid gap-4 overflow-y-auto overflow-x-hidden px-6 flat:grid-flow-col 
-      flatMin:grid-cols-2`}
+      flat:justify-start flatMin:grid-cols-2`}
       ref={pageListRef}
     >
       {Array.from({ length: totalPages }).map((item, idx: number) => {
@@ -68,6 +87,7 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
             bg-green-blue before:absolute before:bottom-0 before:text-sm before:content-[attr(data-count)] 
             flat:h-14 flat:w-14`}
             onClick={moveCanvasScroll}
+            ref={pageItemBlackRef}
           >
             <canvas
               ref={(el) => (pageItemRef.current = [...pageItemRef.current, el])}
