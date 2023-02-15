@@ -9,6 +9,7 @@ import Modal from "../../components/Modal";
 import { RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
+import ZoomKit from "./EditFile/ZoomKit";
 
 interface props {
   pdfName: string;
@@ -29,6 +30,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
   const [phoneSize, setPhoneSize] = useState<boolean>(false); // RWD phone size
   const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
+  /** RWD 下方的 menu button ,false:頁面清單, true:簽名清單 */
+  const [isActiveMenu, setActiveMenu] = useState<boolean>(true);
 
   const closeModal = () => {
     setOpenModal(false);
@@ -95,7 +98,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setPhoneSize(window.innerWidth >= RWDSize);
+      const RWD = window.innerWidth >= RWDSize;
+      setPhoneSize(RWD);
+      if (RWD && !isActiveMenu) setActiveMenu(RWD);
     };
 
     window.addEventListener("resize", handleResize);
@@ -142,16 +147,18 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           onSelectSize={onSelectSize}
           setOnSelectSize={setOnSelectSize}
         />
+        <ZoomKit isActiveMenu={isActiveMenu} setActiveMenu={setActiveMenu} />
       </div>
-      <div
-        className="edit-file-field flex flex-col justify-between gap-8 
-      rounded-r-md "
-      >
-        <FileList
-          totalPages={totalPages}
-          canvasListRef={canvasListRef}
-          canvasItemRef={canvasItemRef}
-        />
+      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-md ">
+        {isActiveMenu ? (
+          <FileList
+            totalPages={totalPages}
+            canvasListRef={canvasListRef}
+            canvasItemRef={canvasItemRef}
+          />
+        ) : (
+          <TabPanel />
+        )}
         <div className="flex flex-col gap-4 px-6">
           <button className="btn-primary flex-auto">下一步</button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
