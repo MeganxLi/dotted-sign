@@ -55,9 +55,8 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
   return (
     <div
       id="FileList"
-      className={`grid grid-cols-2 gap-4 overflow-y-auto overflow-x-hidden px-6 flat:grid-flow-col 
-      flat:grid-cols-[repeat(auto-fill,${pageScale}px)] flat:overflow-x-auto flat:rounded-b-md flat:rounded-t-none
-      flat:bg-white flat:py-5`}
+      className={`flat-list grid gap-4 overflow-y-auto overflow-x-hidden px-6 flat:grid-flow-col 
+      flatMin:grid-cols-2`}
       ref={pageListRef}
     >
       {Array.from({ length: totalPages }).map((item, idx: number) => {
@@ -65,9 +64,9 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
           <div
             key={idx}
             data-count={idx + 1}
-            className={`before:dark-blue relative flex h-[${pageScale}px] w-[${pageScale}px] 
-            cursor-pointer items-center justify-center rounded-lg bg-green-blue before:absolute before:bottom-0 
-            before:text-sm before:content-[attr(data-count)]`}
+            className={`before:dark-blue relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg 
+            bg-green-blue before:absolute before:bottom-0 before:text-sm before:content-[attr(data-count)] 
+            flat:h-14 flat:w-14`}
             onClick={moveCanvasScroll}
           >
             <canvas
