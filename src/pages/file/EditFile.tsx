@@ -56,9 +56,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   /** 填上背景檔案 */
   useEffect(() => {
-    if (pdfURL && bgRef.current) {
-      for (let i = 0; i < totalPages; i++) {
-        {
+    const handelFabricCanvas = () => {
+      if (pdfURL && bgRef.current) {
+        for (let i = 0; i < totalPages; i++) {
           //計算 className canvas-container 長寬度
           const screenHeight = bgRef.current.scrollHeight * onSelectSize;
           const screenWidth = bgRef.current.scrollWidth * onSelectSize;
@@ -88,12 +88,17 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
                 { cssOnly: true }
               )
               .requestRenderAll();
-
-            // scaleAndPositionImage(img);
           });
         }
       }
-    }
+    };
+
+    handelFabricCanvas();
+    window.addEventListener("resize", handelFabricCanvas);
+
+    return () => {
+      window.removeEventListener("resize", handelFabricCanvas);
+    };
   }, [canvas, pdfURL, onSelectSize]);
 
   useEffect(() => {
@@ -103,6 +108,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       if (RWD && !isActiveMenu) setActiveMenu(RWD);
     };
 
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
