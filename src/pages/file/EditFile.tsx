@@ -6,9 +6,10 @@ import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
 import TabPanel from "./EditFile/TabPanel";
 import Modal from "../../components/Modal";
-import { A4Size, RWDSize } from "../../constants/EnumType";
+import { RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
+import ZoomKit from "./EditFile/ZoomKit";
 
 interface props {
   pdfName: string;
@@ -27,8 +28,10 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const canvasListRef = useRef<HTMLDivElement | null>(null);
   const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
-  const [smallModal, setSmallModal] = useState<boolean>(false);
-  const [onSelectSize, setOnSelectSize] = useState<number>(1);
+  const [phoneSize, setPhoneSize] = useState<boolean>(false); // RWD phone size
+  const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
+  /** RWD 下方的 menu button ,false:頁面清單, true:簽名清單 */
+  const [isActiveMenu, setActiveMenu] = useState<boolean>(true);
 
   const closeModal = () => {
     setOpenModal(false);
@@ -37,8 +40,6 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   /** 建立主要的 canvas */
   useEffect(() => {
     for (let i = 0; i < totalPages; i++) {
-      console.log("canvasItemRef", canvasItemRef.current[i]);
-
       const c: fabric.Canvas = new fabric.Canvas(canvasItemRef.current[i]);
       setCanvas((prev) => [...prev, c]);
     }
@@ -55,50 +56,59 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   /** 填上背景檔案 */
   useEffect(() => {
-    if (pdfURL && bgRef.current) {
-      for (let i = 0; i < totalPages; i++) {
-        {
+    const handelFabricCanvas = () => {
+      if (pdfURL && bgRef.current) {
+        for (let i = 0; i < totalPages; i++) {
           //計算 className canvas-container 長寬度
           const screenHeight = bgRef.current.scrollHeight * onSelectSize;
           const screenWidth = bgRef.current.scrollWidth * onSelectSize;
 
           const bgImage = pdfURL[i].dataURL;
-          // console.log("canvas[i]", canvas[i]);
           if (!canvas[i]) return;
 
           fabric.Image.fromURL(bgImage, (img) => {
             canvas[i].setBackgroundImage(bgImage, () => canvas[i].renderAll());
-            // console.log("img---", img, "screenHeight", screenHeight);
+
+            // 計算頁面尺寸
+            const imgSize = pdfURL[i].width / pdfURL[i].height;
             canvas[i].setHeight(img.height ?? 0);
             canvas[i].setWidth(img.width ?? 0);
+            // 如果頁面是直(>=1)的使用乘法，如果是橫(<1)的使用除法
+            const getSmallSize = Math.min(screenHeight, screenWidth);
             canvas[i]
               .setDimensions(
                 {
                   width:
-                    (pdfURL[0].orientation === 1
-                      ? screenHeight * A4Size
-                      : screenWidth) + "px",
+                    (imgSize >= 1 ? getSmallSize : getSmallSize * imgSize) +
+                    "px",
                   height:
-                    (pdfURL[0].orientation === 1
-                      ? screenHeight
-                      : screenWidth * A4Size) + "px",
+                    (imgSize >= 1 ? getSmallSize / imgSize : getSmallSize) +
+                    "px",
                 },
                 { cssOnly: true }
               )
               .requestRenderAll();
-
-            // scaleAndPositionImage(img);
           });
         }
       }
-    }
+    };
+
+    handelFabricCanvas();
+    window.addEventListener("resize", handelFabricCanvas);
+
+    return () => {
+      window.removeEventListener("resize", handelFabricCanvas);
+    };
   }, [canvas, pdfURL, onSelectSize]);
 
   useEffect(() => {
     const handleResize = () => {
-      setSmallModal(window.innerWidth >= RWDSize);
+      const RWD = window.innerWidth >= RWDSize;
+      setPhoneSize(RWD);
+      if (RWD && !isActiveMenu) setActiveMenu(RWD);
     };
 
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -107,17 +117,23 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   }, []);
 
   return (
-    <div className="gap not-w relative grid h-[70vh] w-screen grid-cols-[220px_auto_220px]">
-      <div className="edit-file-field grid grid-rows-[repeat(3,_min-content)] gap-8 rounded-l-md  px-6">
+    <div
+      className="gap not-w relative grid h-[70vh] w-full grid-cols-[220px_auto_220px] 
+    flat:grid-cols-1 flat:grid-rows-[auto_400px_auto]"
+    >
+      <div
+        className="edit-file-field grid grid-rows-[repeat(3,_min-content)] 
+      gap-8 rounded-l-md px-6 flat:grid-rows-1 flat:rounded-t-md flat:rounded-b-none"
+      >
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
-        <TabPanel />
+        {phoneSize && <TabPanel />}
       </div>
       <div
-        className="relative flex h-inherit w-full items-start bg-green-blue"
+        className="relative flex h-inherit w-full items-start bg-green-blue flat:h-initial"
         ref={bgRef}
       >
         <div
-          className="grid h-inherit w-full gap-4 overflow-auto p-4"
+          className="grid h-inherit w-full gap-4 overflow-auto py-4 flat:h-full"
           ref={canvasListRef}
         >
           {Array.from({ length: totalPages }).map((_, idx: number) => {
@@ -137,13 +153,18 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           onSelectSize={onSelectSize}
           setOnSelectSize={setOnSelectSize}
         />
+        <ZoomKit isActiveMenu={isActiveMenu} setActiveMenu={setActiveMenu} />
       </div>
-      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-md">
-        <FileList
-          totalPages={totalPages}
-          canvasListRef={canvasListRef}
-          canvasItemRef={canvasItemRef}
-        />
+      <div className="edit-file-field flex flex-col justify-between gap-8 rounded-r-md ">
+        {isActiveMenu ? (
+          <FileList
+            totalPages={totalPages}
+            canvasListRef={canvasListRef}
+            canvasItemRef={canvasItemRef}
+          />
+        ) : (
+          <TabPanel />
+        )}
         <div className="flex flex-col gap-4 px-6">
           <button className="btn-primary flex-auto">下一步</button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
@@ -151,7 +172,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           </button>
         </div>
       </div>
-      <Modal childrenClassName="w-[580px]" small={smallModal}>
+      <Modal childrenClassName="w-[580px]" small={phoneSize}>
         <React.Fragment>
           <SignMode onlySendBtn={true} clickStartSignBtn={closeModal} />
           <p

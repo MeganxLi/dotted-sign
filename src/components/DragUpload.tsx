@@ -95,8 +95,7 @@ const DragUpload = ({
 
               for (let i = 1; i <= pdf.numPages; i++) {
                 pdf.getPage(i).then(function (page) {
-                  const scale = 1.5;
-                  const viewport = page.getViewport({ scale: scale });
+                  const viewport = page.getViewport({ scale: 1 });
                   const canvasChild = document.createElement("canvas");
                   canvas.appendChild(canvasChild);
                   const context = canvasChild.getContext("2d");
@@ -115,10 +114,12 @@ const DragUpload = ({
                     //輸出圖片
                     imageDate.push({
                       orientation:
-                        canvasChild.height > canvasChild.width
+                        canvasChild.height < canvasChild.width
                           ? orientationType.landscape
                           : orientationType.portrait,
                       dataURL: canvasChild.toDataURL("image/png"),
+                      width: viewport.width,
+                      height: viewport.height,
                     });
                     console.log(
                       imageDate.length + " page(s) loaded in data, total page",
