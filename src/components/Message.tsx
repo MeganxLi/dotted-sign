@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "react-feather";
 import { useLocation } from "react-router-dom";
@@ -16,18 +16,28 @@ const Message = () => {
   const [messages, setMessages] = useState<MessageType>(MessageDefault);
   const messageEl = document.getElementById("Message");
 
-  const messagesOff = () => setMessages((prev) => ({ ...prev, ... { open: false } }));
+  const handleTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const messagesOff = () => {
+    setMessages((prev) => ({ ...prev, ...{ open: false } }));
+
+    if (messageEl?.className === "") return;
+    messageEl?.setAttribute("class", "slide-bottom opacity-100");
+    setTimeout(() => messageEl?.removeAttribute("class"), 1000);
+  };
 
   useEffect(() => {
-    const handleTimer = setTimeout(() => {
-      messagesOff();
-    }, 5000);
+    if (handleTimer.current) {
+      clearInterval(handleTimer.current);
+    }
 
     if (messageObj) {
       setMessages(messageObj);
       if (messageObj.open) {
-        clearInterval(handleTimer);
-        handleTimer;
+        messageEl?.setAttribute("class", "slide-top");
+        handleTimer.current = setTimeout(() => {
+          messagesOff();
+        }, 3000);
       }
     } else {
       messagesOff();
@@ -40,12 +50,11 @@ const Message = () => {
   }, [pathname]);
 
   const messageContent: JSX.Element = (
-    <div className={`min-w-[380px] py-4 px-6 bg-depp-blue text-white flex rounded items-center gap-2 ${messages.open ?
-      "slide-top" : "slide-bottom opacity-100"}`}>
+    <div className="message-notice">
       <span>{MessageIcon[messages.icon].icon}</span>
       <span className="flex-auto">{messages.content}</span>
       <span
-        className="before:w-px before:h-7 before:bg-white/30 before:mr-3 before:block flex items-center cursor-pointer"
+        className="flex cursor-pointer items-center before:mr-3 before:block before:h-7 before:w-px before:bg-white/30"
         onClick={() => setMessageObj(null)}
       >
         <X size={20} />
