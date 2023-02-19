@@ -25,6 +25,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [, setOpenModal] = useAtom(openModalAtom);
 
   const bgRef = useRef<HTMLDivElement>(null);
+  const [bgWidth, setBgWidth] = useState<number>(0);
   const canvasListRef = useRef<HTMLDivElement | null>(null);
   const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
@@ -60,6 +61,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       if (pdfURL && bgRef.current) {
         for (let i = 0; i < totalPages; i++) {
           //計算 className canvas-container 長寬度
+
           const screenHeight = bgRef.current.scrollHeight * onSelectSize;
           const screenWidth = bgRef.current.scrollWidth * onSelectSize;
 
@@ -106,6 +108,10 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       const RWD = window.innerWidth >= RWDSize;
       setPhoneSize(RWD);
       if (RWD && !isActiveMenu) setActiveMenu(RWD);
+
+      setBgWidth(
+        (window.innerWidth || 0) - (bgRef.current?.offsetLeft || 0) * 2
+      );
     };
 
     handleResize();
@@ -135,6 +141,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         <div
           className="grid h-inherit w-full gap-4 overflow-auto py-4 flat:h-full"
           ref={canvasListRef}
+          style={{ width: bgWidth }}
         >
           {Array.from({ length: totalPages }).map((_, idx: number) => {
             return (
