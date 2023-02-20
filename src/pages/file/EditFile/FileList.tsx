@@ -11,9 +11,15 @@ interface props {
   totalPages: number;
   canvasListRef: React.RefObject<HTMLDivElement | null>;
   canvasItemRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
+  setCanvasIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
+const FileList = ({
+  totalPages,
+  canvasListRef,
+  canvasItemRef,
+  setCanvasIndex,
+}: props) => {
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const fileUrl: pdfFileType[] = pdfURL || [];
   const pageListRef = useRef<HTMLDivElement>(null);
@@ -23,9 +29,12 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
 
   const moveCanvasScroll = (e: React.MouseEvent<HTMLDivElement>) => {
     const clickIndex = Number(e.currentTarget.dataset.count) - 1;
-    if (canvasListRef.current)
+    if (canvasListRef.current) {
       canvasListRef.current.scrollTop =
         (canvasItemRef.current[clickIndex]?.parentElement?.offsetTop || 0) - 4;
+    }
+
+    setCanvasIndex(clickIndex);
   };
 
   const handlePageItem = () => {
@@ -85,7 +94,7 @@ const FileList = ({ totalPages, canvasListRef, canvasItemRef }: props) => {
             data-count={idx + 1}
             className={`before:dark-blue relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg 
             bg-green-blue before:absolute before:bottom-0 before:text-sm before:content-[attr(data-count)] 
-            flat:h-14 flat:w-14`}
+            hover:border hover:border-solid hover:border-depp-blue/50 flat:h-14 flat:w-14`}
             onClick={moveCanvasScroll}
             ref={pageItemBlackRef}
           >
