@@ -33,6 +33,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
   /** RWD 下方的 menu button ,false:頁面清單, true:簽名清單 */
   const [isActiveMenu, setActiveMenu] = useState<boolean>(true);
+  const [canvasIndex, setCanvasIndex] = useState<number>(0); // click canvas page
 
   const closeModal = () => {
     setOpenModal(false);
@@ -103,6 +104,17 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     };
   }, [canvas, pdfURL, onSelectSize]);
 
+  const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
+      console.log("entry", entry);
+
+      const targetElement = entry.target as HTMLElement;
+      if (entry.isIntersecting) {
+        setCanvasIndex(Number(targetElement.dataset.index));
+      }
+    });
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const RWD = window.innerWidth >= RWDSize;
@@ -117,8 +129,24 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     handleResize();
     window.addEventListener("resize", handleResize);
 
+    const options: IntersectionObserverInit = {
+      root: canvasListRef.current,
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, options);
+    if (!canvasListRef.current) return;
+    const canvasList = Array.from(
+      canvasListRef.current.children
+    ) as HTMLCanvasElement[];
+    canvasList.forEach((canvas, index) => {
+      observer.observe(canvas);
+      canvas.dataset.index = String(index);
+    });
+
     return () => {
       window.removeEventListener("resize", handleResize);
+      observer.disconnect();
     };
   }, []);
 
@@ -168,6 +196,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
             totalPages={totalPages}
             canvasListRef={canvasListRef}
             canvasItemRef={canvasItemRef}
+            setCanvasIndex={setCanvasIndex}
           />
         ) : (
           <TabPanel />
