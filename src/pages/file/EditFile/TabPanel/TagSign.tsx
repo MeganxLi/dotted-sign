@@ -1,16 +1,18 @@
 import { useAtom } from "jotai";
-import { addCanvasAtom, signAtom } from "../../../../jotai";
+import { openModalAtom, signAtom } from "../../../../jotai";
 import { Plus } from "react-feather";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import SingImgContext from "../../../../context/SingImgContext";
 
 const TagSign = () => {
-  // router
-  const navigate = useNavigate();
+  //context
+  const { clickAddSing } = useContext(SingImgContext);
+  //useAtom
   const [signList] = useAtom(signAtom);
-  const [, setAddCanvas] = useAtom(addCanvasAtom);
+  const [, setOpenModal] = useAtom(openModalAtom);
 
   const createSignURL = (item: string | HTMLCanvasElement) => {
-    setAddCanvas(item);
+    clickAddSing(item);
   };
 
   return (
@@ -30,7 +32,7 @@ const TagSign = () => {
         })}
         <div
           className="sing-tag border-dashed border-black/20 text-blue"
-          onClick={() => navigate("/writing")}
+          onClick={() => setOpenModal(true)}
         >
           <Plus size={14} />
         </div>

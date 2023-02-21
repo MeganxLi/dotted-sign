@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Intro from "../../components/Intro";
-import UploadMode from "./UploadMode";
-import WritingMode from "./WritingMode";
+import SignMode from "../../components/SignMode";
 
 const Sign = () => {
-  const [ActiveMenu, setActiveMenu] = useState<number>(0);
 
   useEffect(() => {
     document.body.classList.add("sign");
@@ -21,11 +19,7 @@ const Sign = () => {
         }
         SubStandard="創建您的第一枚電子簽名"
       />
-      {ActiveMenu === 0 ? (
-        <WritingMode ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
-      ) : (
-        <UploadMode ActiveMenu={ActiveMenu} setActiveMenu={setActiveMenu} />
-      )}
+      <SignMode />
     </main>
   );
 };

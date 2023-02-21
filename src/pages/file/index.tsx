@@ -10,8 +10,11 @@ import { FileNameDefault } from "../../constants/FileSetting";
 
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
-  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<canvasType>>(fileAtom);
+  const [pdfURL, setPdfURL] =
+    useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [progressBar, setProgressBar] = useState<number>(0);
 
   useEffect(() => {
     document.body.classList.add("file");
@@ -38,6 +41,11 @@ const File = () => {
     setStepMenu((perv) => perv - 1);
   };
 
+  const cancelUpload = () => {
+    previousMenu();
+    setProgressBar(0);
+  };
+
   const nextMenu = () => {
     setStepMenu((perv) => perv + 1);
   };
@@ -46,6 +54,49 @@ const File = () => {
     setStepMenu(0);
     setPdfURL(null);
     setPdfName(FileNameDefault);
+  };
+
+  const fileElement: { [index: number]: JSX.Element } = {
+    0: (
+      <>
+        <div className="card-box w-full p-5">
+          <DragUpload
+            fileSetting={{
+              type: uploadTypeName.PDF,
+              size: 20,
+              divHight: "h-[360px]",
+            }}
+            fileURL={pdfURL}
+            changeFile={(file, name, totalPages) => {
+              if (Array.isArray(file)) {
+                setPdfURL(file);
+                setPdfName(name);
+                setTotalPages(totalPages || 0);
+              }
+            }}
+            setProgressBar={setProgressBar}
+          />
+        </div>
+      </>
+    ),
+    1: (
+      <FinishUpload
+        pdfName={pdfName}
+        setPdfName={setPdfName}
+        previousMenu={previousMenu}
+        cancelUpload={cancelUpload}
+        nextMenu={nextMenu}
+        progressBar={progressBar}
+      />
+    ),
+    2: (
+      <EditFile
+        pdfName={pdfName}
+        setPdfName={setPdfName}
+        cancelFile={cancelFile}
+        totalPages={totalPages}
+      />
+    ),
   };
 
   return (
@@ -63,39 +114,7 @@ const File = () => {
           SubStandard="開始簽署您的文件"
         />
       )}
-      {stepMenu === 0 && (
-        <>
-          <div className="card-box w-full p-5">
-            <DragUpload
-              fileSetting={{
-                type: uploadTypeName.PDF,
-                size: 20,
-                divHight: "h-[360px]",
-              }}
-              fileURL={pdfURL}
-              changeFile={(file, name) => {
-                setPdfURL(file);
-                setPdfName(name);
-              }}
-            />
-          </div>
-        </>
-      )}
-      {stepMenu === 1 && (
-        <FinishUpload
-          pdfName={pdfName}
-          setPdfName={setPdfName}
-          previousMenu={previousMenu}
-          nextMenu={nextMenu}
-        />
-      )}
-      {stepMenu === 2 && (
-        <EditFile
-          pdfName={pdfName}
-          setPdfName={setPdfName}
-          cancelFile={cancelFile}
-        />
-      )}
+      {fileElement[stepMenu]}
     </main>
   );
 };

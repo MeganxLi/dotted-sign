@@ -1,13 +1,13 @@
 //svg
-import { ReactComponent as ColorIcon } from "../../assets/svg/color.svg";
-import { ReactComponent as PenIcon } from "../../assets/svg/pen.svg";
-import { ReactComponent as HighlighterIcon } from "../../assets/svg/highlighter.svg";
-import { ReactComponent as EraserIcon } from "../../assets/svg/eraser.svg";
-import { ReactComponent as ArrowUndoIcon } from "../../assets/svg/arrow_undo.svg";
-import { ReactComponent as ArrowRedoIcon } from "../../assets/svg/arrow_redo.svg";
-import { ReactComponent as ResetIcon } from "../../assets/svg/reset.svg";
+import { ReactComponent as ColorIcon } from "../../../assets/svg/color.svg";
+import { ReactComponent as PenIcon } from "../../../assets/svg/pen.svg";
+import { ReactComponent as HighlighterIcon } from "../../../assets/svg/highlighter.svg";
+import { ReactComponent as EraserIcon } from "../../../assets/svg/eraser.svg";
+import { ReactComponent as ArrowUndoIcon } from "../../../assets/svg/arrow_undo.svg";
+import { ReactComponent as ArrowRedoIcon } from "../../../assets/svg/arrow_redo.svg";
+import { ReactComponent as ResetIcon } from "../../../assets/svg/reset.svg";
 
-import { CanvasToolsName } from "../../constants/EnumType";
+import { CanvasToolsName } from "../../../constants/EnumType";
 
 interface props {
   handleSignTools: {

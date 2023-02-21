@@ -1,0 +1,7 @@
+#Message {
+  @apply fixed bottom-6 w-full translate-y-28;
+  .message-notice {
+    @apply absolute left-1/2 bottom-2 flex min-w-[380px] -translate-x-1/2 items-center gap-2 rounded bg-depp-blue py-4 px-6 text-white;
+    foo: bar;
+  }
+}

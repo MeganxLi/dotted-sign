@@ -1,17 +1,24 @@
 @layer components {
   #File {
     .edit-file-field {
-      @apply overflow-y-auto overflow-x-hidden bg-white py-12 px-6;
+      @apply h-inherit bg-white py-12;
+      @apply flat:h-min flat:py-4 first:flat:pt-5 last:flat:bg-transparent last:flat:py-0;
+
+      > .flat-list {
+        @apply flat:overflow-x-auto flat:rounded-b-md flat:rounded-t-none flat:bg-white flat:py-5;
+      }
     }
 
     .tag-element {
+      @apply flat:flex flat:items-center;
       > p {
-        @apply mb-4 text-sm text-dark-blue;
+        @apply mb-4 whitespace-nowrap text-sm text-dark-blue flat:mb-0 flat:mr-4;
       }
     }
 
     .tag-list {
       @apply grid grid-cols-2 gap-2;
+      @apply flat:flex flat:items-center;
 
       .sing-tag {
         @apply relative h-[56px] w-[80px] cursor-pointer rounded-lg border-[0.5px];
@@ -19,7 +26,7 @@
 
         > img,
         > svg {
-          @apply absolute top-[50%] bottom-0 left-[50%] right-0 translate-x-[-50%] translate-y-[-50%];
+          @apply absolute top-1/2 bottom-0 left-1/2 right-0 -translate-x-1/2 -translate-y-1/2;
           foo: bar;
           @apply block max-h-full max-w-full;
         }
@@ -31,14 +38,20 @@
 
       .field-tag {
         @apply h-[80px] w-[80px] cursor-pointer rounded-lg p-4 shadow-tag;
+        @apply flat:flex flat:h-auto flat:w-auto flat:items-center flat:whitespace-nowrap;
         foo: bar;
         > span {
           @apply inline-block h-6 w-6;
+          @apply flat:h-auto flat:w-auto flat:pr-2;
         }
         > p {
-          @apply mt-1 text-xs;
+          @apply text-xs;
         }
       }
+    }
+
+    .canvas-container {
+      @apply m-auto;
     }
   }
 }

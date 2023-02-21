@@ -35,25 +35,29 @@ span {
     sans-serif;
 }
 
+.Roboto-Slab {
+  font-family: "Roboto Slab";
+}
+
 @layer components {
   body {
-    @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black flatMin:bg-sign-cover;
+    @apply bg-light-blue bg-cover bg-fixed bg-center bg-no-repeat text-black;
     @apply before:absolute before:top-0 before:right-0;
-    @apply after:absolute after:left-0 after:bottom-0 after:z-[-20] after:h-0  after:w-0;
-    foo: bar;
-    foo: bar;
+    @apply after:absolute after:left-0 after:bottom-16 after:-z-20 after:h-0 after:w-0;
     &.sign {
+      @apply flatMin:bg-sign-cover;
       @apply flat:before:content-sign-mobile-cover-right flat:after:content-sign-mobile-cover-left;
     }
     &.file {
+      @apply flatMin:bg-file-cover;
       @apply flat:before:content-file-mobile-cover-right flat:after:content-file-mobile-cover-left;
     }
   }
 
   main {
-    @apply flex h-[calc(100vh-120px)] items-center justify-center gap-24 px-6;
+    @apply flex h-[calc(100vh-4rem)] items-center justify-center gap-24 px-6;
     foo: bar;
-    @apply flat:h-auto flat:flex-col flat:items-start flat:justify-start flat:gap-4 flat:pt-9;
+    @apply flat:flex-col flat:items-start flat:justify-start flat:gap-4 flat:pt-9;
 
     > div:last-child:not(.not-w) {
       @apply w-[588px] flat:w-full flat:max-w-full flat:flex-initial;
@@ -70,7 +74,7 @@ span {
   }
 
   .bg-checkerboard {
-    @apply flex items-center justify-center rounded-[32px] bg-[#d9d9d9];
+    @apply flex items-center justify-center rounded-md bg-[#d9d9d9];
     foo: bar;
     background-image: linear-gradient(45deg, transparent 75%, #eee 0),
       linear-gradient(45deg, #eee 25%, transparent 0),
@@ -79,4 +83,7 @@ span {
     background-size: 30px 30px;
     background-position: 0 0, 15px 15px, 15px 15px, 0 0;
   }
+}
+.animation-forwards {
+  animation-fill-mode: forwards;
 }

@@ -1,15 +1,9 @@
 @layer components {
   #WritingMode {
-    .sing-canvas-caption {
-      @apply after:absolute after:top-[50%] after:left-[50%] after:translate-x-[-50%] after:translate-y-[-50%] after:text-sm after:text-[#728F9B]  after:content-['在此範圍內進行簽署'];
-      foo: bar;
-    }
-
     #WritingTools {
       @apply flex w-[calc(100%-6rem)] items-center justify-between rounded-3xl bg-white px-3 py-1 shadow-base;
       foo: bar;
-      @apply absolute top-3 left-[50%] translate-x-[-50%];
-      foo: bar;
+      @apply absolute top-3 left-1/2 -translate-x-1/2;
 
       > ul {
         @apply flex items-center gap-2;
@@ -39,8 +33,7 @@
     }
 
     .react-colorful {
-      @apply absolute top-12 left-[4rem] h-28 w-28;
-      foo: bar;
+      @apply absolute top-12 left-16 h-28 w-28;
     }
   }
 }
