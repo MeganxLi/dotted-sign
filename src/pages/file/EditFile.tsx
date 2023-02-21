@@ -110,11 +110,21 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     };
   }, [canvas, pdfURL, onSelectSize]);
 
-  const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry) => {
-      const targetElement = entry.target as HTMLElement;
-      if (entry.isIntersecting) {
-        setCanvasIndex(Number(targetElement.dataset.index));
+  const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
+
+    if (!canvasListRef.current) return;
+    // 取得所有 canvas
+    const canvasList = Array.from(
+      canvasListRef.current.children
+    ) as HTMLCanvasElement[];
+
+    canvasList.forEach((item: HTMLCanvasElement, index: number) => {
+      const canvasTop = item.offsetTop; // Canvas Item 頂部距離
+      const canvasBottom = canvasTop + item.clientHeight; // Canvas Item 底部距離
+
+      if (currentScrollTop >= canvasTop && currentScrollTop <= canvasBottom) {
+        setCanvasIndex(index);
       }
     });
   };
@@ -133,24 +143,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     handleResize();
     window.addEventListener("resize", handleResize);
 
-    const options: IntersectionObserverInit = {
-      root: canvasListRef.current,
-      threshold: 1.0,
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, options);
-    if (!canvasListRef.current) return;
-    const canvasList = Array.from(
-      canvasListRef.current.children
-    ) as HTMLCanvasElement[];
-    canvasList.forEach((canvas, index) => {
-      observer.observe(canvas);
-      canvas.dataset.index = String(index);
-    });
-
     return () => {
       window.removeEventListener("resize", handleResize);
-      observer.disconnect();
     };
   }, []);
 
@@ -178,6 +172,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           className="grid h-inherit w-full gap-4 overflow-auto py-4 flat:h-full"
           ref={canvasListRef}
           style={{ width: bgWidth }}
+          onScroll={handleCanvasListScroll}
         >
           {Array.from({ length: totalPages }).map((_, idx: number) => {
             return (
