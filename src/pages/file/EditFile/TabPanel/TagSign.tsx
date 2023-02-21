@@ -1,14 +1,18 @@
 import { useAtom } from "jotai";
-import { addCanvasAtom, openModalAtom, signAtom } from "../../../../jotai";
+import { openModalAtom, signAtom } from "../../../../jotai";
 import { Plus } from "react-feather";
+import { useContext } from "react";
+import SingImgContext from "../../../../context/SingImgContext";
 
 const TagSign = () => {
+  //context
+  const { clickAddSing } = useContext(SingImgContext);
+  //useAtom
   const [signList] = useAtom(signAtom);
-  const [, setAddCanvas] = useAtom(addCanvasAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
 
   const createSignURL = (item: string | HTMLCanvasElement) => {
-    setAddCanvas(item);
+    clickAddSing(item);
   };
 
   return (

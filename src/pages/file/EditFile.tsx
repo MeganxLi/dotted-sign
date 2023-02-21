@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { PrimitiveAtom, useAtom } from "jotai";
-import { addCanvasAtom, fileAtom, openModalAtom } from "../../jotai";
+import { fileAtom, openModalAtom } from "../../jotai";
 import { fabric } from "fabric";
 import InputTextField from "../../components/InputTextField";
 import FileList from "./EditFile/FileList";
@@ -10,6 +10,7 @@ import { RWDSize } from "../../constants/EnumType";
 import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 import ZoomKit from "./EditFile/ZoomKit";
+import SingImgContext from "../../context/SingImgContext";
 
 interface props {
   pdfName: string;
@@ -21,7 +22,6 @@ interface props {
 const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   // useAtom
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
-  const [addSignURL] = useAtom(addCanvasAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
 
   const bgRef = useRef<HTMLDivElement>(null);
@@ -48,13 +48,19 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   }, [canvasItemRef]);
 
   /** 填上簽名 */
-  useEffect(() => {
-    fabric.Image.fromURL(addSignURL.toString(), (img) => {
-      img.scaleToWidth(100);
-      img.scaleToHeight(100);
-      // canvas[0].add(img).renderAll();
+  const clickAddSing = (addImg: string | HTMLCanvasElement) => {
+    fabric.Image.fromURL(addImg.toString(), (img) => {
+      console.log("canvasIndex", canvas[canvasIndex]);
+      const widthSize = (canvas[canvasIndex].width ?? 0) / 3;
+      console.log(widthSize);
+
+      // img.scaleToWidth(widthSize);
+      // img.scaleToHeight(widthSize / (img.width ?? 0) / (img.height ?? 0));
+      // img.scaleToWidth(100);
+      // img.scaleToHeight(100);
+      canvas[canvasIndex].add(img).renderAll();
     });
-  }, [canvas, addSignURL]);
+  };
 
   /** 填上背景檔案 */
   useEffect(() => {
@@ -106,8 +112,6 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
   const handleIntersection = (entries: IntersectionObserverEntry[]) => {
     entries.forEach((entry) => {
-      console.log("entry", entry);
-
       const targetElement = entry.target as HTMLElement;
       if (entry.isIntersecting) {
         setCanvasIndex(Number(targetElement.dataset.index));
@@ -150,6 +154,8 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     };
   }, []);
 
+  const SingImgProps = { clickAddSing };
+
   return (
     <div
       className="gap not-w relative grid h-[70vh] w-full grid-cols-[220px_auto_220px] 
@@ -160,7 +166,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       gap-8 rounded-l-md px-6 flat:grid-rows-1 flat:rounded-t-md flat:rounded-b-none"
       >
         <InputTextField InputValue={pdfName} setInputValue={setPdfName} />
-        {phoneSize && <TabPanel />}
+        <SingImgContext.Provider value={SingImgProps}>
+          {phoneSize && <TabPanel />}
+        </SingImgContext.Provider>
       </div>
       <div
         className="relative flex h-inherit w-full items-start bg-green-blue flat:h-initial"
