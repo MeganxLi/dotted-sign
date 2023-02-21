@@ -16,14 +16,8 @@ const messageAtom = atom<MessageType | null>(null);
 const signAtom = atom<(HTMLCanvasElement | string)[]>([]);
 
 /**
- * 新增 canvas 圖像
- */
-const addCanvasAtom = atom<HTMLCanvasElement | string>("");
-
-/**
  * 檔案 canvas
  */
 const fileAtom = atom<pdfFileType[] | null>(null);
 
-export { openModalAtom, messageAtom, signAtom, addCanvasAtom, fileAtom };
-
+export { openModalAtom, messageAtom, signAtom, fileAtom };
