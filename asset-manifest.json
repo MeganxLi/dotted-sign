@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/dotted-sign/static/css/main.2ccfbf81.css",
-    "main.js": "/dotted-sign/static/js/main.e53071a5.js",
+    "main.css": "/dotted-sign/static/css/main.28576bf8.css",
+    "main.js": "/dotted-sign/static/js/main.5de7e354.js",
     "static/media/bg-desktop-2.png": "/dotted-sign/static/media/bg-desktop-2.00bcfc2842a818682b09.png",
+    "static/media/bg-desktop-1.png": "/dotted-sign/static/media/bg-desktop-1.40f459145555cb7f2cd8.png",
     "static/media/bg-mobile-2-right.png": "/dotted-sign/static/media/bg-mobile-2-right.cb7e7ab1dd886a0a646e.png",
     "static/media/bg-mobile-1-right.png": "/dotted-sign/static/media/bg-mobile-1-right.1b3f9d9ebf9de6329731.png",
     "static/media/bg-mobile-2-left.png": "/dotted-sign/static/media/bg-mobile-2-left.70bf31fc41ae1e4bb7b8.png",
@@ -20,17 +21,18 @@
     "static/media/edit.svg": "/dotted-sign/static/media/edit.c1773cbd42ca83b961ff5fad552372b6.svg",
     "static/media/writing.svg": "/dotted-sign/static/media/writing.b56f6fe87fdafecf0a1738ab792f5516.svg",
     "static/media/canvas_cursor.svg": "/dotted-sign/static/media/canvas_cursor.5b5b7a3ac8863bf407dc.svg",
+    "static/media/grid.svg": "/dotted-sign/static/media/grid.0a25f9a76f04071fcb1b8a602fd6a2dd.svg",
     "static/media/menu.svg": "/dotted-sign/static/media/menu.8e207597d599d7e6ffba1a3258faa83d.svg",
     "static/media/arrow_undo.svg": "/dotted-sign/static/media/arrow_undo.80358b654bb49ebac781febbbd17ad5d.svg",
-    "static/media/text.svg": "/dotted-sign/static/media/text.3344c3a435024e88bec9916ddb66a5bc.svg",
     "static/media/arrow_redo.svg": "/dotted-sign/static/media/arrow_redo.ebbd28c591fd5144d15f8b8b59fd0f00.svg",
+    "static/media/text.svg": "/dotted-sign/static/media/text.533be58c3810998b805c4b6fb94812bd.svg",
     "static/media/checkbox.svg": "/dotted-sign/static/media/checkbox.0413a6ad67b521b7fbfecd87112ee9ba.svg",
     "static/media/radio.svg": "/dotted-sign/static/media/radio.80fdcb0ee0d149140ac2006526a78835.svg",
-    "main.2ccfbf81.css.map": "/dotted-sign/static/css/main.2ccfbf81.css.map",
-    "main.e53071a5.js.map": "/dotted-sign/static/js/main.e53071a5.js.map"
+    "main.28576bf8.css.map": "/dotted-sign/static/css/main.28576bf8.css.map",
+    "main.5de7e354.js.map": "/dotted-sign/static/js/main.5de7e354.js.map"
   },
   "entrypoints": [
-    "static/css/main.2ccfbf81.css",
-    "static/js/main.e53071a5.js"
+    "static/css/main.28576bf8.css",
+    "static/js/main.5de7e354.js"
   ]
 }
