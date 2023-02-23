@@ -7,6 +7,7 @@ import { uploadTypeName } from "../../constants/EnumType";
 import EditFile from "./EditFile";
 import FinishUpload from "./FinishUpload";
 import { FileNameDefault } from "../../constants/FileSetting";
+import FinishFile from "./FinishFile";
 
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
@@ -95,8 +96,10 @@ const File = () => {
         setPdfName={setPdfName}
         cancelFile={cancelFile}
         totalPages={totalPages}
+        nextMenu={nextMenu}
       />
     ),
+    3: <FinishFile pdfName={pdfName} setPdfName={setPdfName} />,
   };
 
   return (
