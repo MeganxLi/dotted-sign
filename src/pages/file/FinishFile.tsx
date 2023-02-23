@@ -1,24 +1,37 @@
-import { PrimitiveAtom, useAtom } from "jotai";
-import React from "react";
+import { useAtom } from "jotai";
+import React, { useEffect } from "react";
 import { Download } from "react-feather";
 import InputTextField from "../../components/InputTextField";
 import { MessageTexts } from "../../constants/MessageSetting";
-import { fileAtom, messageAtom } from "../../jotai";
+import { messageAtom } from "../../jotai";
 
 interface props {
   pdfName: string;
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
+  canvasItemRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
 }
 
-const FinishFile = ({ pdfName, setPdfName }: props) => {
+const FinishFile = ({ pdfName, setPdfName, canvasItemRef }: props) => {
   const [, setMessage] = useAtom(messageAtom);
-  const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
+  const firstPage = canvasItemRef.current[0]?.toDataURL("image/png");
+
+  useEffect(() => {
+    setMessage({
+      open: true,
+      icon: "check",
+      content: MessageTexts.sign_success,
+    });
+  }, []);
 
   return (
     <div id="WritingMode">
       <div className="card-box">
-        <div className="mx-8 my-2 flex items-center justify-center rounded-3xl border border-solid border-blue/50 p-4">
-          <img src="https://autos.yahoo.com.tw/p/r/w880/car-trim/August2020/d303d03c67a9add0d2df10acd7acadea.jpeg" />
+        <div className="mx-8 my-2 flex items-center justify-center rounded-3xl border border-solid border-blue/50 p-6">
+          {firstPage ? (
+            <img src={firstPage} className="h-44 shadow-pdf" />
+          ) : (
+            <p className="text-alert-red">影像錯誤，請確認是否已上傳影像</p>
+          )}
         </div>
         <div className="px-12">
           <p className="mt-8 mb-4 select-none text-black/50">簽名檔名稱</p>
