@@ -23,6 +23,7 @@ module.exports = {
         secodary: "0px 2px 20px -8px #6DA9B7",
         alter: "0px 2px 20px -4px #CE583E",
         tag: "0px 2px 12px -4px #92B9C1;",
+        pdf: "0px 0px 12px -4px #BDC2C6;",
       },
       borderRadius: {
         large: "40px",
