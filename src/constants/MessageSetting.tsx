@@ -7,11 +7,12 @@ export const MessageDefault: MessageType = {
 };
 
 export const MessageIcon: MessageIconType = {
-  "check": { icon: <Check size={16} strokeWidth={3.5} /> },
-  "warn": { icon: <AlertTriangle size={16} strokeWidth={3.5} /> }
+  check: { icon: <Check size={16} strokeWidth={3.5} /> },
+  warn: { icon: <AlertTriangle size={16} strokeWidth={3.5} /> },
 };
 
 export enum MessageTexts {
   create = "創建成功",
-  unopened = "尚未開放"
+  unopened = "尚未開放",
+  sign_success = "簽署成功",
 }
