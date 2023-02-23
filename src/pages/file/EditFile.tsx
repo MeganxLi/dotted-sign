@@ -17,9 +17,18 @@ interface props {
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
   cancelFile: () => void;
   totalPages: number;
+  nextMenu: () => void;
+  canvasItemRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
 }
 
-const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
+const EditFile = ({
+  pdfName,
+  setPdfName,
+  cancelFile,
+  totalPages,
+  nextMenu,
+  canvasItemRef,
+}: props) => {
   // useAtom
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
@@ -27,7 +36,6 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
   const bgRef = useRef<HTMLDivElement>(null);
   const [bgWidth, setBgWidth] = useState<number>(0);
   const canvasListRef = useRef<HTMLDivElement | null>(null);
-  const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
   const [phoneSize, setPhoneSize] = useState<boolean>(false); // RWD phone size
   const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
@@ -205,7 +213,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           <TabPanel />
         )}
         <div className="flex flex-col gap-4 px-6">
-          <button className="btn-primary flex-auto">下一步</button>
+          <button className="btn-primary flex-auto" onClick={nextMenu}>
+            下一步
+          </button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
             取消
           </button>
