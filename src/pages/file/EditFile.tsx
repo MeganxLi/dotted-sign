@@ -137,6 +137,14 @@ const EditFile = ({
     });
   };
 
+  const toFinishFile = () => {
+    for (let i = 0; i < totalPages; i++) {
+      canvas[i].discardActiveObject();
+      canvas[i].requestRenderAll();
+    }
+    nextMenu();
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const RWD = window.innerWidth >= RWDSize;
@@ -213,7 +221,7 @@ const EditFile = ({
           <TabPanel />
         )}
         <div className="flex flex-col gap-4 px-6">
-          <button className="btn-primary flex-auto" onClick={nextMenu}>
+          <button className="btn-primary flex-auto" onClick={toFinishFile}>
             下一步
           </button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
