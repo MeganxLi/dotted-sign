@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PrimitiveAtom, useAtom } from "jotai";
 import { fileAtom } from "../../jotai";
 import DragUpload from "../../components/DragUpload";
@@ -9,6 +9,9 @@ import FinishUpload from "./FinishUpload";
 import { FileNameDefault } from "../../constants/FileSetting";
 import FinishFile from "./FinishFile";
 
+import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
 const File = () => {
   const [stepMenu, setStepMenu] = useState<number>(0);
   const [pdfURL, setPdfURL] =
@@ -16,6 +19,9 @@ const File = () => {
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [progressBar, setProgressBar] = useState<number>(0);
+
+  // edit pdf
+  const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
 
   useEffect(() => {
     document.body.classList.add("file");
@@ -97,9 +103,16 @@ const File = () => {
         cancelFile={cancelFile}
         totalPages={totalPages}
         nextMenu={nextMenu}
+        canvasItemRef={canvasItemRef}
       />
     ),
-    3: <FinishFile pdfName={pdfName} setPdfName={setPdfName} />,
+    3: (
+      <FinishFile
+        pdfName={pdfName}
+        setPdfName={setPdfName}
+        canvasItemRef={canvasItemRef}
+      />
+    ),
   };
 
   return (
