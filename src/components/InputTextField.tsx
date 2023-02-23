@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { ReactComponent as EditIcon } from "../assets/svg/edit.svg";
 
 interface props {
@@ -7,6 +7,13 @@ interface props {
 }
 
 const InputTextField = ({ InputValue, setInputValue }: props) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
   return (
     <div className="text-field">
       <input
@@ -14,8 +21,9 @@ const InputTextField = ({ InputValue, setInputValue }: props) => {
         className="w-full"
         value={InputValue}
         onChange={(e) => setInputValue(e.target.value)}
+        ref={inputRef}
       />
-      <span>
+      <span className="cursor-pointer" onClick={handleClick}>
         <EditIcon className="stroke-black" />
       </span>
     </div>
