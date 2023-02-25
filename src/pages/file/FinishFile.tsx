@@ -8,12 +8,12 @@ import { messageAtom } from "../../jotai";
 interface props {
   pdfName: string;
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
-  canvasItemRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
+  finishPdf: (HTMLCanvasElement | null)[];
 }
 
-const FinishFile = ({ pdfName, setPdfName, canvasItemRef }: props) => {
+const FinishFile = ({ pdfName, setPdfName, finishPdf }: props) => {
   const [, setMessage] = useAtom(messageAtom);
-  const firstPage = canvasItemRef.current[0]?.toDataURL("image/png");
+  const firstPage = finishPdf[0]?.toDataURL("image/png");
 
   useEffect(() => {
     setMessage({

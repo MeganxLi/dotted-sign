@@ -18,7 +18,7 @@ interface props {
   cancelFile: () => void;
   totalPages: number;
   nextMenu: () => void;
-  canvasItemRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
+  getCanvasItem: (canvasItem: (HTMLCanvasElement | null)[]) => void;
 }
 
 const EditFile = ({
@@ -27,7 +27,7 @@ const EditFile = ({
   cancelFile,
   totalPages,
   nextMenu,
-  canvasItemRef,
+  getCanvasItem,
 }: props) => {
   // useAtom
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
@@ -36,6 +36,7 @@ const EditFile = ({
   const bgRef = useRef<HTMLDivElement>(null);
   const [bgWidth, setBgWidth] = useState<number>(0);
   const canvasListRef = useRef<HTMLDivElement | null>(null);
+  const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
   const [canvas, setCanvas] = useState<fabric.Canvas[]>([]);
   const [phoneSize, setPhoneSize] = useState<boolean>(false); // RWD phone size
   const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
@@ -115,6 +116,7 @@ const EditFile = ({
 
     return () => {
       window.removeEventListener("resize", handelFabricCanvas);
+      getCanvasItem(canvasItemRef.current);
     };
   }, [canvas, pdfURL, onSelectSize]);
 
@@ -152,7 +154,7 @@ const EditFile = ({
       if (RWD && !isActiveMenu) setActiveMenu(RWD);
 
       setBgWidth(
-        (window.innerWidth || 0) - (bgRef.current?.offsetLeft || 0) * 2
+        (window.innerWidth || 0) - ((bgRef.current?.offsetLeft || 0) + 32) * 2
       );
     };
 

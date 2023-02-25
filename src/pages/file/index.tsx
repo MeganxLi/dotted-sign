@@ -7,9 +7,9 @@ import { uploadTypeName } from "../../constants/EnumType";
 import EditFile from "./EditFile";
 import FinishUpload from "./FinishUpload";
 import { FileNameDefault } from "../../constants/FileSetting";
-import FinishFile from "./FinishFile";
 
 import { pdfjs } from "react-pdf";
+import FinishFile from "./FinishFile";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const File = () => {
@@ -19,9 +19,7 @@ const File = () => {
   const [pdfName, setPdfName] = useState<string>(FileNameDefault);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [progressBar, setProgressBar] = useState<number>(0);
-
-  // edit pdf
-  const canvasItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
+  const [finishPdf, setFinishPdf] = useState<(HTMLCanvasElement | null)[]>([]); // get finish pdf
 
   useEffect(() => {
     document.body.classList.add("file");
@@ -103,14 +101,14 @@ const File = () => {
         cancelFile={cancelFile}
         totalPages={totalPages}
         nextMenu={nextMenu}
-        canvasItemRef={canvasItemRef}
+        getCanvasItem={(canvasItem) => setFinishPdf(canvasItem)}
       />
     ),
     3: (
       <FinishFile
         pdfName={pdfName}
         setPdfName={setPdfName}
-        canvasItemRef={canvasItemRef}
+        finishPdf={finishPdf}
       />
     ),
   };
