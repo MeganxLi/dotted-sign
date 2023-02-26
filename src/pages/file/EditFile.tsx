@@ -42,7 +42,7 @@ const EditFile = ({
   const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
   /** RWD 下方的 menu button ,false:頁面清單, true:簽名清單 */
   const [isActiveMenu, setActiveMenu] = useState<boolean>(true);
-  const [canvasIndex, setCanvasIndex] = useState<number>(0); // click canvas page
+  const [focusCanvasIdx, setFocusCanvasIdx] = useState<number>(0); // click canvas page
   const [canvasListScroll, setCanvasListScroll] = useState<number>(0);
 
   const closeModal = () => {
@@ -66,15 +66,15 @@ const EditFile = ({
     ) as HTMLCanvasElement[];
 
     const bgHight = bgRef.current?.clientHeight ?? 0; //取得 div 尺寸
-    const cTop = canvasList[canvasIndex].offsetTop; // Canvas Item 頂部距離
+    const cTop = canvasList[focusCanvasIdx].offsetTop; // Canvas Item 頂部距離
 
     fabric.Image.fromURL(
       addImg.toString(),
       (img) => {
-        canvas[canvasIndex].add(img).renderAll();
+        canvas[focusCanvasIdx].add(img).renderAll();
       },
       {
-        width: (canvas[canvasIndex].width ?? 0) / 3,
+        width: (canvas[focusCanvasIdx].width ?? 0) / 3,
         top: canvasListScroll - cTop + bgHight / 2,
       }
     );
@@ -144,7 +144,7 @@ const EditFile = ({
       const canvasBottom = canvasTop + (item.clientHeight / 3) * 2; // Canvas Item 底部距離
 
       if (index === 0 && currentScrollTop <= canvasBottom) {
-        return setCanvasIndex(index);
+        return setFocusCanvasIdx(index);
       }
 
       if (
@@ -154,7 +154,7 @@ const EditFile = ({
             (canvasList[index - 1].clientHeight / 3) * 2 &&
         currentScrollTop <= canvasBottom
       ) {
-        return setCanvasIndex(index);
+        return setFocusCanvasIdx(index);
       }
     });
   };
@@ -237,7 +237,7 @@ const EditFile = ({
             totalPages={totalPages}
             canvasListRef={canvasListRef}
             canvasItemRef={canvasItemRef}
-            setCanvasIndex={setCanvasIndex}
+            setFocusCanvasIdx={setFocusCanvasIdx}
           />
         ) : (
           <TabPanel />
