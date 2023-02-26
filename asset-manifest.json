@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/dotted-sign/static/css/main.28576bf8.css",
-    "main.js": "/dotted-sign/static/js/main.5de7e354.js",
+    "main.css": "/dotted-sign/static/css/main.617fa44d.css",
+    "main.js": "/dotted-sign/static/js/main.77e2a640.js",
     "static/media/bg-desktop-2.png": "/dotted-sign/static/media/bg-desktop-2.00bcfc2842a818682b09.png",
     "static/media/bg-desktop-1.png": "/dotted-sign/static/media/bg-desktop-1.40f459145555cb7f2cd8.png",
     "static/media/bg-mobile-2-right.png": "/dotted-sign/static/media/bg-mobile-2-right.cb7e7ab1dd886a0a646e.png",
@@ -28,11 +28,11 @@
     "static/media/text.svg": "/dotted-sign/static/media/text.533be58c3810998b805c4b6fb94812bd.svg",
     "static/media/checkbox.svg": "/dotted-sign/static/media/checkbox.0413a6ad67b521b7fbfecd87112ee9ba.svg",
     "static/media/radio.svg": "/dotted-sign/static/media/radio.80fdcb0ee0d149140ac2006526a78835.svg",
-    "main.28576bf8.css.map": "/dotted-sign/static/css/main.28576bf8.css.map",
-    "main.5de7e354.js.map": "/dotted-sign/static/js/main.5de7e354.js.map"
+    "main.617fa44d.css.map": "/dotted-sign/static/css/main.617fa44d.css.map",
+    "main.77e2a640.js.map": "/dotted-sign/static/js/main.77e2a640.js.map"
   },
   "entrypoints": [
-    "static/css/main.28576bf8.css",
-    "static/js/main.5de7e354.js"
+    "static/css/main.617fa44d.css",
+    "static/js/main.77e2a640.js"
   ]
 }
