@@ -80,6 +80,44 @@ const EditFile = ({
     );
   };
 
+  const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
+    setCanvasListScroll(currentScrollTop);
+
+    if (!canvasListRef.current) return;
+    // 取得所有 canvas
+    const canvasList = Array.from(
+      canvasListRef.current.children
+    ) as HTMLCanvasElement[];
+
+    canvasList.forEach((item: HTMLCanvasElement, index: number) => {
+      const canvasTop = item.offsetTop; // Canvas Item 頂部距離
+      const canvasBottom = canvasTop + (item.clientHeight / 3) * 2; // Canvas Item 底部距離
+
+      if (index === 0 && currentScrollTop <= canvasBottom) {
+        return setFocusCanvasIdx(index);
+      }
+
+      if (
+        index !== 0 &&
+        currentScrollTop >=
+          canvasList[index - 1].offsetTop +
+            (canvasList[index - 1].clientHeight / 3) * 2 &&
+        currentScrollTop <= canvasBottom
+      ) {
+        return setFocusCanvasIdx(index);
+      }
+    });
+  };
+
+  const toFinishFile = () => {
+    for (let i = 0; i < totalPages; i++) {
+      canvas[i].discardActiveObject();
+      canvas[i].requestRenderAll();
+    }
+    nextMenu();
+  };
+
   /** 填上背景檔案，並移動視窗變動尺寸 */
   useEffect(() => {
     const handelFabricCanvas = () => {
@@ -128,44 +166,6 @@ const EditFile = ({
       getCanvasItem(canvasItemRef.current);
     };
   }, [canvas, pdfURL, onSelectSize]);
-
-  const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
-    setCanvasListScroll(currentScrollTop);
-
-    if (!canvasListRef.current) return;
-    // 取得所有 canvas
-    const canvasList = Array.from(
-      canvasListRef.current.children
-    ) as HTMLCanvasElement[];
-
-    canvasList.forEach((item: HTMLCanvasElement, index: number) => {
-      const canvasTop = item.offsetTop; // Canvas Item 頂部距離
-      const canvasBottom = canvasTop + (item.clientHeight / 3) * 2; // Canvas Item 底部距離
-
-      if (index === 0 && currentScrollTop <= canvasBottom) {
-        return setFocusCanvasIdx(index);
-      }
-
-      if (
-        index !== 0 &&
-        currentScrollTop >=
-          canvasList[index - 1].offsetTop +
-            (canvasList[index - 1].clientHeight / 3) * 2 &&
-        currentScrollTop <= canvasBottom
-      ) {
-        return setFocusCanvasIdx(index);
-      }
-    });
-  };
-
-  const toFinishFile = () => {
-    for (let i = 0; i < totalPages; i++) {
-      canvas[i].discardActiveObject();
-      canvas[i].requestRenderAll();
-    }
-    nextMenu();
-  };
 
   useEffect(() => {
     const handleResize = () => {
