@@ -71,7 +71,7 @@ const EditFile = ({
     });
   };
 
-  /** 填上背景檔案 */
+  /** 填上背景檔案，並移動視窗變動尺寸 */
   useEffect(() => {
     const handelFabricCanvas = () => {
       if (pdfURL && bgRef.current) {
@@ -131,10 +131,20 @@ const EditFile = ({
 
     canvasList.forEach((item: HTMLCanvasElement, index: number) => {
       const canvasTop = item.offsetTop; // Canvas Item 頂部距離
-      const canvasBottom = canvasTop + item.clientHeight; // Canvas Item 底部距離
+      const canvasBottom = canvasTop + (item.clientHeight / 3) * 2; // Canvas Item 底部距離
 
-      if (currentScrollTop >= canvasTop && currentScrollTop <= canvasBottom) {
-        setCanvasIndex(index);
+      if (index === 0 && currentScrollTop <= canvasBottom) {
+        return setCanvasIndex(index);
+      }
+
+      if (
+        index !== 0 &&
+        currentScrollTop >=
+          canvasList[index - 1].offsetTop +
+            (canvasList[index - 1].clientHeight / 3) * 2 &&
+        currentScrollTop <= canvasBottom
+      ) {
+        return setCanvasIndex(index);
       }
     });
   };
