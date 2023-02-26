@@ -235,7 +235,7 @@ const EditFile = ({
         <React.Fragment>
           <SignMode onlySendBtn={true} clickStartSignBtn={closeModal} />
           <p
-            className="pt-8 text-center text-xs text-white"
+            className="cursor-auto pt-8 text-center text-xs text-white"
             onClick={closeModal}
           >
             點擊畫面任一處離開
