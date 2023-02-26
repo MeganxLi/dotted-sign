@@ -109,6 +109,7 @@ const File = () => {
         pdfName={pdfName}
         setPdfName={setPdfName}
         finishPdf={finishPdf}
+        totalPages={totalPages}
       />
     ),
   };
