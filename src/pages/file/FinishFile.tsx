@@ -4,16 +4,30 @@ import { Download } from "react-feather";
 import InputTextField from "../../components/InputTextField";
 import { MessageTexts } from "../../constants/MessageSetting";
 import { messageAtom } from "../../jotai";
+import { Document, Page, Image, PDFDownloadLink } from "@react-pdf/renderer";
 
 interface props {
   pdfName: string;
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
   finishPdf: (HTMLCanvasElement | null)[];
+  totalPages: number;
 }
 
-const FinishFile = ({ pdfName, setPdfName, finishPdf }: props) => {
+const FinishFile = ({ pdfName, setPdfName, finishPdf, totalPages }: props) => {
   const [, setMessage] = useAtom(messageAtom);
   const firstPage = finishPdf[0]?.toDataURL("image/png");
+
+  const createCanvasItem = (): JSX.Element => (
+    <Document>
+      {Array.from({ length: totalPages }).map((_, idx: number) => {
+        return (
+          <Page key={idx}>
+            <Image src={finishPdf[idx]?.toDataURL("image/png")} />
+          </Page>
+        );
+      })}
+    </Document>
+  );
 
   useEffect(() => {
     setMessage({
@@ -51,9 +65,13 @@ const FinishFile = ({ pdfName, setPdfName, finishPdf }: props) => {
         >
           管理文件
         </button>
-        <button className="btn-primary flex flex-auto items-center justify-center gap-3">
+        <PDFDownloadLink
+          document={createCanvasItem()}
+          fileName={pdfName}
+          className="btn-primary flex flex-auto items-center justify-center gap-3"
+        >
           下載此文件 <Download size={20} />
-        </button>
+        </PDFDownloadLink>
       </div>
     </div>
   );
