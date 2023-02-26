@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@react-pdf/renderer": "^3.1.6",
     "@types/fabric": "^4.5.12",
     "@types/react-pdf": "^5.7.4",
     "@types/react-signature-canvas": "^1.0.2",
