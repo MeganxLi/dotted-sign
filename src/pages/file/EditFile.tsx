@@ -43,6 +43,7 @@ const EditFile = ({
   /** RWD 下方的 menu button ,false:頁面清單, true:簽名清單 */
   const [isActiveMenu, setActiveMenu] = useState<boolean>(true);
   const [canvasIndex, setCanvasIndex] = useState<number>(0); // click canvas page
+  const [canvasListScroll, setCanvasListScroll] = useState<number>(0);
 
   const closeModal = () => {
     setOpenModal(false);
@@ -58,17 +59,25 @@ const EditFile = ({
 
   /** 填上簽名 */
   const clickAddSing = (addImg: string | HTMLCanvasElement) => {
-    fabric.Image.fromURL(addImg.toString(), (img) => {
-      console.log("canvasIndex", canvas[canvasIndex]);
-      const widthSize = (canvas[canvasIndex].width ?? 0) / 3;
-      console.log(widthSize);
+    if (!canvasListRef.current) return;
+    // 取得所有 canvas
+    const canvasList = Array.from(
+      canvasListRef.current.children
+    ) as HTMLCanvasElement[];
 
-      // img.scaleToWidth(widthSize);
-      // img.scaleToHeight(widthSize / (img.width ?? 0) / (img.height ?? 0));
-      // img.scaleToWidth(100);
-      // img.scaleToHeight(100);
-      canvas[canvasIndex].add(img).renderAll();
-    });
+    const bgHight = bgRef.current?.clientHeight ?? 0; //取得 div 尺寸
+    const cTop = canvasList[canvasIndex].offsetTop; // Canvas Item 頂部距離
+
+    fabric.Image.fromURL(
+      addImg.toString(),
+      (img) => {
+        canvas[canvasIndex].add(img).renderAll();
+      },
+      {
+        width: (canvas[canvasIndex].width ?? 0) / 3,
+        top: canvasListScroll - cTop + bgHight / 2,
+      }
+    );
   };
 
   /** 填上背景檔案，並移動視窗變動尺寸 */
@@ -122,6 +131,7 @@ const EditFile = ({
 
   const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
+    setCanvasListScroll(currentScrollTop);
 
     if (!canvasListRef.current) return;
     // 取得所有 canvas
