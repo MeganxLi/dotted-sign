@@ -17,9 +17,18 @@ interface props {
   setPdfName: React.Dispatch<React.SetStateAction<string>>;
   cancelFile: () => void;
   totalPages: number;
+  nextMenu: () => void;
+  getCanvasItem: (canvasItem: (HTMLCanvasElement | null)[]) => void;
 }
 
-const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
+const EditFile = ({
+  pdfName,
+  setPdfName,
+  cancelFile,
+  totalPages,
+  nextMenu,
+  getCanvasItem,
+}: props) => {
   // useAtom
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
@@ -107,6 +116,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
 
     return () => {
       window.removeEventListener("resize", handelFabricCanvas);
+      getCanvasItem(canvasItemRef.current);
     };
   }, [canvas, pdfURL, onSelectSize]);
 
@@ -129,6 +139,14 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
     });
   };
 
+  const toFinishFile = () => {
+    for (let i = 0; i < totalPages; i++) {
+      canvas[i].discardActiveObject();
+      canvas[i].requestRenderAll();
+    }
+    nextMenu();
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const RWD = window.innerWidth >= RWDSize;
@@ -136,7 +154,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
       if (RWD && !isActiveMenu) setActiveMenu(RWD);
 
       setBgWidth(
-        (window.innerWidth || 0) - (bgRef.current?.offsetLeft || 0) * 2
+        (window.innerWidth || 0) - ((bgRef.current?.offsetLeft || 0) + 32) * 2
       );
     };
 
@@ -205,7 +223,9 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
           <TabPanel />
         )}
         <div className="flex flex-col gap-4 px-6">
-          <button className="btn-primary flex-auto">下一步</button>
+          <button className="btn-primary flex-auto" onClick={toFinishFile}>
+            下一步
+          </button>
           <button className="btn-secodary flex-auto" onClick={cancelFile}>
             取消
           </button>
@@ -215,7 +235,7 @@ const EditFile = ({ pdfName, setPdfName, cancelFile, totalPages }: props) => {
         <React.Fragment>
           <SignMode onlySendBtn={true} clickStartSignBtn={closeModal} />
           <p
-            className="pt-8 text-center text-xs text-white"
+            className="cursor-auto pt-8 text-center text-xs text-white"
             onClick={closeModal}
           >
             點擊畫面任一處離開
