@@ -11,14 +11,14 @@ interface props {
   totalPages: number;
   canvasListRef: React.RefObject<HTMLDivElement | null>;
   canvasItemRef: React.MutableRefObject<(HTMLCanvasElement | null)[]>;
-  setCanvasIndex: React.Dispatch<React.SetStateAction<number>>;
+  setFocusCanvasIdx: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const FileList = ({
   totalPages,
   canvasListRef,
   canvasItemRef,
-  setCanvasIndex,
+  setFocusCanvasIdx,
 }: props) => {
   const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const fileUrl: pdfFileType[] = pdfURL || [];
@@ -34,7 +34,7 @@ const FileList = ({
         (canvasItemRef.current[clickIndex]?.parentElement?.offsetTop || 0) - 4;
     }
 
-    setCanvasIndex(clickIndex);
+    setFocusCanvasIdx(clickIndex);
   };
 
   const handlePageItem = () => {

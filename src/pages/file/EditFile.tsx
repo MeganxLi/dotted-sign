@@ -42,7 +42,8 @@ const EditFile = ({
   const [onSelectSize, setOnSelectSize] = useState<number>(1); // canvas size
   /** RWD 下方的 menu button ,false:頁面清單, true:簽名清單 */
   const [isActiveMenu, setActiveMenu] = useState<boolean>(true);
-  const [canvasIndex, setCanvasIndex] = useState<number>(0); // click canvas page
+  const [focusCanvasIdx, setFocusCanvasIdx] = useState<number>(0); // click canvas page
+  const [canvasListScroll, setCanvasListScroll] = useState<number>(0);
 
   const closeModal = () => {
     setOpenModal(false);
@@ -58,20 +59,66 @@ const EditFile = ({
 
   /** 填上簽名 */
   const clickAddSing = (addImg: string | HTMLCanvasElement) => {
-    fabric.Image.fromURL(addImg.toString(), (img) => {
-      console.log("canvasIndex", canvas[canvasIndex]);
-      const widthSize = (canvas[canvasIndex].width ?? 0) / 3;
-      console.log(widthSize);
+    if (!canvasListRef.current) return;
+    // 取得所有 canvas
+    const canvasList = Array.from(
+      canvasListRef.current.children
+    ) as HTMLCanvasElement[];
 
-      // img.scaleToWidth(widthSize);
-      // img.scaleToHeight(widthSize / (img.width ?? 0) / (img.height ?? 0));
-      // img.scaleToWidth(100);
-      // img.scaleToHeight(100);
-      canvas[canvasIndex].add(img).renderAll();
+    const bgHight = bgRef.current?.clientHeight ?? 0; //取得 div 尺寸
+    const cTop = canvasList[focusCanvasIdx].offsetTop; // Canvas Item 頂部距離
+
+    fabric.Image.fromURL(
+      addImg.toString(),
+      (img) => {
+        canvas[focusCanvasIdx].add(img).renderAll();
+      },
+      {
+        width: (canvas[focusCanvasIdx].width ?? 0) / 3,
+        top: canvasListScroll - cTop + bgHight / 2,
+      }
+    );
+  };
+
+  const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
+    setCanvasListScroll(currentScrollTop);
+
+    if (!canvasListRef.current) return;
+    // 取得所有 canvas
+    const canvasList = Array.from(
+      canvasListRef.current.children
+    ) as HTMLCanvasElement[];
+
+    canvasList.forEach((item: HTMLCanvasElement, index: number) => {
+      const canvasTop = item.offsetTop; // Canvas Item 頂部距離
+      const canvasBottom = canvasTop + (item.clientHeight / 3) * 2; // Canvas Item 底部距離
+
+      if (index === 0 && currentScrollTop <= canvasBottom) {
+        return setFocusCanvasIdx(index);
+      }
+
+      if (
+        index !== 0 &&
+        currentScrollTop >=
+          canvasList[index - 1].offsetTop +
+            (canvasList[index - 1].clientHeight / 3) * 2 &&
+        currentScrollTop <= canvasBottom
+      ) {
+        return setFocusCanvasIdx(index);
+      }
     });
   };
 
-  /** 填上背景檔案 */
+  const toFinishFile = () => {
+    for (let i = 0; i < totalPages; i++) {
+      canvas[i].discardActiveObject();
+      canvas[i].requestRenderAll();
+    }
+    nextMenu();
+  };
+
+  /** 填上背景檔案，並移動視窗變動尺寸 */
   useEffect(() => {
     const handelFabricCanvas = () => {
       if (pdfURL && bgRef.current) {
@@ -119,33 +166,6 @@ const EditFile = ({
       getCanvasItem(canvasItemRef.current);
     };
   }, [canvas, pdfURL, onSelectSize]);
-
-  const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
-
-    if (!canvasListRef.current) return;
-    // 取得所有 canvas
-    const canvasList = Array.from(
-      canvasListRef.current.children
-    ) as HTMLCanvasElement[];
-
-    canvasList.forEach((item: HTMLCanvasElement, index: number) => {
-      const canvasTop = item.offsetTop; // Canvas Item 頂部距離
-      const canvasBottom = canvasTop + item.clientHeight; // Canvas Item 底部距離
-
-      if (currentScrollTop >= canvasTop && currentScrollTop <= canvasBottom) {
-        setCanvasIndex(index);
-      }
-    });
-  };
-
-  const toFinishFile = () => {
-    for (let i = 0; i < totalPages; i++) {
-      canvas[i].discardActiveObject();
-      canvas[i].requestRenderAll();
-    }
-    nextMenu();
-  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -217,7 +237,7 @@ const EditFile = ({
             totalPages={totalPages}
             canvasListRef={canvasListRef}
             canvasItemRef={canvasItemRef}
-            setCanvasIndex={setCanvasIndex}
+            setFocusCanvasIdx={setFocusCanvasIdx}
           />
         ) : (
           <TabPanel />
