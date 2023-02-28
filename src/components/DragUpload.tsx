@@ -48,7 +48,6 @@ const DragUpload = ({
   const uploadFile = (file: FileList | null) => {
     if (!file) return;
     const { name, size, type } = file[0];
-    console.log("upload file", file[0]);
 
     // 確認檔案類型
     const imgTypes = ["image/jpeg", "image/jpg", "image/png"];
@@ -111,8 +110,8 @@ const DragUpload = ({
 
                   const renderTask = page.render(renderContext);
                   renderTask.promise.then(function () {
-                    //輸出圖片
-                    imageDate.push({
+                    //輸出圖片，使用指定位置不會導致頁面順序不對
+                    imageDate[page._pageIndex] = {
                       orientation:
                         canvasChild.height < canvasChild.width
                           ? orientationType.landscape
@@ -120,11 +119,7 @@ const DragUpload = ({
                       dataURL: canvasChild.toDataURL("image/png"),
                       width: viewport.width,
                       height: viewport.height,
-                    });
-                    console.log(
-                      imageDate.length + " page(s) loaded in data, total page",
-                      pdf.numPages
-                    );
+                    };
 
                     setProgressBar?.((imageDate.length / pdf.numPages) * 100);
                   });
