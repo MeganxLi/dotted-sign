@@ -27,6 +27,9 @@ interface TagItemType {
   icon: JSX.Element;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+type AddLocationType = { width: number; top: number; left: number } | {};
+
 // Message
 type MessageIconString = "check" | "warn";
 
