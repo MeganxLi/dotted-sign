@@ -6,10 +6,23 @@ const TagField = () => {
   //context
   const { clickAddText } = useContext(SingImgContext);
 
+  const getToday = () =>
+    new Date()
+      .toLocaleDateString("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
+      .replace(/\//g, "-"); // 取得今天日期轉 yyyy-mm-dd
+
   const addTag = (tagName: string) => {
     switch (tagName) {
       case FieldTagName.TEXT:
         clickAddText();
+        break;
+
+      case FieldTagName.DATE:
+        clickAddText(getToday());
         break;
 
       default:
