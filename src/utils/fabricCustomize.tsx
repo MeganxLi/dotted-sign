@@ -9,10 +9,13 @@ fabric.Object.prototype.controls.deleteControl = new fabric.Control({
   mouseUpHandler: deleteObject,
   render: renderIcon,
 });
-fabric.Object.prototype.transparentCorners = false;
-fabric.Object.prototype.cornerColor = "#2e41cec7";
-fabric.Object.prototype.borderColor = "#b8b8b8";
-fabric.Object.prototype.cornerStyle = "rect";
+fabric.Object.prototype.set({
+  transparentCorners: false,
+  borderColor: "#2e41cec7",
+  cornerColor: "#fff",
+  cornerStyle: "circle",
+  cornerStrokeColor: "#2e41cec7",
+});
 fabric.Object.prototype.controls.deleteControl = new fabric.Control({
   x: 0.5,
   y: -0.5,
