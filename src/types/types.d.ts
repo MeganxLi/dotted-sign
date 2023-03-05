@@ -44,3 +44,6 @@ interface MessageIconType {
     icon: Icon;
   };
 }
+interface CustomGroup extends fabric.Group {
+  clicked?: boolean;
+}
