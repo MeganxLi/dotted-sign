@@ -15,6 +15,7 @@ fabric.Object.prototype.set({
   cornerColor: "#fff",
   cornerStyle: "circle",
   cornerStrokeColor: "#2e41cec7",
+  cornerSize: 16,
 });
 fabric.Object.prototype.controls.deleteControl = new fabric.Control({
   x: 0.5,
