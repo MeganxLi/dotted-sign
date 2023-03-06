@@ -4,7 +4,7 @@ import SingImgContext from "../../../../context/SingImgContext";
 
 const TagField = () => {
   //context
-  const { clickAddText } = useContext(SingImgContext);
+  const { clickAddText, clickAddCheckBox } = useContext(SingImgContext);
 
   const getToday = () =>
     new Date()
@@ -23,6 +23,10 @@ const TagField = () => {
 
       case FieldTagName.DATE:
         clickAddText(getToday());
+        break;
+
+      case FieldTagName.CHECKBOX:
+        clickAddCheckBox();
         break;
 
       default:

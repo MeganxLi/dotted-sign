@@ -11,6 +11,7 @@ import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 import ZoomKit from "./EditFile/ZoomKit";
 import SingImgContext from "../../context/SingImgContext";
+import { fabricObjectEnum } from "../../constants/FileSetting";
 
 interface props {
   pdfName: string;
@@ -93,16 +94,159 @@ const EditFile = ({
         originY: "center",
         originX: "center",
         fontSize: 28,
-        fill: "#000",
+        fill: fabricObjectEnum.TEXT_COLOR,
         fontWeight: 800,
         textAlign: "center",
         cornerSize: 12,
         transparentCorners: false,
+        fontFamily: fabricObjectEnum.FONTFAMILY,
       },
     });
 
     canvas[focusCanvasIdx].add(textbox);
     canvas[focusCanvasIdx].setActiveObject(textbox);
+  };
+
+  const clickAddCheckBox = () => {
+    const cancelControls = (obj: fabric.Group | fabric.IText) => {
+      obj.setControlsVisibility({
+        mt: false, // 上中
+        mb: false, // 下中
+        ml: false, // 左中
+        mr: false, // 右中
+        bl: false, // 左下
+        br: false, // 右下
+        tl: false, // 左上
+        tr: false, // 右上
+        mtr: false, // 角度旋轉控制點
+      });
+    };
+    const box = new fabric.Rect({
+      width: 20,
+      height: 20,
+      fill: "#fff",
+      stroke: fabricObjectEnum.TEXT_COLOR,
+      strokeWidth: 2,
+      rx: 3, // 圓角
+      ry: 3,
+    });
+
+    const check = new fabric.Polyline(
+      [
+        { x: 0, y: 4 },
+        { x: 5, y: 10 },
+        { x: 12, y: 0 },
+      ],
+      {
+        left: 4,
+        top: 5,
+        fill: "transparent",
+        strokeWidth: 2,
+      }
+    );
+
+    const checkbox = new fabric.Group([box, check], {
+      left: 10,
+      top: 0,
+    });
+    cancelControls(checkbox);
+
+    const label = new fabric.IText("Checkbox Label", {
+      left: 40,
+      top: 2,
+      fontSize: 16,
+      fill: fabricObjectEnum.TEXT_COLOR,
+      fontFamily: fabricObjectEnum.FONTFAMILY,
+    });
+    cancelControls(label);
+
+    // checkbox and label group
+    const checkboxGroup = new fabric.Group([checkbox, label], {
+      left: 10,
+      top: 0,
+    });
+
+    // Double-click event handler
+    const fabricDblClick = function (obj: CustomGroup, handler: any) {
+      return function () {
+        if (obj.clicked) {
+          handler(obj);
+        } else {
+          obj.clicked = true;
+          setTimeout(function () {
+            obj.clicked = false;
+          }, 500);
+        }
+      };
+    };
+
+    const unGroup = function (group: fabric.Group) {
+      let items: fabric.Object[] = [];
+      items = group._objects;
+      group._restoreObjectsState();
+      canvas[focusCanvasIdx].remove(group);
+      canvas[focusCanvasIdx].renderAll();
+      for (let i = 0; i < items.length; i++) {
+        canvas[focusCanvasIdx].add(items[i]);
+      }
+      // if you have disabled render on addition
+      canvas[focusCanvasIdx].renderAll();
+    };
+
+    const editLabel = (group: fabric.Group) => {
+      console.log("editLabel");
+
+      unGroup(group);
+      canvas[focusCanvasIdx].setActiveObject(label);
+      label.enterEditing();
+      label.selectAll();
+    };
+
+    // 設定 checkbox 初始狀態為未勾選
+    // let isChecked = false;
+    // edit label text
+    checkboxGroup.on(
+      "mousedown",
+      fabricDblClick(checkboxGroup, function (e: fabric.IEvent) {
+        editLabel(checkboxGroup);
+
+        const target = e.target as fabric.Group;
+        // const polyline = target.item(0).item(1);
+        console.log("checkboxGroup mousedown", target);
+
+        // if (isChecked) {
+        // check.set({
+        //   stroke: fabricObjectEnum.TEXT_COLOR,
+        // });
+        // } else {
+        //   check.set({
+        //     stroke: "#fff",
+        //   });
+        // }
+        // isChecked = !isChecked; // 更新勾選狀態
+        // canvas[focusCanvasIdx].renderAll();
+      })
+    );
+
+    check.on("mousedown", function () {
+      console.log("checkboxGroup mousedown");
+    });
+
+    // leave label to group
+    label.on("editing:exited", function () {
+      const grp = new fabric.Group([checkbox, label], {});
+      canvas[focusCanvasIdx].add(grp);
+
+      grp.on(
+        "mousedown",
+        fabricDblClick(grp, function () {
+          editLabel(grp);
+        })
+      );
+    });
+
+    canvas[focusCanvasIdx].add(checkboxGroup);
+    canvas[focusCanvasIdx].renderAll();
   };
   /* _CANVAS ADD TAG END_ */
 
@@ -212,7 +356,7 @@ const EditFile = ({
     };
   }, []);
 
-  const SingImgProps = { clickAddSing, clickAddText };
+  const SingImgProps = { clickAddSing, clickAddText, clickAddCheckBox };
 
   return (
     <div
