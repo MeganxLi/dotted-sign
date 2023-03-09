@@ -11,7 +11,7 @@ import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 import ZoomKit from "./EditFile/ZoomKit";
 import SingImgContext from "../../context/SingImgContext";
-import { fabricObjectEnum } from "../../constants/FileSetting";
+import { FabricObjectEnum } from "../../constants/FileSetting";
 
 interface props {
   pdfName: string;
@@ -94,12 +94,12 @@ const EditFile = ({
         originY: "center",
         originX: "center",
         fontSize: 28,
-        fill: fabricObjectEnum.TEXT_COLOR,
+        fill: FabricObjectEnum.TEXT_COLOR,
         fontWeight: 800,
         textAlign: "center",
         cornerSize: 12,
         transparentCorners: false,
-        fontFamily: fabricObjectEnum.FONTFAMILY,
+        fontFamily: FabricObjectEnum.FONTFAMILY,
         hoverCursor: "text",
       },
     });
@@ -127,7 +127,7 @@ const EditFile = ({
       width: 20,
       height: 20,
       fill: "#fff",
-      stroke: fabricObjectEnum.TEXT_COLOR,
+      stroke: FabricObjectEnum.TEXT_COLOR,
       strokeWidth: 2,
       rx: 3, // 圓角
       ry: 3,
@@ -144,7 +144,7 @@ const EditFile = ({
         top: 5,
         fill: "transparent",
         strokeWidth: 2,
-        stroke: fabricObjectEnum.WHITE,
+        stroke: FabricObjectEnum.WHITE,
       }
     );
 
@@ -159,12 +159,12 @@ const EditFile = ({
     });
     cancelControls(checkbox);
 
-    const label = new fabric.IText("Checkbox Label", {
+    const label = new fabric.IText("Label", {
       left: 40,
       top: 2,
       fontSize: 16,
-      fill: fabricObjectEnum.TEXT_COLOR,
-      fontFamily: fabricObjectEnum.FONTFAMILY,
+      fill: FabricObjectEnum.TEXT_COLOR,
+      fontFamily: FabricObjectEnum.FONTFAMILY,
       hoverCursor: "text",
     });
     cancelControls(label);
@@ -221,9 +221,9 @@ const EditFile = ({
       console.log("checkboxGroup mousedown", target, target._objects);
       check.set({
         stroke:
-          target._objects[1].stroke === fabricObjectEnum.TEXT_COLOR
-            ? fabricObjectEnum.WHITE
-            : fabricObjectEnum.TEXT_COLOR,
+          target._objects[1].stroke === FabricObjectEnum.TEXT_COLOR
+            ? FabricObjectEnum.WHITE
+            : FabricObjectEnum.TEXT_COLOR,
       });
 
       canvas[focusCanvasIdx].renderAll();

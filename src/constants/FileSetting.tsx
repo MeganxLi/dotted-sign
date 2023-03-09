@@ -62,7 +62,7 @@ export const FieldTagItem: TagItemType[] = [
   },
 ];
 
-export enum fabricObjectEnum {
+export enum FabricObjectEnum {
   FONTFAMILY = "Helvetica",
   TEXT_COLOR = "#000",
   WHITE = "#FFF",
