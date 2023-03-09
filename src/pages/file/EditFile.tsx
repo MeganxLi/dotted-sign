@@ -11,7 +11,7 @@ import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 import ZoomKit from "./EditFile/ZoomKit";
 import SingImgContext from "../../context/SingImgContext";
-import { FabricObjectEnum } from "../../constants/FileSetting";
+import { AddGroupEnum, FabricObjectEnum } from "../../constants/FileSetting";
 
 interface props {
   pdfName: string;
@@ -108,7 +108,7 @@ const EditFile = ({
     canvas[focusCanvasIdx].setActiveObject(textbox);
   };
 
-  const clickAddCheckBox = () => {
+  const clickAddGroupBox = (groupType: number) => {
     const cancelControls = (obj: fabric.Group | fabric.IText) => {
       obj.setControlsVisibility({
         mt: false, // 上中
@@ -123,10 +123,11 @@ const EditFile = ({
       });
     };
 
-    const box = new fabric.Rect({
+    //checkbox
+    const squareBox = new fabric.Rect({
       width: 20,
       height: 20,
-      fill: "#fff",
+      fill: FabricObjectEnum.WHITE,
       stroke: FabricObjectEnum.TEXT_COLOR,
       strokeWidth: 2,
       rx: 3, // 圓角
@@ -148,7 +149,7 @@ const EditFile = ({
       }
     );
 
-    const checkbox = new fabric.Group([box, check], {
+    const checkBox = new fabric.Group([squareBox, check], {
       left: 10,
       top: 0,
       hoverCursor: "pointer",
@@ -157,8 +158,63 @@ const EditFile = ({
       lockMovementY: true,
       hasControls: false,
     });
-    cancelControls(checkbox);
+    cancelControls(checkBox);
 
+    checkBox.on("mousedown", (e: fabric.IEvent) => {
+      const target = e.target as fabric.Group;
+      check.set({
+        stroke:
+          target._objects[1].stroke === FabricObjectEnum.TEXT_COLOR
+            ? FabricObjectEnum.WHITE
+            : FabricObjectEnum.TEXT_COLOR,
+      });
+
+      canvas[focusCanvasIdx].renderAll();
+    });
+
+    // radio
+    const circleBox = new fabric.Circle({
+      fill: FabricObjectEnum.WHITE,
+      stroke: FabricObjectEnum.TEXT_COLOR,
+      strokeWidth: 2,
+      radius: 10,
+      originX: "center",
+      originY: "center",
+    });
+
+    const dot = new fabric.Circle({
+      radius: 6,
+      originX: "center",
+      originY: "center",
+      fill: FabricObjectEnum.WHITE,
+    });
+
+    const radioBox = new fabric.Group([circleBox, dot], {
+      left: 10,
+      top: 0,
+      hoverCursor: "pointer",
+      subTargetCheck: true,
+      lockMovementX: true,
+      lockMovementY: true,
+      hasControls: false,
+    });
+    cancelControls(radioBox);
+
+    radioBox.on("mousedown", (e: fabric.IEvent) => {
+      const target = e.target as fabric.Group;
+      console.log(target);
+
+      dot.set({
+        fill:
+          target._objects[1].fill === FabricObjectEnum.TEXT_COLOR
+            ? FabricObjectEnum.WHITE
+            : FabricObjectEnum.TEXT_COLOR,
+      });
+
+      canvas[focusCanvasIdx].renderAll();
+    });
+
+    // box label
     const label = new fabric.IText("Label", {
       left: 40,
       top: 2,
@@ -169,8 +225,16 @@ const EditFile = ({
     });
     cancelControls(label);
 
+    const groupBoxType = (): fabric.Group => {
+      if (groupType === AddGroupEnum.CHECKBOX) {
+        return checkBox;
+      } else {
+        return radioBox;
+      }
+    };
+
     // checkbox and label group
-    const checkboxGroup = new fabric.Group([checkbox, label], {
+    const groupBox = new fabric.Group([groupBoxType(), label], {
       left: 10,
       top: 0,
     });
@@ -209,29 +273,16 @@ const EditFile = ({
     };
 
     // edit label text
-    checkboxGroup.on(
+    groupBox.on(
       "mousedown",
-      fabricDblClick(checkboxGroup, () => {
-        editLabel(checkboxGroup);
+      fabricDblClick(groupBox, () => {
+        editLabel(groupBox);
       })
     );
 
-    checkbox.on("mousedown", (e: fabric.IEvent) => {
-      const target = e.target as fabric.Group;
-      console.log("checkboxGroup mousedown", target, target._objects);
-      check.set({
-        stroke:
-          target._objects[1].stroke === FabricObjectEnum.TEXT_COLOR
-            ? FabricObjectEnum.WHITE
-            : FabricObjectEnum.TEXT_COLOR,
-      });
-
-      canvas[focusCanvasIdx].renderAll();
-    });
-
     // leave label to group
     label.on("editing:exited", () => {
-      const grp = new fabric.Group([checkbox, label], {});
+      const grp = new fabric.Group([groupBoxType(), label], {});
       canvas[focusCanvasIdx].add(grp);
 
       grp.on(
@@ -242,7 +293,7 @@ const EditFile = ({
       );
     });
 
-    canvas[focusCanvasIdx].add(checkboxGroup);
+    canvas[focusCanvasIdx].add(groupBox);
     canvas[focusCanvasIdx].renderAll();
   };
   /* _CANVAS ADD TAG END_ */
@@ -353,7 +404,7 @@ const EditFile = ({
     };
   }, []);
 
-  const SingImgProps = { clickAddSing, clickAddText, clickAddCheckBox };
+  const SingImgProps = { clickAddSing, clickAddText, clickAddGroupBox };
 
   return (
     <div

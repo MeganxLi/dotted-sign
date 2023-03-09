@@ -1,10 +1,14 @@
 import { useContext } from "react";
-import { FieldTagItem, FieldTagName } from "../../../../constants/FileSetting";
+import {
+  AddGroupEnum,
+  FieldTagItem,
+  FieldTagName,
+} from "../../../../constants/FileSetting";
 import SingImgContext from "../../../../context/SingImgContext";
 
 const TagField = () => {
   //context
-  const { clickAddText, clickAddCheckBox } = useContext(SingImgContext);
+  const { clickAddText, clickAddGroupBox } = useContext(SingImgContext);
 
   const getToday = () =>
     new Date()
@@ -26,7 +30,11 @@ const TagField = () => {
         break;
 
       case FieldTagName.CHECKBOX:
-        clickAddCheckBox();
+        clickAddGroupBox(AddGroupEnum.CHECKBOX);
+        break;
+
+      case FieldTagName.RADIO:
+        clickAddGroupBox(AddGroupEnum.RADIO);
         break;
 
       default:
