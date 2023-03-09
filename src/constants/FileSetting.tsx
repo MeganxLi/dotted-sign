@@ -11,6 +11,17 @@ export enum FileMenuName {
   FinishFile = "完成文件",
 }
 
+export enum FabricObjectEnum {
+  FONTFAMILY = "Helvetica",
+  TEXT_COLOR = "#000",
+  WHITE = "#FFF",
+}
+
+export enum AddGroupEnum {
+  CHECKBOX,
+  RADIO,
+}
+
 export const FileStepMenu = {
   0: FileMenuName.Upload,
   1: FileMenuName.FinishUpload,
@@ -61,9 +72,3 @@ export const FieldTagItem: TagItemType[] = [
     ),
   },
 ];
-
-export enum FabricObjectEnum {
-  FONTFAMILY = "Helvetica",
-  TEXT_COLOR = "#000",
-  WHITE = "#FFF",
-}
