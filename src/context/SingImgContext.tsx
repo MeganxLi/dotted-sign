@@ -1,7 +1,9 @@
 import { createContext } from "react";
 
 interface SingImgType {
-  clickAddSing: (addImg: string | HTMLCanvasElement) => void;
+  canvas: fabric.Canvas[];
+  focusCanvasIdx: number;
+  getAddLocation: (showWidth?: boolean) => AddLocationType;
 }
 
 const SingImgContext = createContext({} as SingImgType);

@@ -27,6 +27,9 @@ interface TagItemType {
   icon: JSX.Element;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+type AddLocationType = { width: number; top: number; left: number } | {};
+
 // Message
 type MessageIconString = "check" | "warn";
 
@@ -40,4 +43,7 @@ interface MessageIconType {
   [key: string]: {
     icon: Icon;
   };
+}
+interface CustomGroup extends fabric.Group {
+  clicked?: boolean;
 }

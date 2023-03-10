@@ -57,9 +57,9 @@ const EditFile = ({
     }
   }, [canvasItemRef]);
 
-  /** 填上簽名 */
-  const clickAddSing = (addImg: string | HTMLCanvasElement) => {
-    if (!canvasListRef.current) return;
+  const getAddLocation = (showWidth?: boolean): AddLocationType => {
+    if (!canvasListRef.current) return {};
+
     // 取得所有 canvas
     const canvasList = Array.from(
       canvasListRef.current.children
@@ -68,16 +68,19 @@ const EditFile = ({
     const bgHight = bgRef.current?.clientHeight ?? 0; //取得 div 尺寸
     const cTop = canvasList[focusCanvasIdx].offsetTop; // Canvas Item 頂部距離
 
-    fabric.Image.fromURL(
-      addImg.toString(),
-      (img) => {
-        canvas[focusCanvasIdx].add(img).renderAll();
-      },
-      {
+    const locationObject = {
+      top: canvasListScroll - cTop + bgHight / 2,
+      left: canvasList[focusCanvasIdx].clientWidth / 2,
+    };
+
+    if (showWidth) {
+      return {
         width: (canvas[focusCanvasIdx].width ?? 0) / 3,
-        top: canvasListScroll - cTop + bgHight / 2,
-      }
-    );
+        ...locationObject,
+      };
+    } else {
+      return locationObject;
+    }
   };
 
   const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
@@ -186,7 +189,7 @@ const EditFile = ({
     };
   }, []);
 
-  const SingImgProps = { clickAddSing };
+  const SingImgProps = { canvas, focusCanvasIdx, getAddLocation };
 
   return (
     <div
@@ -203,7 +206,7 @@ const EditFile = ({
         </SingImgContext.Provider>
       </div>
       <div
-        className="relative flex h-inherit w-full items-start bg-green-blue flat:h-initial"
+        className="relative flex h-inherit w-full items-start justify-center bg-green-blue flat:h-initial"
         ref={bgRef}
       >
         <div
