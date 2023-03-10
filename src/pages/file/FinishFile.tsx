@@ -1,9 +1,9 @@
-import { useAtom } from "jotai";
+import { PrimitiveAtom, useAtom } from "jotai";
 import React, { useEffect } from "react";
 import { Download } from "react-feather";
 import InputTextField from "../../components/InputTextField";
 import { MessageTexts } from "../../constants/MessageSetting";
-import { messageAtom } from "../../jotai";
+import { fileAtom, messageAtom } from "../../jotai";
 import { Document, Page, Image, PDFDownloadLink } from "@react-pdf/renderer";
 
 interface props {
@@ -15,13 +15,18 @@ interface props {
 
 const FinishFile = ({ pdfName, setPdfName, finishPdf, totalPages }: props) => {
   const [, setMessage] = useAtom(messageAtom);
+  const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
   const firstPage = finishPdf[0]?.toDataURL("image/png");
 
   const createCanvasItem = (): JSX.Element => (
     <Document>
       {Array.from({ length: totalPages }).map((_, idx: number) => {
+        if (!pdfURL) return;
         return (
-          <Page key={idx}>
+          <Page
+            key={idx}
+            size={{ width: pdfURL[idx].width, height: pdfURL[idx].height }}
+          >
             <Image src={finishPdf[idx]?.toDataURL("image/png")} />
           </Page>
         );
