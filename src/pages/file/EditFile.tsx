@@ -11,7 +11,6 @@ import SignMode from "../../components/SignMode";
 import ControlSizeCanvas from "./EditFile/ControlSizeCanvas";
 import ZoomKit from "./EditFile/ZoomKit";
 import SingImgContext from "../../context/SingImgContext";
-import { AddGroupEnum, FabricObjectEnum } from "../../constants/FileSetting";
 
 interface props {
   pdfName: string;
@@ -58,7 +57,7 @@ const EditFile = ({
     }
   }, [canvasItemRef]);
 
-  const getAddLocation = (): AddLocationType => {
+  const getAddLocation = (showWidth?: boolean): AddLocationType => {
     if (!canvasListRef.current) return {};
 
     // 取得所有 canvas
@@ -69,234 +68,20 @@ const EditFile = ({
     const bgHight = bgRef.current?.clientHeight ?? 0; //取得 div 尺寸
     const cTop = canvasList[focusCanvasIdx].offsetTop; // Canvas Item 頂部距離
 
-    return {
-      width: (canvas[focusCanvasIdx].width ?? 0) / 3,
+    const locationObject = {
       top: canvasListScroll - cTop + bgHight / 2,
       left: canvasList[focusCanvasIdx].clientWidth / 2,
     };
-  };
 
-  /* _CANVAS ADD TAG_ */
-  const clickAddSing = (addImg: string | HTMLCanvasElement) => {
-    fabric.Image.fromURL(
-      addImg.toString(),
-      (img) => {
-        canvas[focusCanvasIdx].add(img).renderAll();
-      },
-      getAddLocation()
-    );
-  };
-
-  const clickAddText = (text = "New Text") => {
-    const textbox = new fabric.Textbox(text, {
-      ...getAddLocation(),
-      ...{
-        originY: "center",
-        originX: "center",
-        fontSize: 28,
-        fill: FabricObjectEnum.TEXT_COLOR,
-        fontWeight: 800,
-        textAlign: "center",
-        cornerSize: 12,
-        transparentCorners: false,
-        fontFamily: FabricObjectEnum.FONTFAMILY,
-        hoverCursor: "text",
-      },
-    });
-
-    canvas[focusCanvasIdx].add(textbox);
-    canvas[focusCanvasIdx].setActiveObject(textbox);
-  };
-
-  const clickAddGroupBox = (groupType: number) => {
-    const cancelControls = (obj: fabric.Group | fabric.IText) => {
-      obj.setControlsVisibility({
-        mt: false, // 上中
-        mb: false, // 下中
-        ml: false, // 左中
-        mr: false, // 右中
-        bl: false, // 左下
-        br: false, // 右下
-        tl: false, // 左上
-        tr: false, // 右上
-        mtr: false, // 角度旋轉控制點
-      });
-    };
-
-    //checkbox
-    const squareBox = new fabric.Rect({
-      width: 20,
-      height: 20,
-      fill: FabricObjectEnum.WHITE,
-      stroke: FabricObjectEnum.TEXT_COLOR,
-      strokeWidth: 2,
-      rx: 3, // 圓角
-      ry: 3,
-    });
-
-    const check = new fabric.Polyline(
-      [
-        { x: 0, y: 4 },
-        { x: 5, y: 10 },
-        { x: 12, y: 0 },
-      ],
-      {
-        left: 4,
-        top: 5,
-        fill: "transparent",
-        strokeWidth: 2,
-        stroke: FabricObjectEnum.WHITE,
-      }
-    );
-
-    const checkBox = new fabric.Group([squareBox, check], {
-      left: 10,
-      top: 0,
-      hoverCursor: "pointer",
-      subTargetCheck: true,
-      lockMovementX: true,
-      lockMovementY: true,
-      hasControls: false,
-    });
-    cancelControls(checkBox);
-
-    checkBox.on("mousedown", (e: fabric.IEvent) => {
-      const target = e.target as fabric.Group;
-      check.set({
-        stroke:
-          target._objects[1].stroke === FabricObjectEnum.TEXT_COLOR
-            ? FabricObjectEnum.WHITE
-            : FabricObjectEnum.TEXT_COLOR,
-      });
-
-      canvas[focusCanvasIdx].renderAll();
-    });
-
-    // radio
-    const circleBox = new fabric.Circle({
-      fill: FabricObjectEnum.WHITE,
-      stroke: FabricObjectEnum.TEXT_COLOR,
-      strokeWidth: 2,
-      radius: 10,
-      originX: "center",
-      originY: "center",
-    });
-
-    const dot = new fabric.Circle({
-      radius: 6,
-      originX: "center",
-      originY: "center",
-      fill: FabricObjectEnum.WHITE,
-    });
-
-    const radioBox = new fabric.Group([circleBox, dot], {
-      left: 10,
-      top: 0,
-      hoverCursor: "pointer",
-      subTargetCheck: true,
-      lockMovementX: true,
-      lockMovementY: true,
-      hasControls: false,
-    });
-    cancelControls(radioBox);
-
-    radioBox.on("mousedown", (e: fabric.IEvent) => {
-      const target = e.target as fabric.Group;
-      console.log(target);
-
-      dot.set({
-        fill:
-          target._objects[1].fill === FabricObjectEnum.TEXT_COLOR
-            ? FabricObjectEnum.WHITE
-            : FabricObjectEnum.TEXT_COLOR,
-      });
-
-      canvas[focusCanvasIdx].renderAll();
-    });
-
-    // box label
-    const label = new fabric.IText("Label", {
-      left: 40,
-      top: 2,
-      fontSize: 16,
-      fill: FabricObjectEnum.TEXT_COLOR,
-      fontFamily: FabricObjectEnum.FONTFAMILY,
-      hoverCursor: "text",
-    });
-    cancelControls(label);
-
-    const groupBoxType = (): fabric.Group => {
-      if (groupType === AddGroupEnum.CHECKBOX) {
-        return checkBox;
-      } else {
-        return radioBox;
-      }
-    };
-
-    // checkbox and label group
-    const groupBox = new fabric.Group([groupBoxType(), label], {
-      left: 10,
-      top: 0,
-    });
-
-    // Double-click event handler
-    const fabricDblClick = (obj: CustomGroup, handler: any) => {
-      return function () {
-        if (obj.clicked) {
-          handler(obj);
-        } else {
-          obj.clicked = true;
-          setTimeout(function () {
-            obj.clicked = false;
-          }, 500);
-        }
+    if (showWidth) {
+      return {
+        width: (canvas[focusCanvasIdx].width ?? 0) / 3,
+        ...locationObject,
       };
-    };
-
-    const unGroup = function (group: fabric.Group) {
-      let items: fabric.Object[] = [];
-      items = group._objects;
-      group._restoreObjectsState();
-      canvas[focusCanvasIdx].remove(group);
-      canvas[focusCanvasIdx].renderAll();
-      for (let i = 0; i < items.length; i++) {
-        canvas[focusCanvasIdx].add(items[i]);
-      }
-      canvas[focusCanvasIdx].renderAll();
-    };
-
-    const editLabel = (group: fabric.Group) => {
-      unGroup(group);
-      canvas[focusCanvasIdx].setActiveObject(label);
-      label.enterEditing();
-      label.selectAll();
-    };
-
-    // edit label text
-    groupBox.on(
-      "mousedown",
-      fabricDblClick(groupBox, () => {
-        editLabel(groupBox);
-      })
-    );
-
-    // leave label to group
-    label.on("editing:exited", () => {
-      const grp = new fabric.Group([groupBoxType(), label], {});
-      canvas[focusCanvasIdx].add(grp);
-
-      grp.on(
-        "mousedown",
-        fabricDblClick(grp, function () {
-          editLabel(grp);
-        })
-      );
-    });
-
-    canvas[focusCanvasIdx].add(groupBox);
-    canvas[focusCanvasIdx].renderAll();
+    } else {
+      return locationObject;
+    }
   };
-  /* _CANVAS ADD TAG END_ */
 
   const handleCanvasListScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop; // list 滾動距離
@@ -404,7 +189,7 @@ const EditFile = ({
     };
   }, []);
 
-  const SingImgProps = { clickAddSing, clickAddText, clickAddGroupBox };
+  const SingImgProps = { canvas, focusCanvasIdx, getAddLocation };
 
   return (
     <div

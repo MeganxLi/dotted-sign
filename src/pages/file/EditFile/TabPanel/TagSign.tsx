@@ -1,4 +1,5 @@
 import { useAtom } from "jotai";
+import { fabric } from "fabric";
 import { openModalAtom, signAtom } from "../../../../jotai";
 import { Plus } from "react-feather";
 import { useContext } from "react";
@@ -6,10 +7,20 @@ import SingImgContext from "../../../../context/SingImgContext";
 
 const TagSign = () => {
   //context
-  const { clickAddSing } = useContext(SingImgContext);
+  const { canvas, focusCanvasIdx, getAddLocation } = useContext(SingImgContext);
   //useAtom
   const [signList] = useAtom(signAtom);
   const [, setOpenModal] = useAtom(openModalAtom);
+
+  const clickAddSing = (addImg: string | HTMLCanvasElement) => {
+    fabric.Image.fromURL(
+      addImg.toString(),
+      (img) => {
+        canvas[focusCanvasIdx].add(img).renderAll();
+      },
+      getAddLocation(true)
+    );
+  };
 
   const createSignURL = (item: string | HTMLCanvasElement) => {
     clickAddSing(item);
