@@ -206,7 +206,7 @@ const EditFile = ({
         </SingImgContext.Provider>
       </div>
       <div
-        className="relative flex h-inherit w-full items-start bg-green-blue flat:h-initial"
+        className="relative flex h-inherit w-full items-start justify-center bg-green-blue flat:h-initial"
         ref={bgRef}
       >
         <div
