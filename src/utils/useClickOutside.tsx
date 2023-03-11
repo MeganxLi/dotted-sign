@@ -1,39 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react'
 
 const useClickOutside = (
   ref: React.MutableRefObject<any>,
-  handler: () => void
+  handler: () => void,
 ) => {
   useEffect(() => {
-    let startedInside = false;
-    let startedWhenMounted = false;
+    let startedInside = false
+    let startedWhenMounted = false
 
     const listener = (event: MouseEvent) => {
       // 如果 `mousedown` 或 `touchstart` 在 ref 內，則不執行任何操作
-      if (startedInside || !startedWhenMounted) return;
+      if (startedInside || !startedWhenMounted) return
       // 如果點擊 ref 的元素或後代元素，什麼都不做
-      if (!ref.current || ref.current.contains(event.target)) return;
+      if (!ref.current || ref.current.contains(event.target)) return
 
-      handler();
-    };
+      handler()
+    }
 
     const validateEventStart = (event: MouseEvent | TouchEvent) => {
-      startedWhenMounted = ref.current;
-      startedInside = ref.current && ref.current.contains(event.target);
-    };
+      startedWhenMounted = ref.current
+      startedInside = ref.current && ref.current.contains(event.target)
+    }
 
-    document.addEventListener("mousedown", validateEventStart);
-    document.addEventListener("touchstart", validateEventStart);
-    document.addEventListener("mousedown", listener);
-    // document.addEventListener("click", listener);
+    document.addEventListener('mousedown', validateEventStart)
+    document.addEventListener('touchstart', validateEventStart)
+    document.addEventListener('mousedown', listener)
 
     return () => {
-      document.removeEventListener("mousedown", validateEventStart);
-      document.removeEventListener("touchstart", validateEventStart);
-      document.removeEventListener("mousedown", listener);
-      // document.removeEventListener("click", listener);
-    };
-  }, [ref, handler]);
-};
+      document.removeEventListener('mousedown', validateEventStart)
+      document.removeEventListener('touchstart', validateEventStart)
+      document.removeEventListener('mousedown', listener)
+    }
+  }, [ref, handler])
+}
 
-export default useClickOutside;
+export default useClickOutside

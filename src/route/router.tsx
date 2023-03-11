@@ -1,11 +1,9 @@
-import Sign from "../pages/sign";
-import File from "../pages/file";
-import Setting from "../pages/setting";
-
-//icon svg
-import { ReactComponent as FileIcon } from "../assets/svg/file.svg";
-import { ReactComponent as WritingIcon } from "../assets/svg/writing.svg";
-import { ReactComponent as SettingIcon } from "../assets/svg/setting.svg";
+import { ReactComponent as FileIcon } from '../assets/svg/file.svg'
+import { ReactComponent as SettingIcon } from '../assets/svg/setting.svg'
+import { ReactComponent as WritingIcon } from '../assets/svg/writing.svg'
+import File from '../pages/file'
+import Setting from '../pages/setting'
+import Sign from '../pages/sign'
 
 const routes: PageListType[] = [
   {
@@ -17,9 +15,9 @@ const routes: PageListType[] = [
         文件
       </>
     ),
-    path: "/",
+    path: '/',
     element: <File />,
-    classTag: "svg-fill",
+    classTag: 'svg-fill',
   },
   {
     name: (
@@ -30,9 +28,9 @@ const routes: PageListType[] = [
         簽名
       </>
     ),
-    path: "/writing",
+    path: '/writing',
     element: <Sign />,
-    classTag: "svg-stroke",
+    classTag: 'svg-stroke',
   },
   {
     name: (
@@ -43,10 +41,10 @@ const routes: PageListType[] = [
         設定
       </>
     ),
-    path: "/setting",
+    path: '/setting',
     element: <Setting />,
-    classTag: "svg-fill",
+    classTag: 'svg-fill',
   },
-];
+]
 
-export default routes;
+export default routes

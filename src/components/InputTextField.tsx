@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
-import { ReactComponent as EditIcon } from "../assets/svg/edit.svg";
+import React, { useRef } from 'react'
+
+import { ReactComponent as EditIcon } from '../assets/svg/edit.svg'
 
 interface props {
   InputValue: string;
@@ -7,13 +8,13 @@ interface props {
 }
 
 const InputTextField = ({ InputValue, setInputValue }: props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleClick = () => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  };
+  }
   return (
     <div className="text-field">
       <input
@@ -27,7 +28,7 @@ const InputTextField = ({ InputValue, setInputValue }: props) => {
         <EditIcon className="stroke-black" />
       </span>
     </div>
-  );
-};
+  )
+}
 
-export default InputTextField;
+export default InputTextField

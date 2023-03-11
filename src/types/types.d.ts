@@ -14,14 +14,14 @@ interface pdfFileType {
   height: number;
 }
 
-//Sign page
+// Sign page
 interface SignCanvasPropsType {
   tool: string;
   width: number;
   color: string;
 }
 
-//File page
+// File page
 interface TagItemType {
   name: string;
   icon: JSX.Element;
@@ -31,7 +31,7 @@ interface TagItemType {
 type AddLocationType = { width: number; top: number; left: number } | {};
 
 // Message
-type MessageIconString = "check" | "warn";
+type MessageIconString = 'check' | 'warn';
 
 interface MessageType {
   open: boolean;

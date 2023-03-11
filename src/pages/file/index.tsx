@@ -1,65 +1,67 @@
-import { useEffect, useRef, useState } from "react";
-import { PrimitiveAtom, useAtom } from "jotai";
-import { fileAtom } from "../../jotai";
-import DragUpload from "../../components/DragUpload";
-import Intro from "../../components/Intro";
-import { uploadTypeName } from "../../constants/EnumType";
-import EditFile from "./EditFile";
-import FinishUpload from "./FinishUpload";
-import { FileNameDefault } from "../../constants/FileSetting";
+import { useEffect, useState } from 'react'
 
-import { pdfjs } from "react-pdf";
-import FinishFile from "./FinishFile";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import { PrimitiveAtom, useAtom } from 'jotai'
+import { pdfjs } from 'react-pdf'
+
+import EditFile from './EditFile'
+import FinishFile from './FinishFile'
+import FinishUpload from './FinishUpload'
+import DragUpload from '../../components/DragUpload'
+import Intro from '../../components/Intro'
+import { uploadTypeName } from '../../constants/EnumType'
+import { FileNameDefault } from '../../constants/FileSetting'
+import { fileAtom } from '../../jotai'
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 const File = () => {
-  const [stepMenu, setStepMenu] = useState<number>(0);
-  const [pdfURL, setPdfURL] =
-    useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
-  const [pdfName, setPdfName] = useState<string>(FileNameDefault);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [progressBar, setProgressBar] = useState<number>(0);
-  const [finishPdf, setFinishPdf] = useState<(HTMLCanvasElement | null)[]>([]); // get finish pdf
+  const [stepMenu, setStepMenu] = useState<number>(0)
+  const [pdfURL, setPdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom)
+  const [pdfName, setPdfName] = useState<string>(FileNameDefault)
+  const [totalPages, setTotalPages] = useState<number>(0)
+  const [progressBar, setProgressBar] = useState<number>(0)
+  const [finishPdf, setFinishPdf] = useState<(HTMLCanvasElement | null)[]>([]) // get finish pdf
 
   useEffect(() => {
-    document.body.classList.add("file");
-    document.body.classList.remove("sign");
+    document.body.classList.add('file')
+    document.body.classList.remove('sign')
     return () => {
-      //離開頁面清空
-      setPdfURL(null);
-    };
-  }, []);
+      // 離開頁面清空
+      setPdfURL(null)
+    }
+  }, [])
 
   useEffect(() => {
-    if (pdfURL) return setStepMenu(1);
-  }, [pdfURL]);
+    if (pdfURL) return setStepMenu(1)
+    return undefined
+  }, [pdfURL])
 
   const previousMenu = () => {
     switch (stepMenu) {
       case 1:
-        setPdfURL(null);
-        break;
+        setPdfURL(null)
+        break
 
       default:
-        break;
+        break
     }
-    setStepMenu((perv) => perv - 1);
-  };
+    setStepMenu((perv) => perv - 1)
+  }
 
   const cancelUpload = () => {
-    previousMenu();
-    setProgressBar(0);
-  };
+    previousMenu()
+    setProgressBar(0)
+  }
 
   const nextMenu = () => {
-    setStepMenu((perv) => perv + 1);
-  };
+    setStepMenu((perv) => perv + 1)
+  }
 
   const cancelFile = () => {
-    setStepMenu(0);
-    setPdfURL(null);
-    setPdfName(FileNameDefault);
-  };
+    setStepMenu(0)
+    setPdfURL(null)
+    setPdfName(FileNameDefault)
+  }
 
   const fileElement: { [index: number]: JSX.Element } = {
     0: (
@@ -69,14 +71,13 @@ const File = () => {
             fileSetting={{
               type: uploadTypeName.PDF,
               size: 20,
-              divHight: "h-[360px]",
+              divHight: 'h-[360px]',
             }}
-            fileURL={pdfURL}
-            changeFile={(file, name, totalPages) => {
+            changeFile={(file, name, pageCount) => {
               if (Array.isArray(file)) {
-                setPdfURL(file);
-                setPdfName(name);
-                setTotalPages(totalPages || 0);
+                setPdfURL(file)
+                setPdfName(name)
+                setTotalPages(pageCount || 0)
               }
             }}
             setProgressBar={setProgressBar}
@@ -112,26 +113,28 @@ const File = () => {
         totalPages={totalPages}
       />
     ),
-  };
+  }
 
   return (
     <main
       id="File"
-      className={`${stepMenu === 2 ? "w-screen justify-start" : undefined}`}
+      className={`${stepMenu === 2 ? 'w-screen justify-start' : undefined}`}
     >
       {stepMenu !== 2 && (
         <Intro
-          LargeStandard={
+          LargeStandard={(
             <>
-              Anywhere, <br /> anytime.
+              Anywhere,
+              <br />
+              anytime.
             </>
-          }
+          )}
           SubStandard="開始簽署您的文件"
         />
       )}
       {fileElement[stepMenu]}
     </main>
-  );
-};
+  )
+}
 
-export default File;
+export default File
