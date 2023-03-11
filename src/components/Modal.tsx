@@ -1,23 +1,24 @@
-import { createPortal } from "react-dom";
-import { useAtom } from "jotai";
-import { openModalAtom } from "../jotai";
-import { X } from "react-feather";
+/* eslint-disable no-nested-ternary */
+import { useAtom } from 'jotai'
+import { createPortal } from 'react-dom'
+import { X } from 'react-feather'
+
+import { openModalAtom } from '../jotai'
+
 interface props {
   children: JSX.Element;
   childrenClassName?: string;
   small?: boolean;
 }
 
-const Modal = ({ children, childrenClassName = "", small }: props) => {
-  const [openModal, setOpenModal] = useAtom(openModalAtom);
-  const modalEl = small ? null : document.getElementById("Modal");
+const Modal = ({ children, childrenClassName = '', small }: props) => {
+  const [openModal, setOpenModal] = useAtom(openModalAtom)
+  const modalEl = small ? null : document.getElementById('Modal')
 
   const modalContent: JSX.Element = (
-    <div className={"absolute top-0 z-[100] h-full w-full"}>
+    <div className="absolute top-0 z-[100] h-full w-full">
       <div
-        className={`h-full w-full backdrop-blur-md ${
-          small ? "rounded-md" : ""
-        } bg-[#151515]/[.5]`}
+        className={`h-full w-full backdrop-blur-md ${small ? 'rounded-md' : ''} bg-[#151515]/[.5]`}
         onClick={() => setOpenModal(false)}
       />
       <span
@@ -32,7 +33,7 @@ const Modal = ({ children, childrenClassName = "", small }: props) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   return openModal ? (
     modalEl ? (
@@ -42,7 +43,7 @@ const Modal = ({ children, childrenClassName = "", small }: props) => {
     )
   ) : (
     <></>
-  );
-};
+  )
+}
 
-export default Modal;
+export default Modal

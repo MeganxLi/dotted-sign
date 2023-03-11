@@ -1,11 +1,13 @@
-import { PrimitiveAtom, useAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
-import { pdfjs } from "react-pdf";
-import { RWDSize } from "../../../constants/EnumType";
-import { fileAtom } from "../../../jotai";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+/* eslint-disable no-return-assign */
+import { useEffect, useRef, useState } from 'react'
 
-const pageScale = 80;
+import { PrimitiveAtom, useAtom } from 'jotai'
+import { pdfjs } from 'react-pdf'
+
+import { RWDSize } from '../../../constants/EnumType'
+import { fileAtom } from '../../../jotai'
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 interface props {
   totalPages: number;
@@ -20,65 +22,67 @@ const FileList = ({
   canvasItemRef,
   setFocusCanvasIdx,
 }: props) => {
-  const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom);
-  const fileUrl: pdfFileType[] = pdfURL || [];
-  const pageListRef = useRef<HTMLDivElement>(null);
-  const pageItemBlackRef = useRef<HTMLDivElement>(null);
-  const pageItemRef = useRef<(HTMLCanvasElement | null)[]>([]);
-  const [resizeSize, setResizeSize] = useState<boolean>(false);
+  const [pdfURL] = useAtom<PrimitiveAtom<pdfFileType[] | null>>(fileAtom)
+  const fileUrl: pdfFileType[] = pdfURL || []
+  const pageListRef = useRef<HTMLDivElement>(null)
+  const pageItemBlackRef = useRef<HTMLDivElement>(null)
+  const pageItemRef = useRef<(HTMLCanvasElement | null)[]>([])
+  const [resizeSize, setResizeSize] = useState<boolean>(false)
 
   const moveCanvasScroll = (e: React.MouseEvent<HTMLDivElement>) => {
-    const clickIndex = Number(e.currentTarget.dataset.count) - 1;
-    if (canvasListRef.current) {
-      canvasListRef.current.scrollTop =
-        (canvasItemRef.current[clickIndex]?.parentElement?.offsetTop || 0) - 4;
+    const clickIndex = Number(e.currentTarget.dataset.count) - 1
+    const canvasListRefCurrent = canvasListRef.current
+
+    if (canvasListRefCurrent) {
+      canvasListRefCurrent.scrollTop = (
+        (canvasItemRef.current[clickIndex]?.parentElement?.offsetTop || 0) - 4)
     }
 
-    setFocusCanvasIdx(clickIndex);
-  };
+    setFocusCanvasIdx(clickIndex)
+  }
 
   const handlePageItem = () => {
-    const canvasDiv = pageListRef.current;
-    if (!canvasDiv) return;
+    const canvasDiv = pageListRef.current
+    if (!canvasDiv) return
 
     for (let i = 0; i < totalPages; i++) {
-      const canvasChild = pageItemRef.current[i];
-      if (!canvasChild) return;
-      const context = canvasChild.getContext("2d");
+      const canvasChild = pageItemRef.current[i]
+      if (!canvasChild) return
+      const context = canvasChild.getContext('2d')
 
       // 設定寬度
-      const imgSize = fileUrl[i].width / fileUrl[i].height;
-      const getDivSize = (pageItemBlackRef.current?.clientWidth || 0) * 0.8;
+      const imgSize = fileUrl[i].width / fileUrl[i].height
+      const getDivSize = (pageItemBlackRef.current?.clientWidth || 0) * 0.8
       // 如果頁面是直(>=1)的使用乘法，如果是橫(<1)的使用除法
-      const setWidth = imgSize >= 1 ? getDivSize : getDivSize * imgSize;
-      const setHeight = imgSize >= 1 ? getDivSize / imgSize : getDivSize;
-      canvasChild.width = setWidth;
-      canvasChild.height = setHeight;
+      const setWidth = imgSize >= 1 ? getDivSize : getDivSize * imgSize
+      const setHeight = imgSize >= 1 ? getDivSize / imgSize : getDivSize
+      canvasChild.width = setWidth
+      canvasChild.height = setHeight
 
-      if (!context) return;
-      const image = new Image();
-      image.src = fileUrl[i].dataURL;
+      if (!context) return
+      const image = new Image()
+      image.src = fileUrl[i].dataURL
       image.onload = () => {
-        context.drawImage(image, 0, 0, setWidth, setHeight);
-      };
+        context.drawImage(image, 0, 0, setWidth, setHeight)
+      }
     }
-  };
+  }
 
   useEffect(() => {
-    handlePageItem();
-  }, [pageListRef, resizeSize]);
+    handlePageItem()
+  }, [pageListRef, resizeSize])
 
   useEffect(() => {
     const handleResize = () => {
-      setResizeSize(window.innerWidth >= RWDSize);
-    };
+      setResizeSize(window.innerWidth >= RWDSize)
+    }
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   return (
     <div
@@ -87,25 +91,23 @@ const FileList = ({
       flat:justify-start flatMin:grid-cols-2`}
       ref={pageListRef}
     >
-      {Array.from({ length: totalPages }).map((item, idx: number) => {
-        return (
-          <div
-            key={idx}
-            data-count={idx + 1}
-            className={`before:dark-blue relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg 
+      {Array.from({ length: totalPages }).map((item, idx: number) => (
+        <div
+          key={idx}
+          data-count={idx + 1}
+          className={`before:dark-blue relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-lg 
             bg-green-blue before:absolute before:bottom-0 before:text-sm before:content-[attr(data-count)] 
             hover:border hover:border-solid hover:border-depp-blue/50 flat:h-14 flat:w-14`}
-            onClick={moveCanvasScroll}
-            ref={pageItemBlackRef}
-          >
-            <canvas
-              ref={(el) => (pageItemRef.current = [...pageItemRef.current, el])}
-            />
-          </div>
-        );
-      })}
+          onClick={moveCanvasScroll}
+          ref={pageItemBlackRef}
+        >
+          <canvas
+            ref={(el) => (pageItemRef.current = [...pageItemRef.current, el])}
+          />
+        </div>
+      ))}
     </div>
-  );
-};
+  )
+}
 
-export default FileList;
+export default FileList

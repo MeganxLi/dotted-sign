@@ -1,53 +1,55 @@
-import { useAtom } from "jotai";
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { X } from "react-feather";
-import { useLocation } from "react-router-dom";
-import { MessageDefault, MessageIcon } from "../constants/MessageSetting";
-import { messageAtom } from "../jotai";
+import { useEffect, useRef, useState } from 'react'
+
+import { useAtom } from 'jotai'
+import { createPortal } from 'react-dom'
+import { X } from 'react-feather'
+import { useLocation } from 'react-router-dom'
+
+import { MessageDefault, MessageIcon } from '../constants/MessageSetting'
+import { messageAtom } from '../jotai'
 
 const Message = () => {
   // route
-  const location = useLocation();
-  const pathname = location.pathname;
+  const location = useLocation()
+  const { pathname } = location
 
-  const [messageObj, setMessageObj] = useAtom(messageAtom);
+  const [messageObj, setMessageObj] = useAtom(messageAtom)
 
-  const [messages, setMessages] = useState<MessageType>(MessageDefault);
-  const messageEl = document.getElementById("Message");
+  const [messages, setMessages] = useState<MessageType>(MessageDefault)
+  const messageEl = document.getElementById('Message')
 
-  const handleTimer = useRef<NodeJS.Timeout | null>(null);
+  const handleTimer = useRef<NodeJS.Timeout | null>(null)
 
   const messagesOff = () => {
-    setMessages((prev) => ({ ...prev, ...{ open: false } }));
+    setMessages((prev) => ({ ...prev, ...{ open: false } }))
 
-    if (messageEl?.className === "") return;
-    messageEl?.setAttribute("class", "slide-bottom opacity-100");
-    setTimeout(() => messageEl?.removeAttribute("class"), 1000);
-  };
+    if (messageEl?.className === '') return
+    messageEl?.setAttribute('class', 'slide-bottom opacity-100')
+    setTimeout(() => messageEl?.removeAttribute('class'), 1000)
+  }
 
   useEffect(() => {
     if (handleTimer.current) {
-      clearInterval(handleTimer.current);
+      clearInterval(handleTimer.current)
     }
 
     if (messageObj) {
-      setMessages(messageObj);
+      setMessages(messageObj)
       if (messageObj.open) {
-        messageEl?.setAttribute("class", "slide-top");
+        messageEl?.setAttribute('class', 'slide-top')
         handleTimer.current = setTimeout(() => {
-          messagesOff();
-        }, 3000);
+          messagesOff()
+        }, 3000)
       }
     } else {
-      messagesOff();
+      messagesOff()
     }
-  }, [messageObj]);
+  }, [messageObj])
 
   useEffect(() => {
-    //變化 page 關閉 message
-    messagesOff();
-  }, [pathname]);
+    // 變化 page 關閉 message
+    messagesOff()
+  }, [pathname])
 
   const messageContent: JSX.Element = (
     <div className="message-notice">
@@ -60,9 +62,9 @@ const Message = () => {
         <X size={20} />
       </span>
     </div>
-  );
+  )
 
-  return messageEl ? createPortal(messageContent, messageEl) : null;
-};
+  return messageEl ? createPortal(messageContent, messageEl) : null
+}
 
-export default Message;
+export default Message

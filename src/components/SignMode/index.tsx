@@ -1,10 +1,12 @@
-import { useAtom } from "jotai";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { MessageTexts } from "../../constants/MessageSetting";
-import { messageAtom } from "../../jotai";
-import UploadMode from "./UploadMode";
-import WritingMode from "./WritingMode";
+import React, { useState } from 'react'
+
+import { useAtom } from 'jotai'
+import { useNavigate } from 'react-router-dom'
+
+import UploadMode from './UploadMode'
+import WritingMode from './WritingMode'
+import { MessageTexts } from '../../constants/MessageSetting'
+import { messageAtom } from '../../jotai'
 
 interface props {
   onlySendBtn?: boolean;
@@ -13,37 +15,44 @@ interface props {
 
 const SignMode = ({ onlySendBtn = false, clickStartSignBtn }: props) => {
   // router
-  const navigate = useNavigate();
-  const [ActiveMenu, setActiveMenu] = useState<number>(0);
-  const [, setMessage] = useAtom(messageAtom);
+  const navigate = useNavigate()
+  const [ActiveMenu, setActiveMenu] = useState<number>(0)
+  const [, setMessage] = useAtom(messageAtom)
 
   const handleClickStartBtn = (e: React.MouseEvent<HTMLElement>) => {
-    clickStartSignBtn ? clickStartSignBtn(e) : navigate("/");
-  };
+    if (clickStartSignBtn) {
+      clickStartSignBtn(e)
+    } else {
+      navigate('/')
+    }
+  }
 
-  const handleOnlyBtnElement: JSX.Element = (onlySendBtn ? <></> :
-    <button
-      className="btn-secodary flex-auto"
-      onClick={() => setMessage({
-        open: true,
-        icon: "warn",
-        content: MessageTexts.unopened,
-      })}
-    >
-      管理簽名
-    </button>
-  );
+  const handleOnlyBtnElement: JSX.Element = (onlySendBtn ? <></>
+    : (
+      <button
+        type="button"
+        className="btn-secodary flex-auto"
+        onClick={() => setMessage({
+          open: true,
+          icon: 'warn',
+          content: MessageTexts.unopened,
+        })}
+      >
+        管理簽名
+      </button>
+    )
+  )
 
   const handleSaveBtnMessage = () => {
     setMessage({
       open: true,
-      icon: "check",
+      icon: 'check',
       content: MessageTexts.create,
-    });
-  };
+    })
+  }
 
   return (
-    <React.Fragment>
+    <>
       {ActiveMenu === 0 ? (
         <WritingMode
           ActiveMenu={ActiveMenu}
@@ -61,8 +70,8 @@ const SignMode = ({ onlySendBtn = false, clickStartSignBtn }: props) => {
           handleSaveBtnMessage={handleSaveBtnMessage}
         />
       )}
-    </React.Fragment>
-  );
-};
+    </>
+  )
+}
 
-export default SignMode;
+export default SignMode

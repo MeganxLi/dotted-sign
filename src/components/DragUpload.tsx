@@ -1,11 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+/* eslint-disable no-underscore-dangle, func-names */
+import React, { useEffect, useRef, useState } from 'react'
 
-import { orientationType, uploadTypeName } from "../constants/EnumType";
+import { pdfjs } from 'react-pdf'
 
-//svg
-import { ReactComponent as UploadIcon } from "../assets/svg/upload.svg";
+import { ReactComponent as UploadIcon } from '../assets/svg/upload.svg'
+import { orientationType, uploadTypeName } from '../constants/EnumType'
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`
 
 interface props {
   fileSetting: {
@@ -13,7 +14,6 @@ interface props {
     size: number;
     divHight: string;
   };
-  fileURL: string | pdfFileType[] | ArrayBuffer | null;
   changeFile: (
     file: string | pdfFileType[] | ArrayBuffer | null,
     name: string,
@@ -23,159 +23,155 @@ interface props {
 }
 const DragUpload = ({
   fileSetting,
-  fileURL,
   changeFile,
   setProgressBar,
 }: props) => {
   /**  true: PDF; false: img */
-  const judgeFileType = fileSetting.type === uploadTypeName.PDF;
-  const [dragActive, setDragActive] = React.useState(false); //是否有拖移檔案
-  const [uploadError, setUploadError] = useState<"type" | "size" | null>(null); //錯誤提醒，圖片類型和不超過檔案大小
+  const judgeFileType = fileSetting.type === uploadTypeName.PDF
+  const [dragActive, setDragActive] = React.useState(false) // 是否有拖移檔案
+  const [uploadError, setUploadError] = useState<'type' | 'size' | null>(null) // 錯誤提醒，圖片類型和不超過檔案大小
 
-  //pdf canvas
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
-  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  // pdf canvas
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null)
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
-    const c = canvasRef.current;
-    if (c == null) return;
-    setCanvas(c);
-    setCtx(c.getContext("2d"));
-    setProgressBar?.(0);
-  }, [canvasRef]);
+    const c = canvasRef.current
+    if (c == null) return
+    setCanvas(c)
+    setCtx(c.getContext('2d'))
+    setProgressBar?.(0)
+  }, [canvasRef])
 
   const uploadFile = (file: FileList | null) => {
-    if (!file) return;
-    const { name, size, type } = file[0];
+    if (!file) return
+    const { name, size, type } = file[0]
 
     // 確認檔案類型
-    const imgTypes = ["image/jpeg", "image/jpg", "image/png"];
-    const pdfType = ["application/pdf"];
+    const imgTypes = ['image/jpeg', 'image/jpg', 'image/png']
+    const pdfType = ['application/pdf']
 
     const fileType = () => {
-      if (judgeFileType) return pdfType.includes(type);
-      return imgTypes.includes(type);
-    };
+      if (judgeFileType) return pdfType.includes(type)
+      return imgTypes.includes(type)
+    }
 
     if (!fileType()) {
-      setUploadError("type");
-      setDragActive(false);
-      return false;
+      setUploadError('type')
+      setDragActive(false)
     }
 
     // 確認檔案大小不超過 MB
     if (size / 1024 / 1024 > fileSetting.size) {
-      setUploadError("size");
-      setDragActive(false);
-      return false;
+      setUploadError('size')
+      setDragActive(false)
     }
-    setUploadError(null);
+    setUploadError(null)
 
-    const fileReader = new FileReader(); // FileReader為瀏覽器內建類別，用途為讀取瀏覽器選中的檔案
+    const fileReader = new FileReader() // FileReader為瀏覽器內建類別，用途為讀取瀏覽器選中的檔案
 
     if (judgeFileType) {
       // 處理 PDF
-      fileReader.onload = function () {
+      fileReader.onload = function (event) {
+        const { result } = event.target as FileReader
         if (
-          typeof this.result !== "string" &&
-          this.result !== null &&
-          canvas &&
-          ctx
+          typeof result !== 'string'
+          && result !== null
+          && canvas
+          && ctx
         ) {
-          const pdfData = new Uint8Array(this.result);
+          const pdfData = new Uint8Array(result)
 
           // Using DocumentInitParameters object to load binary data.
-          const loadingTask = pdfjs.getDocument({ data: pdfData });
+          const loadingTask = pdfjs.getDocument({ data: pdfData })
           loadingTask.promise.then(
-            function (pdf) {
+            (pdf) => {
               // Fetch the first page
-              const imageDate: pdfFileType[] = [];
+              const imageDate: pdfFileType[] = []
 
               for (let i = 1; i <= pdf.numPages; i++) {
-                pdf.getPage(i).then(function (page) {
-                  const viewport = page.getViewport({ scale: 1 });
-                  const canvasChild = document.createElement("canvas");
-                  canvas.appendChild(canvasChild);
-                  const context = canvasChild.getContext("2d");
+                pdf.getPage(i).then((page) => {
+                  const viewport = page.getViewport({ scale: 1 })
+                  const canvasChild = document.createElement('canvas')
+                  canvas.appendChild(canvasChild)
+                  const context = canvasChild.getContext('2d')
                   // Prepare canvas using PDF page dimensions
-                  canvasChild.height = viewport.height;
-                  canvasChild.width = viewport.width;
+                  canvasChild.height = viewport.height
+                  canvasChild.width = viewport.width
                   // Render PDF page into canvas context
-                  if (!context) return;
+                  if (!context) return
                   const renderContext = {
                     canvasContext: context,
-                    viewport: viewport,
-                  };
+                    viewport,
+                  }
 
-                  const renderTask = page.render(renderContext);
-                  renderTask.promise.then(function () {
-                    //輸出圖片，使用指定位置不會導致頁面順序不對
+                  const renderTask = page.render(renderContext)
+                  renderTask.promise.then(() => {
+                    // 輸出圖片，使用指定位置不會導致頁面順序不對
                     imageDate[page._pageIndex] = {
                       orientation:
                         canvasChild.height < canvasChild.width
                           ? orientationType.landscape
                           : orientationType.portrait,
-                      dataURL: canvasChild.toDataURL("image/png"),
+                      dataURL: canvasChild.toDataURL('image/png'),
                       width: viewport.width,
                       height: viewport.height,
-                    };
+                    }
 
-                    setProgressBar?.((imageDate.length / pdf.numPages) * 100);
-                  });
-                });
+                    setProgressBar?.((imageDate.length / pdf.numPages) * 100)
+                  })
+                })
               }
-              changeFile(imageDate, name, pdf.numPages);
+              changeFile(imageDate, name, pdf.numPages)
             },
-            function (reason) {
+            (reason) => {
               // PDF loading error
-              console.error(reason);
-            }
-          );
+              console.error(reason)
+            },
+          )
         }
-      };
-      fileReader.readAsArrayBuffer(file[0]);
+      }
+      fileReader.readAsArrayBuffer(file[0])
     } else {
       // 處理 Img
-      fileReader.onload = (loadEvt) => {
-        changeFile(fileReader.result, name);
-        setDragActive(false);
-      };
-      fileReader.readAsDataURL(file[0]);
+      fileReader.onload = () => {
+        changeFile(fileReader.result, name)
+        setDragActive(false)
+      }
+      fileReader.readAsDataURL(file[0])
     }
-  };
+  }
 
   const fileHandleDrag = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
 
-    if (e.type === "dragenter" || e.type === "dragover") {
-      //拖移
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      //拖移離開
-      setDragActive(false);
-    } else if (e.type === "drop") {
-      //拖移放開
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      // 拖移
+      setDragActive(true)
+    } else if (e.type === 'dragleave') {
+      // 拖移離開
+      setDragActive(false)
+    } else if (e.type === 'drop') {
+      // 拖移放開
       const {
         dataTransfer: { files },
-      } = e;
-      uploadFile(files);
+      } = e
+      uploadFile(files)
     }
-  };
+  }
 
   const fileChangedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    uploadFile(files);
-  };
+    const { files } = e.target
+    uploadFile(files)
+  }
 
   return (
     <div
-      className={`relative flex ${
-        fileSetting.divHight
-      } w-full flex-col items-center justify-center gap-4 
+      className={`relative flex ${fileSetting.divHight} w-full flex-col items-center justify-center gap-4 
           rounded-md border-2 border-dashed border-black/20 bg-pale-blue 
-        text-[#728F9B] ${dragActive ? "bg-green-blue" : undefined}`}
+        text-[#728F9B] ${dragActive ? 'bg-green-blue' : undefined}`}
       onDragEnter={fileHandleDrag}
       onDragLeave={fileHandleDrag}
       onDragOver={fileHandleDrag}
@@ -189,7 +185,7 @@ const DragUpload = ({
           id="upload_file"
           type="file"
           name="file"
-          accept={judgeFileType ? "application/pdf" : "image/*"}
+          accept={judgeFileType ? 'application/pdf' : 'image/*'}
           onChange={fileChangedHandler}
         />
         <label
@@ -201,18 +197,23 @@ const DragUpload = ({
       </p>
       <p className="text-xs tracking-wider">
         <span
-          className={`${uploadError === "type" ? "text-alert-red" : undefined}`}
+          className={`${uploadError === 'type' ? 'text-alert-red' : undefined}`}
         >
-          支援檔案類型：{judgeFileType ? "PDF" : "PNG, JPEG"}
+          支援檔案類型：
+          {judgeFileType ? 'PDF' : 'PNG, JPEG'}
         </span>
         <span
-          className={`${uploadError === "size" ? "text-alert-red" : undefined}`}
+          className={`${uploadError === 'size' ? 'text-alert-red' : undefined}`}
         >
-          <span className="text-[#B0C3CA]">･</span>≦{fileSetting.size}mb{" "}
+          <span className="text-[#B0C3CA]">･</span>
+          ≦
+          {fileSetting.size}
+          mb
+          {' '}
         </span>
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default DragUpload;
+export default DragUpload
