@@ -127,7 +127,9 @@ const DragUpload = ({
             },
             (reason) => {
               // PDF loading error
-              console.error(reason)
+              if (process.env.NODE_ENV === 'development') {
+                console.error(reason)
+              }
             },
           )
         }
