@@ -1,30 +1,36 @@
 # Dotted Sign 點點簽
 
 [HexSchool 2022 The F2E](https://2022.thef2e.com/) Week2 - 簡易線上簽名網站
+![Mar-12-2023 21-04-00](https://user-images.githubusercontent.com/87239200/224546568-53780207-80f2-4b22-afb2-bf34e5f9b9f0.gif)
 
-(尚未完整完成)
+<p align="center"><a href="https://meganxli.github.io/dotted-sign/" target="_blank">Demo website</a></p>
 
-## 文件說明
-### 採用設計
+## Description
+
+### UIUX Design
+
 [Molly Hung](https://mollyhung.framer.website/) 設計 [點點簽 Figma](https://www.figma.com/file/syDguQlTNgRHsAfhye1hQn/F2E---Week-2?node-id=38%3A123392&t=c3lsYVVt7WPGAncz-3) UIUX
 
-### 技術
- - React
- - TypeScript
- - SCSS
- - TailwindCSS
- - Canvas
- 
-### 引用套件
- - react-colorful
- - react-signature-canvas
- - jotai
- - react-pdf
- - fabric
- - react-feather
- - google-font
- 
-### 資料夾說明
+### Programming Languages
+
+- JaveScript
+- TypeScript
+- SCSS
+
+### Frontend
+
+- [React.js](https://reactjs.org/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [jotai](https://github.com/pmndrs/jotai)
+- [react-colorful](https://github.com/omgovich/react-colorful)
+- [react-signature-canvas](https://github.com/agilgur5/react-signature-canvas)
+- [Fabric.js](http://fabricjs.com/)
+- [react-pdf](https://github.com/wojtekmaj/react-pdf)
+- [pdfjs](https://github.com/mozilla/pdf.js/)
+- [Feather](https://feathericons.com/)
+
+### Folder Description
+
 ```
 .
 ├── public
@@ -34,25 +40,28 @@
 │   ├── components/             # 共用文件
 │   ├── constants/              # 管理設定
 │   ├── jotai                   # Jotai 管理
-│   ├── page/                   # 對應到的頁面
+│   ├── page/                   # 對應的頁面
 │   ├── route                   # Route 設定
 │   ├── styles/                 # Scss & Tailwind 樣式
 │   ├── types                   # TypeScript 型別宣告
 │   └── utils                  # 共用函數
 ├── ...
 ```
- 
 
-## 設置
-### 開始
+## Building
+
+### Install Packages
+
 ```
 $ npm install
 ```
 
-### 執行
+### Start Dev Server
+
 ```
 $ npm start
 ```
 
-## 特別感謝
+## Acknowledgements
+
 感謝 [Molly Hung](https://mollyhung.framer.website/) (mollys1925@gmail.com) UIUX 設計與討論
