@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/dotted-sign/static/css/main.68a4b1a9.css",
-    "main.js": "/dotted-sign/static/js/main.be983068.js",
+    "main.js": "/dotted-sign/static/js/main.cf3ba227.js",
     "static/media/bg-desktop-2.png": "/dotted-sign/static/media/bg-desktop-2.00bcfc2842a818682b09.png",
     "static/media/bg-desktop-1.png": "/dotted-sign/static/media/bg-desktop-1.40f459145555cb7f2cd8.png",
     "static/media/bg-mobile-2-right.png": "/dotted-sign/static/media/bg-mobile-2-right.cb7e7ab1dd886a0a646e.png",
@@ -29,10 +29,10 @@
     "static/media/checkbox.svg": "/dotted-sign/static/media/checkbox.0413a6ad67b521b7fbfecd87112ee9ba.svg",
     "static/media/radio.svg": "/dotted-sign/static/media/radio.80fdcb0ee0d149140ac2006526a78835.svg",
     "main.68a4b1a9.css.map": "/dotted-sign/static/css/main.68a4b1a9.css.map",
-    "main.be983068.js.map": "/dotted-sign/static/js/main.be983068.js.map"
+    "main.cf3ba227.js.map": "/dotted-sign/static/js/main.cf3ba227.js.map"
   },
   "entrypoints": [
     "static/css/main.68a4b1a9.css",
-    "static/js/main.be983068.js"
+    "static/js/main.cf3ba227.js"
   ]
 }
