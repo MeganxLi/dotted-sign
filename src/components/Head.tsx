@@ -19,7 +19,12 @@ const Head = () => {
       key={idx}
       className={`flex gap-2 hover:text-blue ${page.classTag} cursor-pointer p-3 ${currentPageIdx === idx && 'active'}`}
       onClick={() => {
-        navigate(page.path)
+        if (page.path === pathname) {
+          window.location.reload()
+        } else {
+          navigate(page.path, { replace: true })
+        }
+
         if (flat) {
           setOpenMenu(false)
         }
