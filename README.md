@@ -13,7 +13,7 @@
 
 ### Programming Languages
 
-- JaveScript
+- JavaScript
 - TypeScript
 - SCSS
 
